@@ -353,21 +353,50 @@
             50% { transform: translateY(-3px) scale(1.06); }
         }
 
-        @keyframes promo-btn-shimmer {
-            0% { background-position: -115% 50%; }
-            100% { background-position: 115% 50%; }
+        @keyframes promo-btn-sweep {
+            0% {
+                transform: translate3d(-220%, 0, 0) rotate(18deg);
+                opacity: 0;
+            }
+            16% {
+                opacity: .95;
+            }
+            64% {
+                opacity: .28;
+            }
+            100% {
+                transform: translate3d(520%, 0, 0) rotate(18deg);
+                opacity: 0;
+            }
         }
 
         @keyframes promo-btn-glow {
             0%, 100% {
                 box-shadow:
-                    0 18px 36px -20px rgba(56, 189, 248, 0.88),
+                    0 16px 32px -18px rgba(56, 189, 248, 0.78),
                     0 0 0 rgba(56, 189, 248, 0);
             }
             50% {
                 box-shadow:
-                    0 22px 42px -18px rgba(56, 189, 248, 0.98),
-                    0 0 24px rgba(56, 189, 248, 0.44);
+                    0 24px 44px -16px rgba(56, 189, 248, 0.96),
+                    0 0 26px rgba(56, 189, 248, 0.4);
+            }
+        }
+
+        @keyframes nav-switch-sweep {
+            0% {
+                transform: translate3d(-190%, 0, 0) rotate(18deg);
+                opacity: 0;
+            }
+            18% {
+                opacity: .9;
+            }
+            70% {
+                opacity: .18;
+            }
+            100% {
+                transform: translate3d(520%, 0, 0) rotate(18deg);
+                opacity: 0;
             }
         }
 
@@ -456,6 +485,55 @@
         #mainNav .menu-row > a[href="#contact"]:hover {
             transform: translateY(-2px) scale(1.02);
             filter: brightness(1.06);
+        }
+
+        #mainNav .menu-row > a.nav-switch-site {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: linear-gradient(138deg, #d946ef 0%, #a855f7 42%, #6d28d9 100%);
+            color: #f8f5ff;
+            border: 1px solid rgba(233, 213, 255, 0.82);
+            box-shadow:
+                0 16px 32px -18px rgba(168, 85, 247, 0.95),
+                inset 0 1px 0 rgba(255, 255, 255, 0.42);
+            overflow: hidden;
+            isolation: isolate;
+            transition: transform var(--t-fast) var(--ease-out), filter var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out);
+        }
+
+        #mainNav .menu-row > a.nav-switch-site::before {
+            content: '';
+            position: absolute;
+            top: -36%;
+            left: -62%;
+            width: 20%;
+            height: 190%;
+            transform: translate3d(-180%, 0, 0) rotate(18deg);
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 18%, rgba(255, 255, 255, 0.98) 46%, rgba(233, 213, 255, 0.42) 72%, transparent 100%);
+            opacity: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            animation: nav-switch-sweep 3.15s linear infinite;
+            will-change: transform, opacity;
+        }
+
+        #mainNav .menu-row > a.nav-switch-site:hover {
+            color: #ffffff;
+            transform: translateY(-2px) scale(1.02);
+            filter: brightness(1.06);
+            box-shadow:
+                0 24px 40px -16px rgba(168, 85, 247, 0.98),
+                0 0 24px rgba(192, 132, 252, 0.42),
+                inset 0 1px 0 rgba(255, 255, 255, 0.55);
+        }
+
+        #mainNav .menu-row > a.nav-switch-site:hover::before {
+            animation-duration: 1.05s;
+            opacity: .95;
         }
 
         .btn-zalo { background-color: #0068FF; }
@@ -1511,18 +1589,55 @@
 
         .promo-primary {
             flex: 1 1 260px;
-            background: linear-gradient(120deg, #22d3ee 0%, #38bdf8 33%, #a5f3fc 50%, #1f9af5 67%, #0a84ff 100%);
-            background-size: 230% 100%;
-            background-position: 0 50%;
+            background: linear-gradient(138deg, #5ee3ff 0%, #2ec5f6 40%, #118cf9 100%);
             color: #03223f;
             border: 1px solid rgba(186, 230, 253, 0.7);
             box-shadow: 0 18px 36px -20px rgba(56, 189, 248, 0.88);
-            animation: promo-btn-shimmer 2.6s linear infinite, promo-btn-glow 2.6s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            transform: translateZ(0);
+            will-change: transform, box-shadow;
+            animation: promo-btn-glow 3.2s ease-in-out infinite;
+        }
+
+        .promo-primary::before {
+            content: '';
+            position: absolute;
+            top: -32%;
+            left: -62%;
+            width: 24%;
+            height: 190%;
+            transform: translate3d(-200%, 0, 0) rotate(18deg);
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.14) 22%, rgba(255, 255, 255, 0.98) 46%, rgba(255, 255, 255, 0.22) 72%, transparent 100%);
+            opacity: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            animation: promo-btn-sweep 3.2s cubic-bezier(.22, .5, .15, 1) infinite;
+            will-change: transform, opacity;
+        }
+
+        .promo-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.26);
+            opacity: .56;
+            pointer-events: none;
         }
 
         .promo-primary:hover {
             transform: translateY(-2px);
             filter: brightness(1.07);
+            box-shadow:
+                0 24px 44px -16px rgba(56, 189, 248, 0.98),
+                0 0 22px rgba(56, 189, 248, 0.34);
+        }
+
+        .promo-primary:hover::before {
+            animation-duration: 1.35s;
+            opacity: .95;
         }
 
         .promo-secondary {
@@ -1588,6 +1703,14 @@
             #mainNav .menu-row > a[href="#services"],
             #mainNav .menu-row > a[href="#about"] {
                 display: none;
+            }
+
+            #mainNav .menu-row > a[href="#contact"],
+            #mainNav .menu-row > a.nav-switch-site {
+                padding: 9px 12px;
+                font-size: .78rem;
+                line-height: 1.1;
+                white-space: nowrap;
             }
 
             #home .hero-stats {
@@ -1744,6 +1867,13 @@
                 padding: 10px 16px;
                 border-radius: 999px;
                 font-size: .9rem;
+                white-space: nowrap;
+            }
+
+            #mainNav .menu-row > a.nav-switch-site {
+                padding: 10px 14px;
+                border-radius: 999px;
+                font-size: .82rem;
                 white-space: nowrap;
             }
 
@@ -2027,6 +2157,10 @@
                         <i data-lucide="phone" class="w-4 h-4 text-cyan-300 mr-2"></i>
                         <span class="text-cyan-300 font-bold">0972.026.482</span>
                     </div>
+                    <a href="https://lamquoccuong.io.vn/" target="_blank" rel="noopener noreferrer" data-track-nav-switch class="nav-switch-site">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        Tăng Tương Tác
+                    </a>
                     <a href="#contact" class="bg-cyan-600 text-white px-6 py-2.5 rounded-full hover:bg-cyan-700 transition transform hover:scale-105 shadow-lg shadow-cyan-700/30">Kết nối ngay</a>
                 </div>
             </div>
@@ -2975,10 +3109,11 @@
             if (href.startsWith('tel:')) return 'call_click';
             if (href.includes('zalo.me')) return 'zalo_click';
             if (href.includes('facebook.com')) return 'facebook_click';
+            if (href.includes('lamquoccuong.io.vn')) return 'growth_site_click';
             return text ? `cta_${text.toLowerCase()}` : 'cta_click';
         };
 
-        document.querySelectorAll('a[href^="tel:"], a[href*="zalo.me"], a[href*="facebook.com"]').forEach((link) => {
+        document.querySelectorAll('a[href^="tel:"], a[href*="zalo.me"], a[href*="facebook.com"], a[data-track-nav-switch]').forEach((link) => {
             link.addEventListener('click', () => {
                 const href = link.getAttribute('href') || '';
                 trackCta(guessLabel(link), href);
@@ -3119,3 +3254,6 @@
     </script>
 </body>
 </html>
+
+
+
