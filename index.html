@@ -36,7 +36,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -141,7 +141,7 @@
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Manrope', 'SF Pro Text', 'Segoe UI', sans-serif;
+            font-family: 'Be Vietnam Pro', 'Noto Sans', 'Segoe UI', sans-serif;
             background:
                 radial-gradient(1200px 760px at 12% -8%, rgba(93, 196, 255, 0.2), transparent 60%),
                 radial-gradient(980px 700px at 94% 8%, rgba(87, 120, 255, 0.18), transparent 62%),
@@ -162,7 +162,7 @@
         }
 
         h1, h2, h3, #mainNav .text-2xl {
-            font-family: 'Sora', 'SF Pro Display', 'Segoe UI', sans-serif;
+            font-family: 'Be Vietnam Pro', 'Noto Sans', 'Segoe UI', sans-serif;
             letter-spacing: -0.02em;
         }
 
@@ -217,6 +217,12 @@
         #home > * {
             position: relative;
             z-index: 1;
+        }
+
+        #home .hero-title {
+            margin-inline: auto;
+            text-wrap: balance;
+            max-width: 18ch;
         }
 
         @keyframes marquee {
@@ -1483,6 +1489,183 @@
             color: #dcfce7;
         }
 
+        .lead-success.error {
+            border-color: rgba(239, 68, 68, 0.42);
+            background: rgba(127, 29, 29, 0.3);
+            color: #fecaca;
+        }
+
+        .feedback-carousel {
+            position: relative;
+            border-radius: 26px;
+            background: linear-gradient(180deg, rgba(219, 234, 254, 0.6), rgba(239, 246, 255, 0.72));
+            border: 1px solid rgba(147, 197, 253, 0.38);
+            padding: 12px;
+            overflow: hidden;
+        }
+
+        .feedback-track {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            padding: 4px 4px 10px;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            cursor: grab;
+            scrollbar-width: none;
+        }
+
+        .feedback-track.dragging {
+            cursor: grabbing;
+            scroll-snap-type: none;
+            user-select: none;
+        }
+
+        .feedback-track::-webkit-scrollbar {
+            height: 0;
+        }
+
+        .feedback-track::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.4);
+            border-radius: 999px;
+        }
+
+        .feedback-card {
+            flex: 0 0 calc((100% - 28px) / 3);
+            min-height: 238px;
+            scroll-snap-align: start;
+            border-radius: 22px;
+            border: 1px solid rgba(147, 197, 253, 0.44);
+            background: linear-gradient(150deg, rgba(37, 99, 235, 0.9), rgba(37, 99, 235, 0.82) 42%, rgba(30, 64, 175, 0.9) 100%);
+            box-shadow:
+                0 18px 36px rgba(30, 64, 175, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.24);
+            color: #eff6ff;
+            padding: 18px 18px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+        }
+
+        .feedback-card:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 24px 42px rgba(30, 64, 175, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        }
+
+        .feedback-stars {
+            display: flex;
+            gap: 3px;
+            color: #facc15;
+            margin-bottom: 10px;
+        }
+
+        .feedback-stars i {
+            width: 17px;
+            height: 17px;
+        }
+
+        .feedback-quote {
+            color: #e0ecff;
+            font-style: italic;
+            font-weight: 600;
+            line-height: 1.56;
+            margin: 0 0 14px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+        }
+
+        .feedback-author {
+            margin: 0;
+            padding-top: 11px;
+            border-top: 1px solid rgba(191, 219, 254, 0.46);
+            color: #f8fafc;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        @media (min-width: 768px) {
+            .feedback-track {
+                scrollbar-width: auto;
+                scrollbar-color: rgba(59, 130, 246, 0.55) rgba(191, 219, 254, 0.45);
+            }
+
+            .feedback-track::-webkit-scrollbar {
+                height: 11px;
+            }
+
+            .feedback-track::-webkit-scrollbar-track {
+                background: rgba(191, 219, 254, 0.46);
+                border-radius: 999px;
+            }
+
+            .feedback-track::-webkit-scrollbar-thumb {
+                background: linear-gradient(180deg, rgba(59, 130, 246, 0.82), rgba(37, 99, 235, 0.88));
+                border-radius: 999px;
+                border: 1px solid rgba(255, 255, 255, 0.38);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .feedback-card {
+                flex: 0 0 calc((100% - 14px) / 2);
+                min-height: 222px;
+            }
+
+            .feedback-quote {
+                font-size: .93rem;
+                -webkit-line-clamp: 5;
+            }
+
+            .feedback-author {
+                font-size: .92rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .feedback-carousel {
+                padding: 8px;
+                border-radius: 18px;
+            }
+
+            .feedback-track {
+                gap: 10px;
+                padding: 2px 2px 8px;
+            }
+
+            .feedback-card {
+                flex: 0 0 86%;
+                min-height: 196px;
+                padding: 14px 14px 12px;
+                border-radius: 18px;
+            }
+
+            .feedback-stars {
+                margin-bottom: 8px;
+            }
+
+            .feedback-stars i {
+                width: 14px;
+                height: 14px;
+            }
+
+            .feedback-quote {
+                font-size: .82rem;
+                line-height: 1.44;
+                margin-bottom: 10px;
+                -webkit-line-clamp: 5;
+            }
+
+            .feedback-author {
+                font-size: .8rem;
+                padding-top: 8px;
+            }
+        }
+
         #particles-js {
             position: fixed;
             inset: 0;
@@ -1622,7 +1805,7 @@
 
         .promo-title {
             margin: 0;
-            font-family: 'Sora', 'SF Pro Display', 'Segoe UI', sans-serif;
+            font-family: 'Be Vietnam Pro', 'Noto Sans', 'Segoe UI', sans-serif;
             font-size: clamp(1.7rem, 2.8vw, 2.3rem);
             line-height: 1.14;
             font-weight: 800;
@@ -2650,8 +2833,9 @@
             <div data-aos="fade-down" class="inline-flex items-center px-4 py-1.5 mb-6 text-sm font-bold tracking-wide text-cyan-300 uppercase bg-cyan-500/10 rounded-full border border-cyan-400/30">
                 <i data-lucide="shield-check" class="w-4 h-4 mr-2"></i> 11+ Năm Kinh Nghiệm Thực Chiến
             </div>
-            <h1 data-aos="fade-up" data-aos-delay="100" class="text-6xl lg:text-8xl font-extrabold tracking-tight mb-6 leading-tight text-white">
-                Mở Khóa - Bảo Mật <span class="gradient-text animate-text-shimmer whitespace-nowrap">Facebook</span> <br>Chuyên Nghiệp - An Toàn
+            <h1 data-aos="fade-up" data-aos-delay="100" class="hero-title text-5xl lg:text-8xl xl:text-[6.5rem] font-extrabold tracking-tight mb-6 leading-[1.12] text-white">
+                Dịch Vụ <span class="gradient-text animate-text-shimmer">Facebook</span>
+                <span class="block mt-3 lg:mt-4 text-3xl lg:text-6xl xl:text-[4.75rem] leading-[1.2] text-white">An Toàn - Bảo Mật</span>
             </h1>
             
             <div data-aos="zoom-in" data-aos-delay="150" class="hero-hotline-box mb-10 inline-block glass-panel glass-panel-dark backdrop-blur-md px-8 lg:px-10 py-5 lg:py-6 rounded-2xl shadow-xl">
@@ -2763,7 +2947,7 @@
     </section>
 
     <!-- Proof Section -->
-    <section id="proof" class="py-20 lg:py-24 bg-slate-100">
+    <section id="proof" class="hidden py-20 lg:py-24 bg-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 lg:mb-14" data-aos="fade-up">
                 <h2 class="text-4xl lg:text-5xl text-slate-900 font-extrabold mb-5">Kết Quả Thực Tế Theo Case</h2>
@@ -2796,7 +2980,7 @@
     </section>
 
     <!-- Process Section -->
-    <section id="process" class="py-20 lg:py-24 bg-slate-900 text-white">
+    <section id="process" class="hidden py-20 lg:py-24 bg-slate-900 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 lg:mb-14" data-aos="fade-up">
                 <h2 class="text-4xl lg:text-5xl font-extrabold mb-5">Quy Trình 3 Bước Chốt Nhanh</h2>
@@ -2866,9 +3050,9 @@
                         </span>
                         <br><span class="text-cyan-400">Social Media Engineer</span>
                     </h2>
-                    <p class="text-slate-300 text-lg lg:text-xl mb-10 leading-relaxed">
-                        Tôi có 11 năm thực chiến Facebook, trực tiếp hỗ trợ rất nhiều khách hàng từ chủ shop, CEO, KOL/KOC đến hệ thống doanh nghiệp.
-                        Mỗi case đều có lộ trình xử lý rõ, cập nhật tiến độ liên tục, ưu tiên tốc độ ra kết quả và an toàn dữ liệu tuyệt đối.
+                    <p class="text-slate-300 text-lg lg:text-xl mb-8 leading-relaxed">
+                        11 năm thực chiến Facebook, hỗ trợ trực tiếp cho cá nhân, chủ shop và doanh nghiệp ở các case khó:
+                        mở khóa tài khoản, bảo mật, tích xanh và tối ưu ads theo lộ trình rõ ràng.
                     </p>
 
                     <div class="grid grid-cols-2 gap-6 mb-10">
@@ -2890,16 +3074,16 @@
                         </div>
                     </div>
 
-                    <div class="space-y-4 border-l-4 border-cyan-500 pl-8 py-2">
+                    <div class="hidden space-y-4 border-l-4 border-cyan-500 pl-8 py-2">
                         <p class="text-slate-200 text-xl lg:text-2xl font-semibold italic leading-relaxed">"Lấy kết quả thực tế và sự an tâm của khách hàng làm trung tâm cho mọi giải pháp."</p>
                         <p class="text-cyan-300 font-black uppercase tracking-[0.2em] text-base lg:text-lg">- Lâm Quốc Cường</p>
                     </div>
-                    <div class="mt-8 flex flex-wrap gap-4">
+                    <div class="mt-6 flex flex-wrap gap-4">
                         <a href="https://zalo.me/0972026482" target="_blank" rel="noopener noreferrer" class="px-7 py-3.5 rounded-2xl bg-cyan-400 text-slate-900 font-black hover:bg-cyan-300 transition">
                             Trao đổi case 1:1
                         </a>
-                        <a href="#contact" class="px-7 py-3.5 rounded-2xl border border-cyan-300/50 text-cyan-200 font-bold hover:bg-white/10 transition">
-                            Xem quy trình hỗ trợ
+                        <a href="tel:0972026482" class="px-7 py-3.5 rounded-2xl border border-cyan-300/50 text-cyan-200 font-bold hover:bg-white/10 transition">
+                            Gọi Ngay
                         </a>
                     </div>
                 </div>
@@ -2908,59 +3092,103 @@
     </section>
 
     <!-- Testimonials Section -->
-    <section id="testimonials" class="py-24 lg:py-32 bg-slate-100">
+    <section id="testimonials" class="py-24 lg:py-28 bg-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 lg:mb-20" data-aos="fade-up">
-                <h2 class="text-4xl lg:text-5xl text-slate-900 font-extrabold mb-6">Khách Hàng Chốt Ngay Vì Kết Quả Thật</h2>
-                <p class="text-slate-700 text-lg lg:text-xl">Case thật, phản hồi thật, hiệu quả nhìn thấy rõ sau từng phiên xử lý.</p>
+            <div class="text-center mb-10 lg:mb-12" data-aos="fade-up">
+                <h2 class="text-4xl lg:text-5xl text-slate-900 font-extrabold mb-5">Khách Hàng Nói Gì Về Tôi</h2>
             </div>
-            
-            <div class="grid grid-cols-3 gap-6 lg:gap-10">
-                <!-- 6 Feedbacks đầy đủ -->
-                <div class="p-8 lg:p-10 glass-panel rounded-3xl border border-slate-100 bg-white shadow-sm hover:border-blue-200 transition-all" data-aos="zoom-in">
-                    <div class="flex text-yellow-400 mb-6">
-                        <i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i>
-                    </div>
-                    <p class="text-slate-700 italic mb-8 text-base lg:text-lg leading-relaxed">"Tài khoản ads của mình chết liên tục 2 tuần, doanh thu tụt mạnh. Làm với anh Cường tối hôm trước, sáng hôm sau camp chạy lại ổn định và có đơn ngay trong ngày."</p>
-                    <div class="font-bold text-lg lg:text-xl text-slate-900 border-t border-slate-50 pt-6">- Chị Mai Anh (Chuỗi Mỹ Phẩm Online)</div>
-                </div>
-                <div class="p-8 lg:p-10 glass-panel rounded-3xl border border-slate-100 bg-white shadow-sm hover:border-blue-200 transition-all" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="flex text-yellow-400 mb-6">
-                        <i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i>
-                    </div>
-                    <p class="text-slate-700 italic mb-8 text-base lg:text-lg leading-relaxed">"Bên mình từng đốt ngân sách mà lead vẫn yếu. Sau khi anh Cường vào tối ưu BM và cấu trúc chiến dịch, CPL giảm gần một nửa, doanh thu tháng tăng rõ rệt."</p>
-                    <div class="font-bold text-lg lg:text-xl text-slate-900 border-t border-slate-50 pt-6">- Anh Tuấn (CEO Agency)</div>
-                </div>
-                <div class="p-8 lg:p-10 glass-panel rounded-3xl border border-slate-100 bg-white shadow-sm hover:border-blue-200 transition-all" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="flex text-yellow-400 mb-6">
-                        <i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i>
-                    </div>
-                    <p class="text-slate-700 italic mb-8 text-base lg:text-lg leading-relaxed">"Mình cần tích xanh để chốt hợp đồng brand gấp. Được hướng dẫn checklist cực chi tiết, đi đúng lộ trình nên hồ sơ mượt và tỷ lệ duyệt cao hơn hẳn."</p>
-                    <div class="font-bold text-lg lg:text-xl text-slate-900 border-t border-slate-50 pt-6">- Linh Ngọc (Creator)</div>
-                </div>
-                <div class="p-8 lg:p-10 glass-panel rounded-3xl border border-slate-100 bg-white shadow-sm hover:border-blue-200 transition-all" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="flex text-yellow-400 mb-6">
-                        <i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i>
-                    </div>
-                    <p class="text-slate-700 italic mb-8 text-base lg:text-lg leading-relaxed">"Page 50k bị mất quyền quản trị, cả team hoang mang. Anh Cường xử lý rất nhanh, lấy lại page sạch và set lại bảo mật chuẩn nên tụi mình yên tâm vận hành tiếp."</p>
-                    <div class="font-bold text-lg lg:text-xl text-slate-900 border-t border-slate-50 pt-6">- Anh Quốc (Chủ Shop Đồng Hồ)</div>
-                </div>
-                <div class="p-8 lg:p-10 glass-panel rounded-3xl border border-slate-100 bg-white shadow-sm hover:border-blue-200 transition-all" data-aos="zoom-in" data-aos-delay="400">
-                    <div class="flex text-yellow-400 mb-6">
-                        <i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i>
-                    </div>
-                    <p class="text-slate-700 italic mb-8 text-base lg:text-lg leading-relaxed">"Mình giao dàn tài khoản cá nhân + fanpage, được audit rủi ro rất rõ và xử lý từng bước. Sau khi làm xong, hệ thống chạy ổn định hơn hẳn, không còn nỗi lo bị bay màu."</p>
-                    <div class="font-bold text-lg lg:text-xl text-slate-900 border-t border-slate-50 pt-6">- Chị Thảo (KOL/Diễn viên)</div>
-                </div>
-                <div class="p-8 lg:p-10 glass-panel rounded-3xl border border-slate-100 bg-white shadow-sm hover:border-blue-200 transition-all" data-aos="zoom-in" data-aos-delay="500">
-                    <div class="flex text-yellow-400 mb-6">
-                        <i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i><i data-lucide="star" class="fill-current w-5 h-5 lg:w-6 lg:h-6"></i>
-                    </div>
-                    <p class="text-slate-700 italic mb-8 text-base lg:text-lg leading-relaxed">"Chỉ sau vài ngày tối ưu ads, inbox khách thật tăng đều mỗi ngày, chi phí mỗi tin nhắn giảm mạnh. Có số liệu trước-sau rõ ràng nên mình chốt ngân sách lớn luôn."</p>
-                    <div class="font-bold text-lg lg:text-xl text-slate-900 border-t border-slate-50 pt-6">- Anh Dũng (Bất Động Sản)</div>
+
+            <div id="feedbackCarousel" class="feedback-carousel" data-aos="fade-up" data-aos-delay="100">
+                <div id="feedbackTrack" class="feedback-track">
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Tài khoản ads chết liên tục 2 tuần. Làm tối hôm trước, sáng hôm sau camp chạy lại ổn định và có đơn ngay."</p>
+                        <p class="feedback-author">- Chị Mai Anh (Chuỗi Mỹ Phẩm Online)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Đốt ngân sách nhiều nhưng lead yếu. Sau tối ưu BM và cấu trúc camp, CPL giảm gần một nửa."</p>
+                        <p class="feedback-author">- Anh Tuấn (CEO Agency)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Cần tích xanh để chốt hợp đồng brand gấp. Checklist rõ nên hồ sơ mượt và tỷ lệ duyệt cao hơn hẳn."</p>
+                        <p class="feedback-author">- Linh Ngọc (Creator)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Page 50k mất quyền admin, team dừng vận hành. Xử lý nhanh, lấy lại page sạch và set lại bảo mật chuẩn."</p>
+                        <p class="feedback-author">- Anh Quốc (Chủ Shop Đồng Hồ)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Audit rủi ro rõ ràng, xử lý từng bước. Hệ thống vận hành ổn định hơn nhiều, không còn lo bay màu."</p>
+                        <p class="feedback-author">- Chị Thảo (KOL/Diễn viên)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Sau vài ngày tối ưu ads, inbox khách thật tăng đều, chi phí mỗi tin nhắn giảm mạnh và có số liệu rõ."</p>
+                        <p class="feedback-author">- Anh Dũng (Bất Động Sản)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Case checkpoint selfie bị treo nhiều ngày. Sau khi xử lý đúng quy trình, tài khoản mở lại và giữ ổn định."</p>
+                        <p class="feedback-author">- Anh Khánh (Chủ Shop Phụ Kiện)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"BM bị hạn chế khiến team không chạy được ads. Được gỡ hạn chế và chuẩn hóa quyền truy cập rất bài bản."</p>
+                        <p class="feedback-author">- Chị Hương (Brand Thời Trang)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Profile bị cảnh báo bảo mật liên tục. Sau audit và chỉnh thiết lập, không còn checkpoint lặp lại như trước."</p>
+                        <p class="feedback-author">- Anh Vũ (Freelancer)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Funnel quảng cáo bị rối, chi phí tăng. Sau khi tái cấu trúc chiến dịch, hiệu suất quay lại ổn định sau 1 tuần."</p>
+                        <p class="feedback-author">- Chị Vy (EdTech)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Mất quyền fanpage đúng đợt sale. Được lấy lại quyền nhanh và thêm checklist vận hành để team tự kiểm soát."</p>
+                        <p class="feedback-author">- Anh Nam (Retail)</p>
+                    </article>
+                    <article class="feedback-card">
+                        <div class="feedback-stars">
+                            <i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i>
+                        </div>
+                        <p class="feedback-quote">"Tài khoản quảng cáo bị khóa đột ngột trước chiến dịch lớn. Được xử lý kịp và camp chạy lại đúng timeline."</p>
+                        <p class="feedback-author">- Chị Trang (BĐS)</p>
+                    </article>
                 </div>
             </div>
-            <div class="mt-12 text-center" data-aos="fade-up">
+
+            <p class="text-center text-slate-600 text-sm lg:text-base mt-5">Vuốt ngang hoặc kéo chuột để xem thêm feedback.</p>
+            <div class="mt-10 text-center" data-aos="fade-up">
                 <a href="#contact" class="inline-flex items-center px-8 py-4 rounded-2xl bg-blue-600 text-white font-black hover:bg-blue-700 transition">
                     Muốn kết quả tương tự? Gửi case ngay
                 </a>
@@ -2969,7 +3197,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section id="faq" class="py-20 lg:py-24 bg-slate-100">
+    <section id="faq" class="hidden py-20 lg:py-24 bg-slate-100">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 lg:mb-14" data-aos="fade-up">
                 <h2 class="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-5">Câu Hỏi Chốt Nhanh</h2>
@@ -3037,7 +3265,7 @@
                     Lựa chọn nền tảng mạng xã hội bên dưới để trao đổi chi tiết hơn.
                 </p>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-12 max-w-6xl mx-auto text-left" data-aos="fade-up">
+                <div class="hidden grid grid-cols-1 lg:grid-cols-3 gap-5 mb-12 max-w-6xl mx-auto text-left" data-aos="fade-up">
                     <div class="glass-panel p-6 rounded-2xl border border-slate-200 bg-white">
                         <p class="text-slate-900 font-black mb-2">Cam kết bảo mật 1:1</p>
                         <p class="text-slate-700">Không chia sẻ dữ liệu case cho bên thứ ba. Chỉ xử lý đúng phạm vi đã thống nhất.</p>
@@ -3053,8 +3281,8 @@
                 </div>
 
                 <div class="lead-shell p-8 lg:p-10 mb-14 max-w-6xl mx-auto text-left" data-aos="fade-up" data-aos-delay="100">
-                    <div class="grid grid-cols-2 gap-10 items-start">
-                        <div>
+                    <div class="grid grid-cols-1 gap-10 items-start">
+                        <div class="hidden">
                             <h3 class="text-3xl lg:text-4xl font-black text-white mb-5">Gửi Case Nhanh Trong 60 Giây</h3>
                             <p class="text-blue-100 text-lg lg:text-xl mb-6 leading-relaxed">
                                 Điền thông tin ngắn gọn để mình đánh giá mức độ ưu tiên và hướng xử lý phù hợp nhất cho case của bạn.
@@ -3106,7 +3334,7 @@
                                     <option>Chưa gấp, cần tư vấn trước</option>
                                 </select>
                             </div>
-                            <div>
+                            <div class="hidden">
                                 <label for="leadBudget" class="block text-blue-100 font-semibold mb-2">Ngân sách dự kiến</label>
                                 <select id="leadBudget" name="lead_budget" class="lead-select">
                                     <option value="">Chọn khoảng ngân sách (không bắt buộc)</option>
@@ -3117,7 +3345,7 @@
                                     <option>Cần tư vấn thêm</option>
                                 </select>
                             </div>
-                            <div>
+                            <div class="hidden">
                                 <label for="leadCallbackTime" class="block text-blue-100 font-semibold mb-2">Khung giờ tiện trao đổi</label>
                                 <select id="leadCallbackTime" name="lead_callback_time" class="lead-select">
                                     <option value="">Chọn khung giờ (không bắt buộc)</option>
@@ -3128,20 +3356,20 @@
                                     <option>Bất kỳ lúc nào</option>
                                 </select>
                             </div>
-                            <div>
+                            <div class="hidden">
                                 <label for="leadNote" class="block text-blue-100 font-semibold mb-2">Mô tả ngắn tình trạng</label>
                                 <textarea id="leadNote" name="lead_note" rows="3" class="lead-textarea" placeholder="Mô tả ngắn để mình tư vấn chính xác hơn"></textarea>
                             </div>
                             <div class="flex items-center gap-4 pt-2">
                                 <button type="submit" class="px-6 lg:px-8 py-3.5 rounded-2xl bg-cyan-400 text-slate-900 font-black hover:bg-cyan-300 transition">
-                                    Gửi Nhanh Qua Zalo
+                                    Gửi Case Ngay
                                 </button>
                                 <a href="tel:0972026482" class="px-6 lg:px-8 py-3.5 rounded-2xl border border-blue-200/55 text-blue-100 font-bold hover:bg-white/10 transition">
                                     Gọi Ngay
                                 </a>
                             </div>
                             <div id="leadSuccess" class="lead-success hidden text-sm lg:text-base rounded-xl px-4 py-3 font-semibold">
-                                Đã mở Zalo và sao chép nội dung case. Bạn chỉ cần dán vào khung chat để mình xử lý ngay.
+                                Đã nhận thông tin case. Mình sẽ liên hệ lại sớm.
                             </div>
                         </form>
                     </div>
@@ -3554,7 +3782,10 @@
                 });
             };
 
-            setTimeout(openPromo, 650);
+            const enablePromoAutoOpen = true;
+            if (enablePromoAutoOpen) {
+                setTimeout(openPromo, 650);
+            }
 
             promoCloseBtn?.addEventListener('click', () => closePromo('icon'));
             promoLaterBtn?.addEventListener('click', () => closePromo('later'));
@@ -3598,6 +3829,31 @@
 
         const quickLeadForm = document.getElementById('quickLeadForm');
         const leadSuccess = document.getElementById('leadSuccess');
+        const LEAD_DELIVERY_CONFIG = {
+            // Example: https://script.google.com/macros/s/AKfyc.../exec
+            webhookUrl: 'https://script.google.com/macros/s/AKfycbztTRTV_lJwa7V-dNg-LJUq0QV5C_0UXNL2bQbQntq_p7AZidNf-MrYte_-XLBdBmgx/exec',
+            webhookMethod: 'POST',
+            // Use 'no-cors' for Google Apps Script web app URL.
+            webhookRequestMode: 'no-cors',
+            openZaloAfterWebhookSuccess: true,
+            fallbackToZaloOnError: true,
+            zaloUrl: 'https://zalo.me/0972026482'
+        };
+
+        const hasWebhookUrl = () => Boolean((LEAD_DELIVERY_CONFIG.webhookUrl || '').trim());
+
+        const setLeadNotice = (message, isError = false) => {
+            if (!leadSuccess) return;
+            leadSuccess.textContent = message;
+            leadSuccess.classList.remove('hidden');
+            leadSuccess.classList.toggle('error', isError);
+        };
+
+        const openZaloDraft = (leadMessage) => {
+            trackCta('lead_form_submit', LEAD_DELIVERY_CONFIG.zaloUrl);
+            window.open(`${LEAD_DELIVERY_CONFIG.zaloUrl}?text=${leadMessage}`, '_blank', 'noopener,noreferrer');
+        };
+
         if (quickLeadForm) {
             let leadFormStarted = false;
             quickLeadForm.addEventListener('focusin', () => {
@@ -3610,6 +3866,8 @@
 
             quickLeadForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                const submitBtn = quickLeadForm.querySelector('button[type="submit"]');
+                const defaultSubmitLabel = submitBtn ? submitBtn.textContent.trim() : '';
                 const name = document.getElementById('leadName')?.value?.trim() || '';
                 const phone = document.getElementById('leadPhone')?.value?.trim() || '';
                 const service = document.getElementById('leadService')?.value?.trim() || '';
@@ -3617,6 +3875,19 @@
                 const budget = document.getElementById('leadBudget')?.value?.trim() || 'Chua cap nhat';
                 const callbackTime = document.getElementById('leadCallbackTime')?.value?.trim() || 'Linh hoat';
                 const note = document.getElementById('leadNote')?.value?.trim() || 'Không có';
+
+                const leadPayload = {
+                    source: 'lamquoccuong.com',
+                    formId: 'quickLeadForm',
+                    submittedAt: new Date().toISOString(),
+                    name,
+                    phone,
+                    service,
+                    urgency,
+                    budget,
+                    callbackTime,
+                    note
+                };
 
                 const leadMessage =
                     `CASE MOI - LAM QUOC CUONG%0A` +
@@ -3627,33 +3898,172 @@
                     `Ngan sach du kien: ${encodeURIComponent(budget)}%0A` +
                     `Khung gio lien he: ${encodeURIComponent(callbackTime)}%0A` +
                     `Mo ta tinh trang: ${encodeURIComponent(note)}`;
+                let sent = false;
 
-                const readableMessage =
-                    `CASE MOI - LAM QUOC CUONG\n` +
-                    `Ho ten: ${name}\n` +
-                    `So dien thoai/Zalo: ${phone}\n` +
-                    `Dich vu can ho tro: ${service}\n` +
-                    `Muc do khan: ${urgency}\n` +
-                    `Ngan sach du kien: ${budget}\n` +
-                    `Khung gio lien he: ${callbackTime}\n` +
-                    `Mo ta tinh trang: ${note}`;
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    submitBtn.textContent = 'Đang gửi...';
+                }
 
                 try {
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        await navigator.clipboard.writeText(readableMessage);
+                    if (hasWebhookUrl()) {
+                        const isGoogleAppsScript = LEAD_DELIVERY_CONFIG.webhookUrl.includes('script.google.com');
+                        const requestMode = LEAD_DELIVERY_CONFIG.webhookRequestMode || (isGoogleAppsScript ? 'no-cors' : 'cors');
+                        const webhookResponse = await fetch(LEAD_DELIVERY_CONFIG.webhookUrl, {
+                            method: LEAD_DELIVERY_CONFIG.webhookMethod || 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(leadPayload),
+                            mode: requestMode
+                        });
+
+                        if (requestMode !== 'no-cors' && !webhookResponse.ok) {
+                            throw new Error(`Webhook status ${webhookResponse.status}`);
+                        }
+
+                        trackEvent('lead_form_submit_success', {
+                            form_id: 'quickLeadForm',
+                            submit_channel: 'webhook'
+                        });
+
+                        if (LEAD_DELIVERY_CONFIG.openZaloAfterWebhookSuccess) {
+                            openZaloDraft(leadMessage);
+                            setLeadNotice('Đã lưu case vào hệ thống và mở Zalo với nội dung soạn sẵn. Bạn chỉ cần bấm gửi.');
+                        } else {
+                            setLeadNotice('Đã gửi case thành công. Mình sẽ liên hệ lại theo thông tin bạn để lại.');
+                        }
+
+                        quickLeadForm.reset();
+                        sent = true;
                     }
                 } catch (error) {
-                    console.warn('Clipboard unavailable:', error);
+                    console.error('Lead webhook submit failed:', error);
+                    trackEvent('lead_form_submit_error', {
+                        form_id: 'quickLeadForm',
+                        submit_channel: 'webhook',
+                        error_name: error?.name || 'UnknownError'
+                    });
                 }
 
-                trackCta('lead_form_submit', 'https://zalo.me/0972026482');
-                window.open(`https://zalo.me/0972026482?text=${leadMessage}`, '_blank', 'noopener,noreferrer');
-
-                if (leadSuccess) {
-                    leadSuccess.classList.remove('hidden');
+                if (!sent && LEAD_DELIVERY_CONFIG.fallbackToZaloOnError) {
+                    openZaloDraft(leadMessage);
+                    setLeadNotice('Đã mở Zalo với nội dung soạn sẵn. Bạn chỉ cần bấm gửi.');
+                    quickLeadForm.reset();
+                    sent = true;
                 }
-                quickLeadForm.reset();
+
+                if (!sent) {
+                    setLeadNotice('Chưa gửi được case. Bạn vui lòng thử lại hoặc gọi hotline 0972.026.482.', true);
+                }
+
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                    submitBtn.textContent = defaultSubmitLabel || 'Gửi Case Ngay';
+                }
             });
+        }
+
+        const feedbackTrack = document.getElementById('feedbackTrack');
+        if (feedbackTrack) {
+            let autoScrollTimer = null;
+            let dragging = false;
+            let movedDuringDrag = false;
+            let activePointerId = null;
+            let dragStartX = 0;
+            let dragStartScrollLeft = 0;
+            let restartTimer = null;
+
+            const getFeedbackStep = () => {
+                const firstCard = feedbackTrack.querySelector('.feedback-card');
+                if (!firstCard) return feedbackTrack.clientWidth * 0.9;
+                const gap = parseFloat(getComputedStyle(feedbackTrack).gap || '14') || 14;
+                return firstCard.getBoundingClientRect().width + gap;
+            };
+
+            const stopAutoScroll = () => {
+                if (autoScrollTimer) {
+                    clearInterval(autoScrollTimer);
+                    autoScrollTimer = null;
+                }
+                if (restartTimer) {
+                    clearTimeout(restartTimer);
+                    restartTimer = null;
+                }
+            };
+
+            const startAutoScroll = () => {
+                if (reduceMotion) return;
+                stopAutoScroll();
+                autoScrollTimer = setInterval(() => {
+                    if (dragging) return;
+                    const maxScrollLeft = feedbackTrack.scrollWidth - feedbackTrack.clientWidth;
+                    if (maxScrollLeft <= 0) return;
+                    const nextLeft = feedbackTrack.scrollLeft + getFeedbackStep();
+                    if (nextLeft >= maxScrollLeft - 4) {
+                        feedbackTrack.scrollTo({ left: 0, behavior: 'auto' });
+                    } else {
+                        feedbackTrack.scrollTo({ left: nextLeft, behavior: 'smooth' });
+                    }
+                }, isSmallScreen ? 3200 : 4000);
+            };
+
+            const deferAutoScroll = (delay = 1600) => {
+                if (reduceMotion) return;
+                if (restartTimer) clearTimeout(restartTimer);
+                restartTimer = setTimeout(startAutoScroll, delay);
+            };
+
+            feedbackTrack.addEventListener('pointerdown', (event) => {
+                if (event.pointerType === 'mouse' && event.button !== 0) return;
+                dragging = true;
+                movedDuringDrag = false;
+                activePointerId = event.pointerId;
+                dragStartX = event.clientX;
+                dragStartScrollLeft = feedbackTrack.scrollLeft;
+                feedbackTrack.classList.add('dragging');
+                feedbackTrack.setPointerCapture(activePointerId);
+                stopAutoScroll();
+            });
+
+            feedbackTrack.addEventListener('pointermove', (event) => {
+                if (!dragging || event.pointerId !== activePointerId) return;
+                const deltaX = event.clientX - dragStartX;
+                if (Math.abs(deltaX) > 3) movedDuringDrag = true;
+                feedbackTrack.scrollLeft = dragStartScrollLeft - deltaX;
+            });
+
+            const endDrag = (event) => {
+                if (!dragging || event.pointerId !== activePointerId) return;
+                if (feedbackTrack.hasPointerCapture(activePointerId)) {
+                    feedbackTrack.releasePointerCapture(activePointerId);
+                }
+                dragging = false;
+                activePointerId = null;
+                feedbackTrack.classList.remove('dragging');
+                deferAutoScroll();
+            };
+
+            feedbackTrack.addEventListener('pointerup', endDrag);
+            feedbackTrack.addEventListener('pointercancel', endDrag);
+
+            feedbackTrack.addEventListener('click', (event) => {
+                if (!movedDuringDrag) return;
+                event.preventDefault();
+                event.stopPropagation();
+                movedDuringDrag = false;
+            }, true);
+
+            feedbackTrack.addEventListener('mouseenter', stopAutoScroll);
+            feedbackTrack.addEventListener('mouseleave', () => deferAutoScroll(900));
+            feedbackTrack.addEventListener('touchstart', stopAutoScroll, { passive: true });
+            feedbackTrack.addEventListener('touchend', () => deferAutoScroll(1200), { passive: true });
+            feedbackTrack.addEventListener('wheel', () => deferAutoScroll(1000), { passive: true });
+            window.addEventListener('resize', () => deferAutoScroll(1200));
+
+            startAutoScroll();
         }
 
         if (!reduceMotion && !isTouchDevice) {
