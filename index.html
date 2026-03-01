@@ -3255,12 +3255,6 @@
             <div class="text-center mb-20" data-aos="fade-up">
                 <h2 class="text-5xl lg:text-7xl font-black mb-8 uppercase tracking-tighter text-slate-900">Kết Nối Với Tôi</h2>
                 
-                <div class="hotline-shell mt-8 mb-16 lg:mb-20 text-white p-12 lg:p-16 rounded-[4rem] inline-block w-full max-w-5xl transition-transform duration-500">
-                    <p class="text-blue-100 text-xl lg:text-2xl font-bold uppercase tracking-[0.4em] mb-6">GỌI NGAY CHO CƯỜNG</p>
-                    <a href="tel:0972026482" class="text-6xl lg:text-8xl font-black tracking-tighter hotline-glow block">0972.026.482</a>
-                    <p class="mt-8 lg:mt-10 text-blue-100 text-lg lg:text-xl font-medium tracking-wide">Social Media Engineer | 11 năm thực chiến Facebook | Hỗ trợ 24/7</p>
-                </div>
-
                 <p class="text-slate-700 max-w-2xl mx-auto text-xl lg:text-2xl font-medium mb-16">
                     Lựa chọn nền tảng mạng xã hội bên dưới để trao đổi chi tiết hơn.
                 </p>
@@ -3833,8 +3827,8 @@
             // Example: https://script.google.com/macros/s/AKfyc.../exec
             webhookUrl: 'https://script.google.com/macros/s/AKfycbztTRTV_lJwa7V-dNg-LJUq0QV5C_0UXNL2bQbQntq_p7AZidNf-MrYte_-XLBdBmgx/exec',
             webhookMethod: 'POST',
-            // Use 'no-cors' for Google Apps Script web app URL.
-            webhookRequestMode: 'no-cors',
+            // Use 'cors' to read webhook response and detect real backend errors.
+            webhookRequestMode: 'cors',
             openZaloAfterWebhookSuccess: true,
             fallbackToZaloOnError: true,
             zaloUrl: 'https://zalo.me/0972026482'
@@ -3849,9 +3843,17 @@
             leadSuccess.classList.toggle('error', isError);
         };
 
-        const openZaloDraft = (leadMessage) => {
+        const openZaloDraft = (leadMessage, preOpenedWindow = null) => {
+            const targetUrl = `${LEAD_DELIVERY_CONFIG.zaloUrl}?text=${leadMessage}`;
             trackCta('lead_form_submit', LEAD_DELIVERY_CONFIG.zaloUrl);
-            window.open(`${LEAD_DELIVERY_CONFIG.zaloUrl}?text=${leadMessage}`, '_blank', 'noopener,noreferrer');
+            if (preOpenedWindow && !preOpenedWindow.closed) {
+                preOpenedWindow.location.href = targetUrl;
+                return true;
+            }
+            const opened = window.open(targetUrl, '_blank', 'noopener,noreferrer');
+            if (opened) return true;
+            window.location.href = targetUrl;
+            return false;
         };
 
         if (quickLeadForm) {
@@ -3871,10 +3873,10 @@
                 const name = document.getElementById('leadName')?.value?.trim() || '';
                 const phone = document.getElementById('leadPhone')?.value?.trim() || '';
                 const service = document.getElementById('leadService')?.value?.trim() || '';
-                const urgency = document.getElementById('leadUrgency')?.value?.trim() || 'Chua ro';
-                const budget = document.getElementById('leadBudget')?.value?.trim() || 'Chua cap nhat';
-                const callbackTime = document.getElementById('leadCallbackTime')?.value?.trim() || 'Linh hoat';
-                const note = document.getElementById('leadNote')?.value?.trim() || 'Không có';
+                const urgency = document.getElementById('leadUrgency')?.value?.trim() || '';
+                const budget = document.getElementById('leadBudget')?.value?.trim() || '';
+                const callbackTime = document.getElementById('leadCallbackTime')?.value?.trim() || '';
+                const note = document.getElementById('leadNote')?.value?.trim() || '';
 
                 const leadPayload = {
                     source: 'lamquoccuong.com',
@@ -3882,23 +3884,38 @@
                     submittedAt: new Date().toISOString(),
                     name,
                     phone,
-                    service,
-                    urgency,
-                    budget,
-                    callbackTime,
-                    note
+                    service
                 };
+                if (urgency) leadPayload.urgency = urgency;
+                if (budget) leadPayload.budget = budget;
+                if (callbackTime) leadPayload.callbackTime = callbackTime;
+                if (note) leadPayload.note = note;
+                const leadPayloadAsJson = JSON.stringify(leadPayload);
 
-                const leadMessage =
-                    `CASE MOI - LAM QUOC CUONG%0A` +
-                    `Ho ten: ${encodeURIComponent(name)}%0A` +
-                    `So dien thoai/Zalo: ${encodeURIComponent(phone)}%0A` +
-                    `Dich vu can ho tro: ${encodeURIComponent(service)}%0A` +
-                    `Muc do khan: ${encodeURIComponent(urgency)}%0A` +
-                    `Ngan sach du kien: ${encodeURIComponent(budget)}%0A` +
-                    `Khung gio lien he: ${encodeURIComponent(callbackTime)}%0A` +
-                    `Mo ta tinh trang: ${encodeURIComponent(note)}`;
+                const messageLines = [
+                    'CASE MOI - LAM QUOC CUONG',
+                    `Ho ten: ${name}`,
+                    `So dien thoai/Zalo: ${phone}`,
+                    `Dich vu can ho tro: ${service}`
+                ];
+                if (urgency) messageLines.push(`Muc do khan: ${urgency}`);
+                if (budget) messageLines.push(`Ngan sach du kien: ${budget}`);
+                if (callbackTime) messageLines.push(`Khung gio lien he: ${callbackTime}`);
+                if (note) messageLines.push(`Mo ta tinh trang: ${note}`);
+                const leadMessage = messageLines.map((line) => encodeURIComponent(line)).join('%0A');
                 let sent = false;
+                let usedZaloWindow = false;
+                const shouldOpenZalo = LEAD_DELIVERY_CONFIG.openZaloAfterWebhookSuccess || LEAD_DELIVERY_CONFIG.fallbackToZaloOnError;
+                let preOpenedZaloWindow = null;
+
+                if (shouldOpenZalo) {
+                    try {
+                        // Open early to avoid popup blockers on mobile after async calls.
+                        preOpenedZaloWindow = window.open('about:blank', '_blank');
+                    } catch (error) {
+                        preOpenedZaloWindow = null;
+                    }
+                }
 
                 if (submitBtn) {
                     submitBtn.disabled = true;
@@ -3913,14 +3930,27 @@
                         const webhookResponse = await fetch(LEAD_DELIVERY_CONFIG.webhookUrl, {
                             method: LEAD_DELIVERY_CONFIG.webhookMethod || 'POST',
                             headers: {
-                                'Content-Type': 'application/json'
+                                // Keep request as a simple request for better compatibility with no-cors mode.
+                                'Content-Type': 'text/plain;charset=UTF-8'
                             },
-                            body: JSON.stringify(leadPayload),
-                            mode: requestMode
+                            body: leadPayloadAsJson,
+                            mode: requestMode,
+                            keepalive: true
                         });
 
                         if (requestMode !== 'no-cors' && !webhookResponse.ok) {
                             throw new Error(`Webhook status ${webhookResponse.status}`);
+                        }
+                        if (requestMode !== 'no-cors') {
+                            let webhookPayload = null;
+                            try {
+                                webhookPayload = await webhookResponse.json();
+                            } catch (parseError) {
+                                webhookPayload = null;
+                            }
+                            if (webhookPayload && webhookPayload.ok === false) {
+                                throw new Error(webhookPayload.error || 'Webhook returned ok=false');
+                            }
                         }
 
                         trackEvent('lead_form_submit_success', {
@@ -3929,7 +3959,7 @@
                         });
 
                         if (LEAD_DELIVERY_CONFIG.openZaloAfterWebhookSuccess) {
-                            openZaloDraft(leadMessage);
+                            usedZaloWindow = openZaloDraft(leadMessage, preOpenedZaloWindow) || usedZaloWindow;
                             setLeadNotice('Đã lưu case vào hệ thống và mở Zalo với nội dung soạn sẵn. Bạn chỉ cần bấm gửi.');
                         } else {
                             setLeadNotice('Đã gửi case thành công. Mình sẽ liên hệ lại theo thông tin bạn để lại.');
@@ -3948,7 +3978,7 @@
                 }
 
                 if (!sent && LEAD_DELIVERY_CONFIG.fallbackToZaloOnError) {
-                    openZaloDraft(leadMessage);
+                    usedZaloWindow = openZaloDraft(leadMessage, preOpenedZaloWindow) || usedZaloWindow;
                     setLeadNotice('Đã mở Zalo với nội dung soạn sẵn. Bạn chỉ cần bấm gửi.');
                     quickLeadForm.reset();
                     sent = true;
@@ -3962,6 +3992,10 @@
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
                     submitBtn.textContent = defaultSubmitLabel || 'Gửi Case Ngay';
+                }
+
+                if (!usedZaloWindow && preOpenedZaloWindow && !preOpenedZaloWindow.closed) {
+                    preOpenedZaloWindow.close();
                 }
             });
         }
