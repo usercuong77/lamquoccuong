@@ -2660,25 +2660,22 @@
             }
 
             #contact .contact-platforms {
-                display: flex !important;
-                flex-wrap: nowrap !important;
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
                 gap: 10px !important;
-                overflow-x: auto;
-                overflow-y: hidden;
-                padding-bottom: 4px;
-                scroll-snap-type: x mandatory;
-                -webkit-overflow-scrolling: touch;
+                overflow: visible !important;
+                padding-bottom: 0 !important;
+                scroll-snap-type: none !important;
             }
 
             #contact .contact-platforms > .contact-link-card {
-                flex: 0 0 60%;
-                min-width: 60%;
-                max-width: 240px;
-                scroll-snap-align: start;
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: none !important;
             }
 
             #contact .contact-platforms > a:last-child {
-                grid-column: auto !important;
+                grid-column: 1 / -1 !important;
             }
 
             #about .grid.grid-cols-2.gap-6 {
@@ -3284,8 +3281,8 @@
     <section id="contact" class="py-24 lg:py-32 bg-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-20" data-aos="fade-up">
-                <h2 class="text-slate-900 max-w-4xl mx-auto text-4xl lg:text-6xl font-black leading-tight tracking-tight mb-16">
-                    Lựa chọn nền tảng mạng xã hội bên dưới để trao đổi chi tiết hơn.
+                <h2 class="text-4xl lg:text-5xl text-slate-900 font-extrabold mb-12">
+                    Liên Hệ
                 </h2>
 
                 <div class="hidden grid grid-cols-1 lg:grid-cols-3 gap-5 mb-12 max-w-6xl mx-auto text-left" data-aos="fade-up">
@@ -3394,6 +3391,14 @@
                             <p class="text-blue-100/90 text-xs lg:text-sm font-medium pt-1">
                                 Lưu ý: Sau khi mở Zalo, vui lòng dán nội dung case rồi bấm gửi.
                             </p>
+                            <div id="leadActionRow" class="hidden flex flex-wrap items-center gap-3 pt-1">
+                                <a id="leadOpenZaloBtn" href="https://zalo.me/0972026482" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-blue-500/85 text-white text-sm font-bold hover:bg-blue-400 transition">
+                                    Mở Zalo
+                                </a>
+                                <button id="leadCopyMsgBtn" type="button" class="px-4 py-2 rounded-xl border border-blue-200/55 text-blue-100 text-sm font-bold hover:bg-white/10 transition">
+                                    Sao Chép Nội Dung
+                                </button>
+                            </div>
                             <div id="leadSuccess" class="lead-success hidden text-sm lg:text-base rounded-xl px-4 py-3 font-semibold">
                                 Đã nhận thông tin case. Mình sẽ liên hệ lại sớm.
                             </div>
@@ -3855,6 +3860,10 @@
 
         const quickLeadForm = document.getElementById('quickLeadForm');
         const leadSuccess = document.getElementById('leadSuccess');
+        const leadActionRow = document.getElementById('leadActionRow');
+        const leadOpenZaloBtn = document.getElementById('leadOpenZaloBtn');
+        const leadCopyMsgBtn = document.getElementById('leadCopyMsgBtn');
+        let latestLeadMessageReadable = '';
         const LEAD_DELIVERY_CONFIG = {
             // Example: https://script.google.com/macros/s/AKfyc.../exec
             webhookUrl: 'https://script.google.com/macros/s/AKfycbztTRTV_lJwa7V-dNg-LJUq0QV5C_0UXNL2bQbQntq_p7AZidNf-MrYte_-XLBdBmgx/exec',
@@ -3875,8 +3884,19 @@
             leadSuccess.classList.toggle('error', isError);
         };
 
+        const isInAppBrowser = () => /FBAN|FBAV|FB_IAB|Messenger|Instagram/i.test(navigator.userAgent || '');
+
+        const buildZaloTargetUrl = (leadMessage) => `${LEAD_DELIVERY_CONFIG.zaloUrl}?text=${leadMessage}`;
+
+        const renderLeadActions = (leadMessage, leadMessageReadable = '') => {
+            if (!leadActionRow || !leadOpenZaloBtn) return;
+            leadOpenZaloBtn.href = buildZaloTargetUrl(leadMessage);
+            latestLeadMessageReadable = leadMessageReadable;
+            leadActionRow.classList.remove('hidden');
+        };
+
         const openZaloDraft = (leadMessage, preOpenedWindow = null) => {
-            const targetUrl = `${LEAD_DELIVERY_CONFIG.zaloUrl}?text=${leadMessage}`;
+            const targetUrl = buildZaloTargetUrl(leadMessage);
             trackCta('lead_form_submit', LEAD_DELIVERY_CONFIG.zaloUrl);
             if (preOpenedWindow && !preOpenedWindow.closed) {
                 preOpenedWindow.location.href = targetUrl;
@@ -3884,19 +3904,68 @@
             }
             const opened = window.open(targetUrl, '_blank', 'noopener,noreferrer');
             if (opened) return true;
-            window.location.href = targetUrl;
-            return false;
+            try {
+                const manualAnchor = document.createElement('a');
+                manualAnchor.href = targetUrl;
+                manualAnchor.target = '_self';
+                manualAnchor.rel = 'noopener noreferrer';
+                manualAnchor.style.display = 'none';
+                document.body.appendChild(manualAnchor);
+                manualAnchor.click();
+                manualAnchor.remove();
+                return true;
+            } catch (error) {
+                window.location.href = targetUrl;
+                return false;
+            }
         };
 
-        const copyLeadDraft = async (leadMessageReadable) => {
+        const copyViaExecCommand = (text) => {
             try {
-                if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') return false;
-                await navigator.clipboard.writeText(leadMessageReadable);
-                return true;
+                const temp = document.createElement('textarea');
+                temp.value = text;
+                temp.setAttribute('readonly', '');
+                temp.style.position = 'fixed';
+                temp.style.top = '-9999px';
+                temp.style.left = '-9999px';
+                document.body.appendChild(temp);
+                temp.focus();
+                temp.select();
+                temp.setSelectionRange(0, temp.value.length);
+                const copied = document.execCommand('copy');
+                temp.remove();
+                return copied;
             } catch (error) {
                 return false;
             }
         };
+
+        const copyLeadDraft = async (leadMessageReadable) => {
+            if (!leadMessageReadable) return false;
+            try {
+                if (window.isSecureContext && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                    await navigator.clipboard.writeText(leadMessageReadable);
+                    return true;
+                }
+            } catch (error) {
+                // Ignore and fallback to legacy copy method.
+            }
+            return copyViaExecCommand(leadMessageReadable);
+        };
+
+        leadCopyMsgBtn?.addEventListener('click', async () => {
+            const copied = await copyLeadDraft(latestLeadMessageReadable);
+            if (copied) {
+                setLeadNotice('Đã sao chép nội dung case. Bạn mở Zalo, dán nội dung rồi bấm gửi.');
+            } else {
+                setLeadNotice('Không sao chép tự động được trên thiết bị này. Vui lòng nhập nhanh nội dung case rồi gửi.', true);
+            }
+        });
+
+        leadOpenZaloBtn?.addEventListener('click', () => {
+            const href = leadOpenZaloBtn.getAttribute('href') || LEAD_DELIVERY_CONFIG.zaloUrl;
+            trackCta('lead_open_zalo_manual', href);
+        });
 
         if (quickLeadForm) {
             let leadFormStarted = false;
@@ -3946,6 +4015,7 @@
                 if (note) messageLines.push(`Mo ta tinh trang: ${note}`);
                 const leadMessageReadable = messageLines.join('\n');
                 const leadMessage = messageLines.map((line) => encodeURIComponent(line)).join('%0A');
+                renderLeadActions(leadMessage, leadMessageReadable);
                 let sent = false;
                 let usedZaloWindow = false;
                 const shouldOpenZalo = LEAD_DELIVERY_CONFIG.openZaloAfterWebhookSuccess || LEAD_DELIVERY_CONFIG.fallbackToZaloOnError;
@@ -4004,7 +4074,13 @@
                         if (LEAD_DELIVERY_CONFIG.openZaloAfterWebhookSuccess) {
                             const copied = await copyLeadDraft(leadMessageReadable);
                             usedZaloWindow = openZaloDraft(leadMessage, preOpenedZaloWindow) || usedZaloWindow;
-                            if (copied) {
+                            if (isInAppBrowser()) {
+                                if (copied) {
+                                    setLeadNotice('Đã lưu case. Trình duyệt Facebook/Messenger có thể chặn mở app tự động, bấm "Mở Zalo", dán nội dung rồi gửi.');
+                                } else {
+                                    setLeadNotice('Đã lưu case. Nếu Zalo chưa mở, bấm "Mở Zalo" rồi gửi nội dung case thủ công.');
+                                }
+                            } else if (copied) {
                                 setLeadNotice('Đã lưu case và mở Zalo. Nội dung đã được sao chép, bạn chỉ cần dán rồi bấm gửi.');
                             } else {
                                 setLeadNotice('Đã lưu case và mở Zalo. Nếu app không tự điền nội dung, bạn nhập ngắn gọn hoặc gửi lại.');
@@ -4028,7 +4104,13 @@
                 if (!sent && LEAD_DELIVERY_CONFIG.fallbackToZaloOnError) {
                     const copied = await copyLeadDraft(leadMessageReadable);
                     usedZaloWindow = openZaloDraft(leadMessage, preOpenedZaloWindow) || usedZaloWindow;
-                    if (copied) {
+                    if (isInAppBrowser()) {
+                        if (copied) {
+                            setLeadNotice('Trình duyệt Facebook/Messenger có thể chặn mở app tự động. Bấm "Mở Zalo", dán nội dung rồi gửi.');
+                        } else {
+                            setLeadNotice('Nếu Zalo chưa mở, bấm "Mở Zalo" và gửi nhanh nội dung case thủ công.');
+                        }
+                    } else if (copied) {
                         setLeadNotice('Đã mở Zalo và sao chép nội dung case. Bạn chỉ cần dán rồi bấm gửi.');
                     } else {
                         setLeadNotice('Đã mở Zalo. Nếu app không tự điền nội dung, bạn gửi nhanh thông tin chính để mình xử lý.');
