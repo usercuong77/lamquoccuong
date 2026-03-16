@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --bg-strong: #07090f;
+  --bg-soft: #0b111d;
+  --text-primary: #f5f7fc;
+  --text-secondary: #98a2b3;
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.22);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% -10%, rgba(79, 141, 255, 0.2), transparent 42%),
+    radial-gradient(circle at 82% 3%, rgba(211, 176, 111, 0.14), transparent 34%),
+    linear-gradient(165deg, var(--bg-strong), #0a111d 45%, #070a12 100%);
+  color: var(--text-primary);
+  font-family: var(--font-sans), "Segoe UI", sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(79, 141, 255, 0.35);
+  color: #f7f9ff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+main {
+  position: relative;
+  overflow-x: clip;
+}
+
+main::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(circle at center, black 42%, transparent 92%);
+  z-index: -1;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: #0a1222;
+  padding: 0.55rem 1rem;
+  color: #f7f9ff;
+  transition: top 0.25s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+@layer utilities {
+  .shell {
+    margin-left: auto;
+    margin-right: auto;
+    width: min(100% - 2rem, 1160px);
+  }
+
+  .section-gap {
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
+  }
+
+  .premium-card {
+    border: 1px solid var(--line);
+    background: linear-gradient(155deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+    backdrop-filter: blur(12px);
+  }
+
+  .focus-outline {
+    outline: none;
+  }
+
+  .focus-outline:focus-visible {
+    box-shadow: 0 0 0 3px rgba(79, 141, 255, 0.45);
+  }
+
+  .link-underline {
+    position: relative;
+  }
+
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.24rem;
+    width: 100%;
+    height: 1px;
+    transform: scaleX(0);
+    transform-origin: right;
+    background: linear-gradient(90deg, rgba(110, 168, 255, 0.88), rgba(211, 176, 111, 0.86));
+    transition: transform 0.25s ease;
+  }
+
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-gap {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+
+  main::before {
+    background-size: 62px 62px;
+  }
+}
