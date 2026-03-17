@@ -25,16 +25,24 @@ export const metadata: Metadata = {
   description:
     "Video-first brand hub of Lam Quoc Cuong. Strategic video editing that strengthens brand perception, attraction, and trust.",
   openGraph: {
-    title: "Lam Quoc Cuong",
+    title: "Lam Quoc Cuong | Premium Video Editor & Visual Brand Builder",
     description:
       "Strategic video editing that elevates brand perception and attracts the right audience.",
     url: "https://lamquoccuong.com",
     siteName: "Lam Quoc Cuong",
-    type: "website"
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Lam Quoc Cuong - Strategic Video Editing for Stronger Brand Presence"
+      }
+    ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lam Quoc Cuong",
+    title: "Lam Quoc Cuong | Premium Video Editor & Visual Brand Builder",
     description:
       "Strategic video editing that elevates brand perception and attracts the right audience."
   },
