@@ -21,13 +21,13 @@ const sans = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lamquoccuong.com"),
-  title: "Lam Quoc Cuong | Premium Video Editor & Visual Brand Builder",
+  title: "Cuonglq | Video Editor, Motion Nerd & Professional Handsome Guy",
   description:
-    "Video-first brand hub of Lam Quoc Cuong. Strategic video editing that strengthens brand perception, attraction, and trust.",
+    "Personal playground of Lâm Quốc Cường: video editing, motion graphics, 3D, AI, creative experiments and questionable jokes.",
   openGraph: {
-    title: "Lam Quoc Cuong | Premium Video Editor & Visual Brand Builder",
+    title: "Cuonglq | Video Editor, Motion Nerd & Professional Handsome Guy",
     description:
-      "Strategic video editing that elevates brand perception and attracts the right audience.",
+      "Video editing, motion graphics, 3D, AI and a slightly dangerous amount of curiosity.",
     url: "https://lamquoccuong.com",
     siteName: "Lam Quoc Cuong",
     type: "website",
@@ -36,15 +36,15 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Lam Quoc Cuong - Strategic Video Editing for Stronger Brand Presence"
+        alt: "Cuonglq - Video Editor, Motion Nerd and Professional Handsome Guy"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lam Quoc Cuong | Premium Video Editor & Visual Brand Builder",
+    title: "Cuonglq | Video Editor, Motion Nerd & Professional Handsome Guy",
     description:
-      "Strategic video editing that elevates brand perception and attracts the right audience."
+      "Video editing, motion graphics, 3D, AI and a slightly dangerous amount of curiosity."
   },
   alternates: {
     canonical: "https://lamquoccuong.com"
@@ -57,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="vi">
       <body className={`${sans.variable} ${serif.variable}`}>
         <LanguageProvider>
           <SkipLink />
