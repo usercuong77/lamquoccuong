@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 
 import { LanguageProvider } from "@/components/providers/language-provider";
-import { SkipLink } from "@/components/skip-link";
 import "./globals.css";
 
 const serif = Cormorant_Garamond({
@@ -60,7 +59,6 @@ export default function RootLayout({
     <html lang="vi">
       <body className={`${sans.variable} ${serif.variable}`}>
         <LanguageProvider>
-          <SkipLink />
           {children}
         </LanguageProvider>
       </body>

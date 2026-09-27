@@ -22,3 +22,6 @@ Thumbs.db
 
 # Keep local static backup out of deploy
 index.html
+
+# Local Netlify folder
+.netlify

@@ -19,11 +19,11 @@ export function LanguageProvider({
 }>) {
   const [locale, setLocaleState] = useState<Locale>(() => {
     if (typeof window === "undefined") {
-      return "en";
+      return "vi";
     }
 
     const savedLocale = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-    return isLocale(savedLocale) ? savedLocale : "en";
+    return isLocale(savedLocale) ? savedLocale : "vi";
   });
 
   useEffect(() => {
