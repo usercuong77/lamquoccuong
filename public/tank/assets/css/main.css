@@ -1,0 +1,2760 @@
+﻿body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #121212;
+            font-family: 'Segoe UI', Tahoma, Arial, 'Consolas', 'Courier New', sans-serif;
+            color: white;
+            user-select: none;
+        }
+
+        #gameCanvas {
+            display: block;
+        }
+
+        /* Compact start menu for the landing-page playable preview only. */
+        html.tank-embed-preview, html.tank-embed-preview body { height: 100%; }
+        html.tank-embed-preview body { overflow: hidden; }
+        html.tank-embed-preview #startScreen { height: 100%; inset: 0; overflow-y: auto; padding: 12px; position: absolute; width: 100%; }
+        html.tank-embed-preview #startScreen .startHints,
+        html.tank-embed-preview #startScreen .startRight,
+        html.tank-embed-preview #startScreen .leftFootNote,
+        html.tank-embed-preview #startScreen .startZones .zoneShop,
+        html.tank-embed-preview #startScreen .startZones .zoneSettings,
+        html.tank-embed-preview #startScreen .startZones .zoneDisplay { display: none !important; }
+        html.tank-embed-preview #startScreen .startTop { align-items: flex-start; flex-direction: row; }
+        html.tank-embed-preview #startScreen .startTitle { font-size: clamp(1.25rem, 4vw, 2.1rem); }
+        html.tank-embed-preview #startScreen .startZones { grid-template-columns: 1fr; }
+        html.tank-embed-preview #startScreen .startZone { min-height: 44px; padding: 8px 12px; }
+        html.tank-embed-preview #startScreen .startMain { grid-template-columns: minmax(0, 1fr) !important; }
+        html.tank-embed-preview #startScreen .systemList { display: grid; gap: 6px; grid-template-columns: repeat(2, minmax(0, 1fr)); max-height: none; }
+        html.tank-embed-preview #startScreen .sysItem { min-height: 46px; padding: 6px; }
+        html.tank-embed-preview #startScreen .sysMini { display: none; }
+        html.tank-embed-preview #startScreen .modeBox { margin-top: 6px; padding: 8px; }
+
+        /* === UI Layer === */
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* HUD: Top Left */
+        #hud-top-left {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-align: left;
+        }
+        .hud-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0 #000;
+        }
+        .highlight { color: #4CAF50; }
+        .wave-text { color: #FFD700; font-size: 1.5rem; }
+
+        /* HUD: Top Right - Buffs */
+        #hud-top-right {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .buff-icon {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid white;
+        }
+
+        /* WEAPON & SKILL BAR */
+        #bottomBar {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            pointer-events: auto;
+        }
+
+
+#playersHudRow{
+    display:flex;
+    gap: 22px;
+    align-items: flex-end;
+    justify-content: center;
+    width: min(980px, 96vw);
+}
+
+#playersHudRow.twoP{
+    justify-content: space-between;
+    gap: 18px;
+}
+
+#playersHudRow.twoP .playerHud{
+    width: 48%;
+}
+
+.hudDivider{
+    width: 2px;
+    min-height: 190px;
+    background: rgba(255,255,255,0.16);
+    border-radius: 2px;
+    align-self: stretch;
+    margin: 0 8px;
+    display: none;
+}
+
+#playersHudRow.twoP .hudDivider{
+    display: block;
+}
+
+/* tighter on narrow screens */
+@media (max-width: 980px){
+    #playersHudRow{ width: 96vw; }
+    #healthBarContainer, #healthBarContainer2{ width: min(360px, 46vw); }
+    #playersHudRow.twoP{ gap: 12px; }
+    .hudDivider{ margin: 0 4px; min-height: 175px; }
+}
+
+.playerHud{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+/* Make per-player HUD a bit smaller on short screens */
+@media (max-height: 760px){
+    #playersHudRow{ gap: 14px; }
+    #healthBarContainer, #healthBarContainer2{ width: 320px; }
+    .slot{ width: 54px; height: 54px; }
+}
+
+        #weaponBar, #skillBar, #weaponBar2, #skillBar2 {
+            display: flex;
+            gap: 10px;
+        }
+
+        .slot {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #555;
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #777;
+            transition: all 0.2s;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .slot.active {
+            border-color: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255,255,255,0.4);
+            background: rgba(60, 60, 60, 0.9);
+        }
+
+        .slot .key-number {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            font-size: 0.7rem;
+            color: #aaa;
+        }
+
+        .slot .icon {
+            font-size: 0.9rem;
+            text-align: center;
+            line-height: 1.1;
+            margin-bottom: 2px;
+        }
+
+        .slot .level-indicator {
+            font-size: 0.7rem;
+            color: #FFD700;
+            margin-top: 2px;
+        }
+
+        /* ULTIMATE BAR */
+        #ultiContainer {
+            width: 400px;
+            height: 10px;
+            background: #333;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 5px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        #ultiBar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700, #FFAB00);
+            transition: width 0.2s;
+            box-shadow: 0 0 10px #FFD700;
+        }
+        #ultiText {
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #FFD700;
+            font-weight: bold;
+            text-shadow: 0 0 5px black;
+        }
+
+        /* Cooldown Overlay */
+        .cooldown-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            transition: height 0.1s linear;
+            background: rgba(0, 0, 0, 0.78);
+            background-image: linear-gradient(135deg,
+                rgba(255,255,255,0.14) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255,255,255,0.14) 50%,
+                rgba(255,255,255,0.14) 75%,
+                transparent 75%,
+                transparent);
+            background-size: 14px 14px;
+        }
+
+        .cooldown-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 2px 0 #000, 0 0 8px rgba(0,0,0,0.8);
+            padding: 2px 6px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.25);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.08s linear;
+        }
+
+/* HUD: Health Bar */
+        #healthBarContainer, #healthBarContainer2 {
+            position: relative;
+            width: 400px;
+            height: 20px;
+            background: #222;
+            border: 2px solid #555;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        @keyframes pvpWarnPulse {
+            0%   { box-shadow: 0 0 0 rgba(255,82,82,0.0); }
+            50%  { box-shadow: 0 0 18px rgba(255,82,82,0.85); }
+            100% { box-shadow: 0 0 0 rgba(255,82,82,0.0); }
+        }
+        .playerHud.pvp-warn #healthBarContainer,
+        .playerHud.pvp-warn #healthBarContainer2 {
+            border-color: #ff5252;
+            animation: pvpWarnPulse 0.8s ease-in-out infinite;
+        }
+        .playerHud.pvp-warn .slot {
+            border-color: #ff5252 !important;
+            box-shadow: 0 0 10px rgba(255,82,82,0.45);
+        }
+
+        .hpLabel{
+            display:inline-block;
+            padding: 1px 6px;
+            margin-right: 6px;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            line-height: 1.2;
+            letter-spacing: 0.5px;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.45);
+        }
+        #healthBar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.2s;
+        }
+        #shieldOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 191, 255, 0.5);
+            display: none;
+        }
+
+        /* BOSS HP BAR */
+        #bossHealthContainer {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 30px;
+            background: #222;
+            border: 3px solid #d32f2f;
+            border-radius: 4px;
+            overflow: hidden;
+            display: none; 
+            z-index: 10;
+        }
+        #bossHealthBar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #d32f2f, #b71c1c);
+            transition: width 0.2s;
+        }
+        #bossName {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        /* SCREENS */
+        #startScreen{
+            position: fixed;
+            inset: 0;
+            top: 0;
+            left: 0;
+            transform: none;
+            background: rgba(10,10,10,0.96);
+            padding: 22px 26px;
+            border-radius: 0;
+            border: 2px solid #4CAF50;
+            text-align: center;
+            pointer-events: auto;
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.24);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: stretch;
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        #gameOverScreen, #victoryScreen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 10, 0.95);
+            padding: 50px;
+            border-radius: 15px;
+            border: 2px solid #4CAF50;
+            text-align: center;
+            pointer-events: auto;
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 400px;
+            z-index: 100;
+        }
+
+        h1 { margin: 0 0 20px; font-size: 3rem; color: #4CAF50; text-transform: uppercase; letter-spacing: 3px; }
+        h2 { margin: 0 0 15px; color: #ff4444; font-size: 2.5rem; }
+        p { color: #ccc; margin-bottom: 10px; font-size: 1.1rem; }
+        
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 30px;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .btn:hover { background: #45a049; transform: scale(1.05); box-shadow: 0 0 20px #4CAF50; }
+        @keyframes pvpReplayPulse {
+            0% { transform: translateX(-50%) scale(1); box-shadow: 0 0 14px rgba(24,255,106,0.25); }
+            50% { transform: translateX(-50%) scale(1.06); box-shadow: 0 0 24px rgba(24,255,106,0.55); }
+            100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 14px rgba(24,255,106,0.25); }
+        }
+        #btnPvpReplay{
+            animation: pvpReplayPulse 1.2s ease-in-out infinite;
+        }
+
+        /* === Shop UI Fix: keep BUY buttons consistent === */
+        #shopModal .btn {
+            padding: 10px 12px;
+            font-size: 0.95rem;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #shopModal #btnShopContinue {
+            width: auto;
+            padding: 12px 16px;
+            font-size: 1rem;
+            margin-top: 0;
+        }
+        .hidden { display: none !important; }
+
+        .key-guide {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 10px;
+            text-align: left;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        .key { color: white; font-weight: bold; background: #333; padding: 2px 6px; border-radius: 4px; }
+        
+        /* === MAX Edition UX Tweaks === */
+        #weaponBar .weapon-slot, .weapon-slot, #weaponBar .slot { width: 60px; height: 60px; }
+        #settingsModal input[type="range"] { width: 100%; }
+        #settingsModal input[type="checkbox"] { transform: scale(1.2); }
+        #maxTopBar .btn:hover { transform: scale(1.03); box-shadow: 0 0 12px rgba(255,255,255,0.15); }
+
+
+        /* === Admin Code Modal (hidden) === */
+        #adminCodeModal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:99999}
+        #adminCodeModal.hidden{display:none}
+        #adminCodePanel{pointer-events:auto;width:min(520px,92vw);background:#0b0f0c;border:2px solid rgba(24,255,106,.9);border-radius:14px;box-shadow:0 0 30px rgba(24,255,106,.25);padding:18px}
+        #adminCodePanel h3{margin:0 0 10px;color:#18ff6a;letter-spacing:2px}
+        #adminCodeInput{pointer-events:auto;width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#090b0a;color:#fff;font-size:16px;outline:none}
+        #adminCodeMsg{margin-top:10px;font-size:13px;min-height:18px;color:rgba(255,255,255,.8)}
+        /* === Assassin Lock Modal === */
+        #assassinLockModal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:100002}
+        #assassinLockModal.hidden{display:none}
+        #assassinLockPanel{pointer-events:auto;width:min(520px,92vw);max-width:92vw;box-sizing:border-box;overflow:hidden;background:#0b0f0c;border:2px solid rgba(255,255,255,.18);border-radius:14px;box-shadow:0 0 30px rgba(0,0,0,.55);padding:16px}
+        #assassinLockPanel h3{margin:0 0 8px;color:#FFD54F;letter-spacing:1px}
+        #assassinLockText{color:rgba(255,255,255,.85);font-size:13px;line-height:1.35}
+        #assassinUnlockRow{margin-top:10px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+        #assassinUnlockRow .btn{margin-top:0;padding:8px 12px;font-size:0.9rem}
+        #assassinUnlockMsg{margin-top:8px;font-size:12px;min-height:18px;color:rgba(255,255,255,.8)}
+
+
+        /* === Copyright Badge === */
+        #copyrightBadge{
+            position:fixed;
+            top:auto;
+            bottom:12px;
+            right:14px;
+            z-index:640;
+            padding:5px 8px;
+            border-radius:9px;
+            border:1px solid rgba(24,255,106,.22);
+            background:rgba(0,0,0,.30);
+            color:rgba(24,255,106,.68);
+            font-size:10px;
+            letter-spacing:0.4px;
+            user-select:none;
+            pointer-events:none;
+            backdrop-filter: blur(6px);
+        }
+
+
+        /* === VietKey Confirm Modal === */
+        #vietkeyModal{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.55); z-index:100001;}
+        #vietkeyModal.hidden{display:none;}
+        #vietkeyPanel{width:min(560px,92vw); background:#0b0f0c; border:2px solid rgba(24,255,106,.55); border-radius:14px;
+                      box-shadow:0 0 30px rgba(24,255,106,.22); padding:16px 18px;}
+        .vietkeyTip{margin-top:14px; font-size:12px; color:rgba(255,255,255,.78); text-align:center;}
+        .vietkeyTip b{color:#18ff6a;}
+        /* === PvP Loadout Modal (in-game) === */
+        #pvpLoadoutModal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.82);z-index:335;pointer-events:auto}
+        #pvpLoadoutModal.hidden{display:none}
+
+        /* === Inline Style Cleanup (Step 1) === */
+        #fpsCounter.hud-fps{ font-size: 1.0rem; font-weight: 800; color:#FFD700; }
+        #goldVal.hud-gold{ color:#FFD700; }
+        .hud-text.hud-enemy{ font-size: 0.9rem; color: #aaa; }
+        .hud-slot-title{
+            position: absolute; top: 0; left: 0; width: 100%;
+            text-align: center; line-height: 20px; font-size: 0.7rem;
+            font-weight: bold; text-shadow: 1px 1px 0 #000;
+        }
+        #skill-clone, #skill2-clone{ border-color: #29B6F6; color: #29B6F6; }
+        #skill-stealth, #skill2-stealth{ border-color: #AB47BC; color: #AB47BC; }
+        #skill-vampirism, #skill2-vampirism{ border-color: #FF5252; color: #FF5252; }
+
+        #finalWave, #victoryWave{ color: yellow; }
+        #finalScore, #victoryScore{ color: white; font-weight: bold; font-size: 2rem; }
+        #restartBtn{ background: #d32f2f; }
+        #menuBtnGO{ background:#333; margin-top:12px; }
+        #victoryScreen h2{ color:#4CAF50; }
+        .victory-sub{ margin-top:8px; color:#aaa; font-size:0.95rem; }
+        #victoryBestScore, #victoryBestWave{ color:#4CAF50; font-weight:800; }
+        #victoryRestartBtn{ background:#18ff6a; color:#041a0c; }
+        #victoryEndlessBtn{ background:#FFD54F; color:#1b1300; margin-top:12px; }
+        #victoryMenuBtn{ background:#333; margin-top:12px; }
+
+        #maxTopBar{
+            position:absolute; top:20px; left:50%;
+            transform:translateX(-50%); display:flex; gap:10px;
+            align-items:center; z-index:200; pointer-events:auto;
+        }
+        #btnPause, #btnSettings{
+            margin-top:0; padding:10px 14px; font-size:0.9rem;
+            background:#333; border:1px solid #555;
+        }
+        #btnSaveQuit{
+            margin-top:0; padding:10px 14px; font-size:0.9rem;
+            background:#2b2b2b; border:1px solid #777;
+        }
+        #btnPvpReplay{
+            position:absolute; top:54px; left:50%;
+            transform:translateX(-50%); margin-top:0; padding:10px 14px;
+            font-size:0.9rem; background:#18ff6a; color:#041a0c;
+            border:1px solid #1b5; box-shadow:0 0 18px rgba(24,255,106,0.35);
+            display:none;
+        }
+
+        #settingsModal{
+            position:absolute; inset:0; background:rgba(0,0,0,0.75);
+            z-index:300; display:flex; align-items:center; justify-content:center;
+            pointer-events:auto;
+        }
+        .settings-panel{
+            width:min(980px,95vw); background:rgba(10,10,10,0.95);
+            border:2px solid #4CAF50; border-radius:14px; padding:18px;
+            box-shadow:0 0 36px rgba(76,175,80,0.24);
+        }
+        .settings-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .settings-title{ font-size:1.4rem; font-weight:800; color:#4CAF50; letter-spacing:1px; }
+        .btn-close-settings{ margin-top:0; padding:10px 14px; font-size:0.9rem; background:#d32f2f; }
+        .settings-body{ margin-top:14px; display:grid; grid-template-columns:1fr; gap:10px; color:#ddd; }
+        .settings-grid{
+            display:grid;
+            grid-template-columns: repeat(2, minmax(320px, 1fr));
+            gap:10px;
+            align-items:start;
+        }
+        .settings-section{
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+            border:1px solid rgba(255,255,255,0.14);
+            border-radius:11px;
+            padding:10px 11px;
+        }
+        .settings-section-title{
+            font-size:0.87rem;
+            font-weight:900;
+            letter-spacing:0.5px;
+            color:#c8f7d6;
+            margin-bottom:8px;
+            text-transform:uppercase;
+        }
+        .settings-row{ display:grid; grid-template-columns:180px 1fr 78px; gap:8px; align-items:center; margin-bottom:6px; }
+        .settings-row:last-child{ margin-bottom:0; }
+        .settings-value{ text-align:right; color:#FFD700; font-weight:700; }
+        .settings-text-input{
+            width:100%;
+            padding:8px 10px;
+            border-radius:8px;
+            border:1px solid rgba(255,255,255,.22);
+            background:rgba(8,12,20,.88);
+            color:#e8f1ff;
+            outline:none;
+            font-size:.88rem;
+        }
+        .settings-text-input::placeholder{
+            color:rgba(195,210,232,.65);
+        }
+        .settings-checks{ display:grid; grid-template-columns:1fr 1fr; gap:8px 10px; }
+        .settings-check{ display:flex; gap:8px; align-items:center; font-size:0.92rem; }
+        .settings-progress{
+            padding:10px 11px;
+        }
+        .settings-progress-title{ font-weight:800; margin-bottom:6px; color:#FFD700; }
+        .settings-progress-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        #bestScore, #bestWave{ color:#4CAF50; font-weight:800; }
+        .settings-progress-actions{ margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; }
+        .btn-save-now{ margin-top:0; padding:10px 14px; font-size:0.9rem; }
+        .btn-reset-save{ margin-top:0; padding:10px 14px; font-size:0.9rem; background:#444; border:1px solid #666; }
+        .settings-info-list{
+            display:grid;
+            gap:6px;
+        }
+        .settings-info-item{
+            display:grid;
+            grid-template-columns: 148px 1fr;
+            gap:10px;
+            align-items:start;
+            font-size:0.86rem;
+            line-height:1.38;
+            color:#d5dde8;
+        }
+        .settings-info-item span:first-child{
+            color:#9be7b0;
+            font-weight:700;
+        }
+        .settings-hotkeys{
+            font-size:0.86rem;
+            color:#aeb7c4;
+            line-height:1.45;
+            border:1px solid rgba(255,255,255,0.12);
+            border-radius:10px;
+            padding:8px 10px;
+            background:rgba(255,255,255,0.03);
+        }
+        @media (max-width: 980px){
+            .settings-grid{ grid-template-columns:1fr; }
+        }
+        @media (max-width: 720px){
+            .settings-row{ grid-template-columns: 1fr; gap:6px; }
+            .settings-value{ text-align:left; }
+            .settings-checks{ grid-template-columns:1fr; }
+            .settings-info-item{ grid-template-columns: 1fr; gap:4px; }
+        }
+
+        #shopModal{
+            position:absolute; inset:0; background:rgba(0,0,0,0.78);
+            z-index:320; display:flex; align-items:center; justify-content:center;
+            pointer-events:auto;
+        }
+        .shop-panel{
+            width:min(760px,94vw); background:rgba(10,10,10,0.96);
+            border:2px solid #FFD700; border-radius:16px; padding:22px;
+            box-shadow:0 0 30px rgba(255,215,0,0.18);
+        }
+        .shop-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .shop-title{ font-size:1.35rem; font-weight:900; color:#FFD700; letter-spacing:1px; }
+        .shop-meta{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+        .shop-gold{ font-weight:900; color:#FFD700; }
+        .shop-next{ color:#aaa; font-weight:700; }
+        .shop-next span{ color:#4CAF50; }
+        .shop-hint{ margin-top:14px; color:#cfcfcf; font-size:0.95rem; line-height:1.35; }
+        .shop-cards{ margin-top:16px; display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px; }
+        .shopCard, .shop-card{ background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:14px; }
+        .shopCard.shop-card--soft, .shop-card--soft{ background:rgba(255,255,255,0.06); }
+        .shopCard.shop-card--heal, .shop-card--heal{ background:rgba(76,175,80,0.10); border:1px solid rgba(76,175,80,0.35); }
+        .shop-card-title{ font-weight:900; color:#fff; }
+        .shop-card-desc{ margin-top:6px; color:#999; font-size:0.9rem; }
+        .shop-card-meta{ margin-top:8px; color:#bbb; font-size:0.85rem; }
+        .shop-card-meta .value{ color:#FFD700; font-weight:900; }
+        .shop-buy-btn{ margin-top:10px; width:100%; padding:10px 12px; font-size:0.95rem; }
+        .shop-footer{ margin-top:16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+        .shop-footer-note{ font-size:0.9rem; color:#888; }
+        .btn-shop-continue{ margin-top:0; padding:12px 16px; }
+        .opacity-90{ opacity:0.9; }
+
+        .weapon-level{ font-size:0.6rem; }
+        #startScreen .skillKey{ box-shadow: 0 0 14px var(--skill-glow, transparent); }
+
+        .btn-dark{ background:#333; }
+        .btn-gold{ background:#FFD54F; color:#1b1300; }
+        .btn-green{ background:#18ff6a; color:#041a0c; }
+        .vk-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .vk-title{ font-weight:900; color:#18ff6a; letter-spacing:2px; }
+        .vk-sub{ opacity:0.8; font-size:12px; }
+        .vk-body{ margin-top:10px; color:#ddd; line-height:1.4; }
+        .vk-actions{ margin-top:14px; display:flex; gap:10px; justify-content:flex-end; }
+        #pvpLoadoutPanel{width:min(1240px,96vw);max-height:min(92vh,900px);overflow:auto;background:linear-gradient(180deg,rgba(9,14,12,.98),rgba(7,10,9,.98));border:2px solid rgba(76,175,80,.55);border-radius:16px;box-shadow:0 26px 80px rgba(0,0,0,.65),0 0 24px rgba(76,175,80,.16);padding:16px 16px 14px}
+        .pvpLoadTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+        .pvpLoadTitleMain{font-size:1.25rem;font-weight:900;color:#18ff6a;letter-spacing:.8px}
+        .pvpLoadSub{margin-top:4px;font-size:.88rem;color:rgba(255,255,255,.78)}
+        .pvpLoadRoundHint{font-size:.78rem;color:rgba(255,255,255,.55)}
+        .pvpLoadGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+        .pvpSideCard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+        .pvpSideHead{font-size:1rem;font-weight:900;color:#FFD54F;letter-spacing:.5px}
+        .pvpFieldLabel{font-size:.8rem;font-weight:800;color:rgba(255,255,255,.82);margin-top:2px}
+        .pvpSideCard .modeSelect{width:100%;max-width:none;padding:9px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.3);color:#eee;font-size:.88rem}
+        .pvpStatBox,.pvpItemsInfo{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:9px 10px}
+        .pvpStatTitle{font-size:.9rem;font-weight:900;color:#9be7b0}
+        .pvpStatDesc{margin-top:3px;font-size:.78rem;color:rgba(255,255,255,.78);line-height:1.3}
+        .pvpStatMuted{font-size:.78rem;color:rgba(255,255,255,.45)}
+        .pvpStatList{margin:6px 0 0 16px;padding:0;font-size:.78rem;color:rgba(255,255,255,.88);line-height:1.28}
+        .pvpItemBlock{padding-top:7px;margin-top:7px;border-top:1px dashed rgba(255,255,255,.16)}
+        .pvpItemBlock:first-child{padding-top:0;margin-top:0;border-top:none}
+        .pvpCounterBox{background:linear-gradient(180deg,rgba(30,64,38,.16),rgba(10,18,12,.32));border:1px solid rgba(120,220,150,.24);border-radius:10px;padding:9px 10px;display:flex;flex-direction:column;gap:5px}
+        .pvpCounterTitle{font-size:.8rem;font-weight:900;color:#b8ffd2;letter-spacing:.2px}
+        .pvpCounterLine{font-size:.78rem;color:rgba(255,255,255,.9);line-height:1.3}
+        .pvpCounterLabel{font-weight:800;color:rgba(255,255,255,.96);margin-right:5px}
+        .pvpCounterReason{font-size:.75rem;color:rgba(173,224,197,.9);line-height:1.35}
+        .pvpLoadActions{margin-top:12px;display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+        #pvpLiveReset{margin-top:0;background:#2f3640}
+        #pvpLiveConfirm{margin-top:0;background:#18ff6a;color:#041a0c}
+        @media (max-width: 980px){
+            .pvpLoadGrid{grid-template-columns:1fr}
+        }
+
+        #blessingModal{
+            position:absolute;
+            inset:0;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:rgba(0,0,0,.78);
+            z-index:360;
+        }
+        #blessingModal.hidden{display:none}
+        #blessingPanel{
+            width:min(980px,95vw);
+            max-height:min(92vh,860px);
+            overflow:auto;
+            background:linear-gradient(180deg,rgba(14,19,34,.98),rgba(10,13,24,.98));
+            border:1px solid rgba(124,164,255,.36);
+            border-radius:14px;
+            box-shadow:0 22px 70px rgba(0,0,0,.64),0 0 30px rgba(111,154,255,.18);
+            padding:14px;
+        }
+        .blessingHeader{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+        }
+        #blessingModalTitle{
+            font-size:1.2rem;
+            font-weight:900;
+            letter-spacing:.6px;
+            color:#9fc4ff;
+        }
+        .blessingMetaRow{
+            margin-top:10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            background:rgba(255,255,255,.04);
+            border:1px solid rgba(255,255,255,.12);
+            border-radius:10px;
+            padding:8px 10px;
+        }
+        #blessingMetaGoldLabel{
+            color:rgba(255,255,255,.8);
+            font-size:.88rem;
+            font-weight:700;
+        }
+        #blessingMetaGoldValue{
+            color:#FFD54F;
+            font-size:1.08rem;
+            font-weight:900;
+            min-width:28px;
+            text-align:center;
+        }
+        .blessingHintText{
+            margin-top:8px;
+            font-size:.8rem;
+            color:rgba(215,224,248,.82);
+        }
+        .shopSectionTabs{
+            margin-top:10px;
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+            justify-content:flex-start;
+        }
+        .shopSectionTab{
+            margin:0;
+            padding:11px 18px;
+            border-radius:12px;
+            border:1px solid rgba(150,190,255,.35);
+            background:linear-gradient(180deg, rgba(10,16,28,.95), rgba(8,12,22,.92));
+            color:rgba(236,244,255,.98);
+            font-size:.95rem;
+            font-weight:900;
+            letter-spacing:.55px;
+            text-transform:uppercase;
+            cursor:pointer;
+            transition:all 140ms ease;
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.04), 0 4px 12px rgba(0,0,0,.35);
+        }
+        .shopSectionTab:hover{
+            border-color:rgba(170,220,255,.58);
+            background:linear-gradient(180deg, rgba(16,25,44,.95), rgba(11,17,30,.94));
+            transform:translateY(-1px);
+        }
+        .shopSectionTab.active{
+            color:#08131f;
+            background:linear-gradient(180deg,#8dd9ff,#49b8ff);
+            border-color:rgba(150,232,255,.98);
+            box-shadow:0 0 18px rgba(91,198,255,.42), inset 0 0 0 1px rgba(255,255,255,.4);
+            transform:translateY(-1px);
+        }
+        .shopSectionView{
+            display:none;
+            margin-top:10px;
+        }
+        .shopSectionView.active{
+            display:block;
+        }
+        .blessingNodes{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+        }
+        .blessingNode{
+            background:rgba(255,255,255,.04);
+            border:1px solid rgba(255,255,255,.12);
+            border-radius:11px;
+            padding:10px;
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+        }
+        .blessingNodeHead{
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        .blessingNodeIcon{
+            width:24px;
+            height:24px;
+            border-radius:8px;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            flex:0 0 24px;
+            font-size:14px;
+            line-height:1;
+            border:1px solid rgba(255,255,255,.22);
+            background:linear-gradient(180deg, rgba(28,40,64,.95), rgba(15,22,36,.95));
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.04), 0 0 10px rgba(120,180,255,.12);
+        }
+        .blessingIcon-hp{ color:#ff9db0; border-color:rgba(255,130,158,.45); box-shadow:0 0 10px rgba(255,80,130,.25); }
+        .blessingIcon-armor{ color:#9dd0ff; border-color:rgba(126,188,255,.45); box-shadow:0 0 10px rgba(76,150,255,.22); }
+        .blessingIcon-damage{ color:#ffb07a; border-color:rgba(255,170,115,.45); box-shadow:0 0 10px rgba(255,120,66,.22); }
+        .blessingIcon-fireRate{ color:#ffe28a; border-color:rgba(255,220,122,.45); box-shadow:0 0 10px rgba(255,210,86,.22); }
+        .blessingIcon-goldGain{ color:#ffe074; border-color:rgba(255,214,92,.55); box-shadow:0 0 10px rgba(255,210,70,.26); }
+        .blessingIcon-ultiGain{ color:#c4adff; border-color:rgba(190,150,255,.45); box-shadow:0 0 10px rgba(170,120,255,.24); }
+        .blessingNodeTitle{
+            font-size:.93rem;
+            font-weight:900;
+            color:#d6e4ff;
+        }
+        .blessingNodeDesc{
+            font-size:.77rem;
+            color:rgba(255,255,255,.8);
+            line-height:1.35;
+        }
+        .blessingNodeMeta{
+            font-size:.75rem;
+            color:rgba(255,255,255,.72);
+            line-height:1.3;
+        }
+        .blessingNodeActions{
+            margin-top:2px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:8px;
+        }
+        .blessingCost{
+            font-size:.78rem;
+            color:#FFD54F;
+            font-weight:800;
+        }
+        .blessingNode .btn{
+            margin-top:0;
+            padding:8px 14px;
+            font-size:.95rem;
+            font-weight:900;
+            letter-spacing:.25px;
+        }
+        .skinShopSection{
+            border:1px solid rgba(120,170,255,.26);
+            border-radius:12px;
+            background:linear-gradient(180deg,rgba(14,20,36,.76),rgba(8,12,24,.74));
+            padding:10px;
+            display:grid;
+            gap:9px;
+        }
+        .skinShopHeader{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:10px;
+        }
+        .skinShopTitle{
+            font-size:1rem;
+            font-weight:900;
+            letter-spacing:.5px;
+            color:#9fc4ff;
+            text-transform:uppercase;
+        }
+        .skinShopOwned{
+            font-size:.8rem;
+            font-weight:800;
+            color:#ffd97a;
+            border:1px solid rgba(255,217,122,.35);
+            border-radius:999px;
+            padding:3px 8px;
+            background:rgba(255,217,122,.08);
+        }
+        .skinSystemTabs{
+            display:flex;
+            gap:7px;
+            flex-wrap:wrap;
+        }
+        .skinSystemTab{
+            margin:0;
+            padding:6px 10px;
+            border-radius:999px;
+            border:1px solid rgba(255,255,255,.18);
+            background:rgba(6,9,15,.65);
+            color:rgba(230,235,245,.92);
+            font-size:.76rem;
+            font-weight:800;
+            cursor:pointer;
+            transition:all 120ms ease;
+        }
+        .skinSystemTab:hover{ border-color:rgba(255,255,255,.34); background:rgba(11,16,26,.82); }
+        .skinSystemTab.active{
+            color:#0b1420;
+            background:linear-gradient(180deg,#ffe08a,#ffcc55);
+            border-color:rgba(255,220,140,.95);
+            box-shadow:0 0 10px rgba(255,212,102,.32);
+        }
+        .skinShowcase{
+            border:1px solid rgba(255,255,255,.14);
+            border-radius:12px;
+            background:linear-gradient(180deg,rgba(10,16,28,.88),rgba(7,11,20,.94));
+            padding:10px;
+            display:grid;
+            grid-template-columns:1.2fr .8fr;
+            gap:10px;
+            align-items:stretch;
+        }
+        .skinShowcaseMedia{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:8px;
+            min-width:0;
+        }
+        .skinShowcasePane{
+            border:1px solid rgba(255,255,255,.14);
+            border-radius:10px;
+            overflow:hidden;
+            background:
+                linear-gradient(180deg, rgba(9,13,22,.90), rgba(5,8,14,.92)),
+                radial-gradient(circle at 60% 25%, rgba(140,185,255,.16), rgba(140,185,255,0) 58%);
+            min-width:0;
+        }
+        .skinShowcaseImage{
+            display:block;
+            width:100%;
+            height:220px;
+            object-fit:contain;
+            background:
+                radial-gradient(circle at 50% 40%, rgba(255,255,255,.08), rgba(255,255,255,0) 44%),
+                linear-gradient(180deg, rgba(8,12,22,.92), rgba(5,8,14,.96));
+        }
+        .skinShowcasePreview{
+            display:block;
+            width:100%;
+            height:220px;
+        }
+        .skinShowcaseInfo{
+            border:1px solid rgba(255,255,255,.12);
+            border-radius:10px;
+            background:rgba(255,255,255,.03);
+            padding:10px;
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+        }
+        .skinShowcaseName{
+            font-size:1rem;
+            font-weight:900;
+            color:#dff0ff;
+            line-height:1.2;
+        }
+        .skinShowcaseDesc{
+            font-size:.82rem;
+            color:rgba(226,236,252,.92);
+            line-height:1.45;
+            min-height:42px;
+        }
+        .skinShowcaseMeta{
+            font-size:.78rem;
+            color:rgba(220,232,252,.86);
+            line-height:1.35;
+        }
+        .skinShowcaseAction{
+            margin-top:auto;
+            display:flex;
+            align-items:center;
+            justify-content:flex-end;
+            gap:8px;
+            min-height:34px;
+        }
+        .skinCards{
+            display:grid;
+            grid-template-columns:repeat(3,minmax(160px,1fr));
+            grid-auto-rows:minmax(96px,auto);
+            gap:8px;
+        }
+        .skinCard{
+            border:1px solid rgba(255,255,255,.12);
+            border-radius:10px;
+            background:rgba(255,255,255,.025);
+            padding:8px 9px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:10px;
+            cursor:pointer;
+            transition:all 120ms ease;
+            position:relative;
+            overflow:hidden;
+        }
+        .skinCard:hover{
+            border-color:rgba(184,219,255,.45);
+            background:rgba(26,44,72,.22);
+        }
+        .skinCard.selected{
+            border-color:rgba(255,214,90,.92);
+            background:linear-gradient(90deg, rgba(255,214,90,.12), rgba(255,214,90,.03) 55%, rgba(255,214,90,.02));
+            box-shadow:0 0 0 1px rgba(255,214,90,.62), 0 0 18px rgba(255,214,90,.26);
+            transform:translateY(-1px) scale(1.01);
+        }
+        .skinCard.selected::before{
+            content:'';
+            position:absolute;
+            left:0;
+            top:0;
+            bottom:0;
+            width:4px;
+            background:linear-gradient(180deg,#ffe88d,#ffcc3f);
+            box-shadow:0 0 10px rgba(255,224,120,.45);
+        }
+        .skinCard.selected .skinCardName{
+            color:#fff2bc;
+        }
+        .skinCard.rarity-base{border-color:rgba(173,195,226,.35);}
+        .skinCard.rarity-rare{border-color:rgba(120,220,150,.42);}
+        .skinCard.rarity-epic{border-color:rgba(196,152,255,.46);}
+        .skinCard.owned{
+            border-color:rgba(120,220,150,.35);
+        }
+        .skinCard.equipped{
+            box-shadow:0 0 0 1px rgba(255,214,90,.48), 0 0 16px rgba(255,214,90,.18);
+        }
+        .skinMediaGrid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:6px;
+        }
+        .skinImageWrap{
+            border:1px solid rgba(255,255,255,.14);
+            border-radius:8px;
+            background:
+                linear-gradient(180deg, rgba(12,18,30,.92), rgba(7,11,20,.94));
+            overflow:hidden;
+        }
+        .skinMediaCap{
+            font-size:.68rem;
+            font-weight:800;
+            letter-spacing:.35px;
+            text-transform:uppercase;
+            color:rgba(220,236,255,.88);
+            padding:4px 7px;
+            border-bottom:1px solid rgba(255,255,255,.1);
+            background:rgba(255,255,255,.03);
+        }
+        .skinImage{
+            display:block;
+            width:100%;
+            height:112px;
+            object-fit:cover;
+        }
+        .skinPreviewWrap{
+            border:1px solid rgba(255,255,255,.14);
+            border-radius:8px;
+            background:
+                linear-gradient(180deg, rgba(9,13,22,.90), rgba(5,8,14,.92)),
+                radial-gradient(circle at 60% 25%, rgba(140,185,255,.16), rgba(140,185,255,0) 58%);
+            overflow:hidden;
+        }
+        .skinPreviewCanvas{
+            display:block;
+            width:100%;
+            height:112px;
+        }
+        .skinSwatch{
+            height:34px;
+            border-radius:8px;
+            border:1px solid rgba(255,255,255,.18);
+        }
+        .skinCardName{
+            font-size:.82rem;
+            font-weight:900;
+            color:#d8e9ff;
+            line-height:1.2;
+        }
+        .skinCardDesc{
+            font-size:.74rem;
+            color:rgba(219,229,245,.88);
+            line-height:1.35;
+            min-height:34px;
+        }
+        .skinCardMeta{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:8px;
+            font-size:.72rem;
+            color:rgba(214,225,245,.86);
+        }
+        .skinCardMain{
+            display:grid;
+            gap:4px;
+            min-width:0;
+            flex:1;
+        }
+        .skinCardRight{
+            display:grid;
+            gap:4px;
+            text-align:right;
+            align-items:end;
+            justify-items:end;
+            min-width:84px;
+        }
+        .skinPrice{
+            color:#ffd979;
+            font-weight:800;
+        }
+        .skinRarity{
+            text-transform:uppercase;
+            letter-spacing:.35px;
+            font-weight:800;
+            opacity:.9;
+        }
+        .skinCardActions{
+            display:flex;
+            align-items:center;
+            justify-content:flex-end;
+            gap:6px;
+        }
+        .skinCardActions .btn{
+            margin-top:0;
+            padding:7px 10px;
+            font-size:.78rem;
+            font-weight:900;
+            letter-spacing:.2px;
+        }
+        .skinStatusOwned{
+            font-size:.72rem;
+            color:#a7f0c0;
+            font-weight:800;
+        }
+        .skinCard.selected .skinStatusOwned{
+            color:#ffe07b;
+            text-shadow:0 0 8px rgba(255,212,96,.28);
+        }
+        .blessingFooter{
+            margin-top:12px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+        }
+        .blessingActionMsg{
+            min-height:20px;
+            font-size:.78rem;
+            color:#b0c7ff;
+        }
+        @media (max-width: 860px){
+            .blessingNodes{grid-template-columns:1fr;}
+            .skinShowcase{
+                grid-template-columns:1fr;
+            }
+            .skinShowcaseMedia{
+                grid-template-columns:1fr;
+            }
+            .skinShowcaseImage,
+            .skinShowcasePreview{
+                height:180px;
+            }
+            .skinCards{grid-template-columns:1fr;}
+            .skinMediaGrid{grid-template-columns:1fr;}
+            .blessingFooter{flex-direction:column;align-items:stretch;}
+            .blessingActionMsg{min-height:0;}
+            .shopSectionTab{
+                flex:1 1 calc(50% - 8px);
+                font-size:.88rem;
+                padding:10px 12px;
+                text-align:center;
+            }
+        }
+
+
+        /* === UI Polish v25: Weapon & Skill Cards === */
+
+        /* Layout spacing */
+        #weaponBar, #skillBar { gap: 12px; }
+
+        /* Shared card base (skills + weapons) */
+        .slot, .weapon-slot {
+            width: 62px;
+            height: 62px;
+            border-radius: 14px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            overflow: hidden;
+            cursor: default;
+            user-select: none;
+
+            /* Glass + depth */
+            background:
+                radial-gradient(circle at 30% 22%, rgba(255,255,255,0.16), rgba(255,255,255,0) 48%),
+                linear-gradient(180deg, rgba(14, 16, 22, 0.92), rgba(0, 0, 0, 0.72));
+            border: 2px solid rgba(255,255,255,0.14);
+            box-shadow:
+                0 12px 22px rgba(0,0,0,0.55),
+                inset 0 0 0 1px rgba(255,255,255,0.06);
+            backdrop-filter: blur(6px);
+            transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease, filter 120ms ease;
+        }
+
+        /* Shine + subtle scanlines */
+        .slot::before, .weapon-slot::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 55%);
+            opacity: 0.85;
+            pointer-events: none;
+        }
+        .slot::after, .weapon-slot::after {
+            content: "";
+            position: absolute;
+            left: -50%;
+            top: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255,255,255,0.045) 0px,
+                rgba(255,255,255,0.045) 1px,
+                rgba(0,0,0,0) 4px,
+                rgba(0,0,0,0) 7px
+            );
+            opacity: 0.08;
+            transform: rotate(12deg);
+            pointer-events: none;
+        }
+
+        /* Micro hover (desktop) */
+        @media (hover:hover) {
+            .slot:hover, .weapon-slot:hover {
+                transform: translateY(-1px) scale(1.04);
+                box-shadow:
+                    0 16px 28px rgba(0,0,0,0.62),
+                    inset 0 0 0 1px rgba(255,255,255,0.08);
+            }
+        }
+
+        /* Key label */
+        .slot .key-number, .weapon-slot .key-number {
+            position: absolute;
+            top: 4px;
+            left: 5px;
+            font-size: 11px;
+            letter-spacing: 0.4px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.78);
+            text-shadow: 0 1px 0 rgba(0,0,0,0.55);
+        }
+
+        /* Icon text */
+        .slot .icon, .weapon-slot .icon {
+            font-size: 12px;
+            line-height: 1.05;
+            text-align: center;
+            padding: 0 4px;
+            color: rgba(255,255,255,0.88);
+            text-shadow: 0 2px 0 rgba(0,0,0,0.38);
+        }
+
+        /* Level chip */
+        .slot .level-indicator, .weapon-slot .level-indicator {
+            position: absolute;
+            bottom: 4px;
+            right: 5px;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #FFD54F;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.55);
+        }
+
+        /* Cooldown overlay looks like tinted glass */
+        .cooldown-overlay {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 0%;
+            background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.78));
+            border-top: 1px solid rgba(255,255,255,0.08);
+            pointer-events: none;
+        }
+
+        .cooldown-text {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            font-weight: 900;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.60);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.92);
+            text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Active weapon slot (selected) */
+        .weapon-slot.active {
+            transform: translateY(-1px) scale(1.12);
+            border-color: rgba(255,255,255,0.92) !important;
+            filter: drop-shadow(0 0 10px currentColor);
+            box-shadow:
+                0 18px 34px rgba(0,0,0,0.68),
+                inset 0 0 0 1px rgba(255,255,255,0.10);
+        }
+
+        /* Skill ready pulse (when cooldown is done) */
+        .slot.ready {
+            border-color: currentColor;
+            box-shadow:
+                0 12px 24px rgba(0,0,0,0.58),
+                inset 0 0 0 1px rgba(255,255,255,0.08);
+            animation: uiReadyPulse 1.15s ease-in-out infinite;
+        }
+        @keyframes uiReadyPulse {
+            0%, 100% { filter: drop-shadow(0 0 0px transparent); }
+            50% { filter: drop-shadow(0 0 10px currentColor); }
+        }
+
+        /* Skill on cooldown slightly muted */
+        .slot.cooling { opacity: 0.92; }
+
+        /* Mobile scale */
+        @media (max-width: 560px) {
+            .slot, .weapon-slot { width: 54px; height: 54px; border-radius: 12px; }
+            .slot .icon, .weapon-slot .icon { font-size: 11px; }
+            .slot .key-number, .weapon-slot .key-number { font-size: 10px; padding: 1px 5px; }
+            .slot .level-indicator, .weapon-slot .level-indicator { font-size: 9px; padding: 1px 5px; }
+        }
+
+    
+
+        /* === Start Screen Fullscreen Layout (v34) === */
+        #startScreen{
+            width: 100vw;
+            height: 100vh;
+            aspect-ratio: auto;
+            padding: 22px 26px;
+            align-items: stretch;
+            justify-content: stretch;
+            gap: 0;
+        }
+        #startScreen .start16{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        #startScreen .startTop{
+            display:flex;
+            gap:10px;
+            align-items:center;
+            justify-content:space-between;
+        }
+        #startScreen .startZones{
+            display:grid;
+            grid-template-columns: 1.05fr 1.2fr 0.95fr 0.95fr;
+            gap: 10px;
+            margin: 2px 0 4px;
+        }
+        #startScreen .startZone{
+            appearance: none;
+            width: 100%;
+            cursor: pointer;
+            min-height: 68px;
+            border-radius: 12px;
+            padding: 8px 10px;
+            background: rgba(0,0,0,0.30);
+            border: 2px solid rgba(255,255,255,0.12);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+            text-align: left;
+            transition: transform 120ms ease, filter 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+        }
+        #startScreen .startZone:not(.active){
+            opacity: 0.72;
+            filter: saturate(0.85);
+        }
+        #startScreen .startZone.active{
+            opacity: 1;
+            transform: translateY(-1px);
+            filter: saturate(1.08);
+        }
+        #startScreen .startZone:focus-visible{
+            outline: 2px solid rgba(255,255,255,0.85);
+            outline-offset: 2px;
+        }
+        #startScreen .startZone .zoneTitle{
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.6px;
+            margin-bottom: 2px;
+        }
+        #startScreen .startZone .zoneDesc{
+            font-size: 11px;
+            color: rgba(230,230,230,0.88);
+            line-height: 1.22;
+        }
+        #startScreen .startZone.zoneGame{
+            border-color: rgba(255, 214, 77, 0.95);
+            box-shadow: 0 0 18px rgba(255, 214, 77, 0.16), inset 0 0 0 1px rgba(255, 214, 77, 0.18);
+        }
+        #startScreen .startZone.zoneGame .zoneTitle{ color: #FFD54F; }
+        #startScreen .startZone.zoneShop{
+            border-color: rgba(66, 165, 245, 0.95);
+            box-shadow: 0 0 18px rgba(66, 165, 245, 0.16), inset 0 0 0 1px rgba(66, 165, 245, 0.20);
+        }
+        #startScreen .startZone.zoneShop .zoneTitle{ color: #64B5F6; }
+        #startScreen .startZone.zoneSettings{
+            border-color: rgba(239, 83, 80, 0.95);
+            box-shadow: 0 0 18px rgba(239, 83, 80, 0.16), inset 0 0 0 1px rgba(239, 83, 80, 0.20);
+        }
+        #startScreen .startZone.zoneSettings .zoneTitle{ color: #EF9A9A; }
+        #startScreen .startZone.zoneDisplay{
+            border-color: rgba(102, 187, 106, 0.95);
+            box-shadow: 0 0 18px rgba(102, 187, 106, 0.16), inset 0 0 0 1px rgba(102, 187, 106, 0.20);
+        }
+        #startScreen .startZone.zoneDisplay .zoneTitle{ color: #81C784; }
+        #startScreen .zoneShopActions{
+            margin-top: 6px;
+            display:flex;
+            align-items:center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        #startScreen .startTitleWrap{
+            text-align:left;
+            padding: 0;
+            min-width: 210px;
+        }
+        #startScreen .startTitle{
+            font-size: clamp(15px, 1.35vw, 22px);
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #4CAF50;
+            text-transform: uppercase;
+            text-shadow: 0 0 12px rgba(76,175,80,0.22);
+            line-height: 1;
+        }
+        #startScreen .startSubtitle{
+            margin-top: 4px;
+            color: #9be7b0;
+            opacity: 0.75;
+            font-size: 11px;
+            text-align:left;
+        }
+        #startScreen .startHints{
+            text-align:right;
+            max-width: none;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+        }
+#startScreen .hintLine{
+            font-size: clamp(11px, 0.95vw, 12px);
+            color: #d3d8df;
+            margin: 0;
+            line-height: 1.2;
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 999px;
+            padding: 5px 10px;
+            background: rgba(6,8,14,0.62);
+        }
+        #startScreen .hintLine b{ color:#fff; }
+        #startScreen .hintLine.warn{ color:#ff7777; }
+        #startScreen .hintLine.danger{ color:#ff4aa6; }
+
+        #startScreen .startMain{
+            flex: 1;
+            display: grid;
+            grid-template-columns: 0.95fr 1.35fr;
+            gap: 14px;
+            min-height: 0;
+        }
+        #startScreen .startMain.hidden-tab-main{
+            display: none !important;
+        }
+        #startScreen .startTabAltViews{
+            display: none;
+            flex: 1;
+            min-height: 0;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            background: rgba(0,0,0,0.22);
+            padding: 12px;
+        }
+        #startScreen .startTabAltViews.active{
+            display: block;
+        }
+        #startScreen .startAltView{
+            display: none;
+            height: 100%;
+            overflow: auto;
+        }
+        #startScreen .startAltView.active{
+            display: block;
+        }
+        #startScreen .startAltHead{
+            font-size: 1.18rem;
+            font-weight: 900;
+            letter-spacing: 0.6px;
+            color: #FFD54F;
+            text-transform: uppercase;
+        }
+        #startScreen .startAltDesc{
+            margin-top: 6px;
+            font-size: 0.95rem;
+            color: rgba(235,240,250,0.9);
+            line-height: 1.3;
+        }
+        #startScreen .startAltNote{
+            margin-top: 10px;
+            font-size: 12px;
+            color: rgba(180,210,255,0.88);
+        }
+        #startScreen #startSettingsInlineHost{
+            margin-top: 10px;
+        }
+        #startScreen.settings-inline-mode #startSettingsInlineHost .settings-panel{
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            border-color: rgba(76,175,80,0.65);
+            box-shadow: 0 0 26px rgba(76,175,80,0.18);
+            background: rgba(8,10,12,0.96);
+        }
+        #startScreen.settings-inline-mode #startSettingsInlineHost .btn-close-settings{
+            display: none;
+        }
+        #startScreen #startShopBlessingHost{
+            margin-top: 10px;
+        }
+        #startScreen #startShopBlessingHost #blessingPanel.blessing-inline{
+            width: 100%;
+            max-height: none;
+            overflow: visible;
+            margin: 0;
+            border-color: rgba(66,165,245,0.52);
+            box-shadow: 0 0 24px rgba(66,165,245,0.18);
+            background: linear-gradient(180deg, rgba(10,15,28,0.97), rgba(8,11,20,0.98));
+            padding: 12px;
+        }
+        #startScreen #startShopBlessingHost #blessingPanel.blessing-inline #btnBlessingClose{
+            display: none;
+        }
+        #startScreen #startShopBlessingHost #blessingPanel.blessing-inline .blessingHeader{
+            margin-bottom: 6px;
+        }
+        #startScreen .startInfoHub{
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 10px;
+            min-height: 420px;
+        }
+        #startScreen .startInfoNav{
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 7px;
+            align-content: start;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 8px;
+        }
+        #startScreen .startInfoBtn{
+            margin: 0;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(6,9,15,0.65);
+            color: rgba(230,235,245,0.92);
+            text-align: left;
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.25px;
+            cursor: pointer;
+            transition: all 120ms ease;
+        }
+        #startScreen .startInfoBtn:hover{
+            border-color: rgba(255,255,255,0.30);
+            background: rgba(11,16,26,0.78);
+        }
+        #startScreen .startInfoBtn.active{
+            color: #071018;
+            background: linear-gradient(180deg, rgba(122, 211, 255, 0.95), rgba(86, 188, 255, 0.90));
+            border-color: rgba(120,220,255,0.95);
+            box-shadow: 0 0 14px rgba(86,188,255,0.35);
+        }
+        #startScreen .startInfoBody{
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 12px;
+            padding: 12px 14px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+            min-height: 380px;
+        }
+        #startScreen .startInfoPane{
+            display: none;
+        }
+        #startScreen .startInfoPane.active{
+            display: block;
+        }
+        #startScreen .startInfoPaneTitle{
+            font-size: 0.98rem;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            color: #ffe78e;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        #startScreen .startInfoPaneText{
+            white-space: pre-line;
+            font-size: 0.88rem;
+            color: rgba(230,235,245,0.93);
+            line-height: 1.55;
+        }
+        #startScreen .startInfoPaneText .infoRichWrap{
+            white-space: normal;
+        }
+        #startScreen .startInfoSubnav{
+            margin-bottom: 10px;
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+        #startScreen .startInfoSubBtn{
+            margin: 0;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.20);
+            background: rgba(8,12,20,0.72);
+            color: rgba(225,233,245,0.92);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: all 120ms ease;
+        }
+        #startScreen .startInfoSubBtn:hover{
+            border-color: rgba(255,255,255,0.36);
+            background: rgba(16,22,36,0.85);
+        }
+        #startScreen .startInfoSubBtn.active{
+            color: #0b1420;
+            background: linear-gradient(180deg, #ffe08a, #ffcc55);
+            border-color: rgba(255, 220, 140, 0.95);
+            box-shadow: 0 0 12px rgba(255, 212, 102, 0.35);
+        }
+        #startScreen .startInfoDetail{
+            border: 1px solid rgba(255,255,255,0.13);
+            border-radius: 10px;
+            padding: 10px 11px;
+            background: rgba(255,255,255,0.02);
+            min-height: 220px;
+        }
+        #startScreen .infoDetailHead{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        #startScreen .infoDetailName{
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #ffe699;
+            letter-spacing: 0.3px;
+        }
+        #startScreen .infoStatRow{
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        #startScreen .infoStatChip{
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 0.72rem;
+            color: rgba(226,234,248,0.95);
+            background: rgba(10,16,26,0.72);
+        }
+        #startScreen .infoSkillList{
+            display: grid;
+            gap: 7px;
+        }
+        #startScreen .infoSkillItem{
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 9px;
+            background: rgba(255,255,255,0.02);
+            padding: 8px 9px;
+        }
+        #startScreen .infoSkillTitle{
+            font-size: 0.82rem;
+            font-weight: 900;
+            color: #d4ecff;
+            margin-bottom: 4px;
+        }
+        #startScreen .infoSkillDesc{
+            font-size: 0.8rem;
+            color: rgba(225,232,245,0.9);
+            line-height: 1.45;
+        }
+        #startScreen .infoSkillMeta{
+            margin-top: 5px;
+            font-size: 0.75rem;
+            color: #9ac8ff;
+        }
+        #startScreen .infoSkillNumbers{
+            margin-top: 6px;
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 8px;
+            background: rgba(8,14,24,0.52);
+            padding: 6px 8px;
+            display: grid;
+            gap: 4px;
+        }
+        #startScreen .infoSkillLine{
+            font-size: 0.74rem;
+            color: rgba(226,236,250,0.94);
+            line-height: 1.38;
+        }
+        #startScreen .infoSystemMetaRow{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        #startScreen .infoSystemGrid{
+            display: grid;
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        #startScreen .infoSystemBlock{
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 9px;
+            background: rgba(255,255,255,0.02);
+            padding: 8px 9px;
+        }
+        #startScreen .infoSystemBlock.infoSystemBlockWide{
+            grid-column: 1 / -1;
+        }
+        #startScreen .infoSystemBlockTitle{
+            font-size: 0.78rem;
+            font-weight: 900;
+            color: #ffe7a8;
+            margin-bottom: 6px;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+        #startScreen .infoMiniList{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 4px;
+        }
+        #startScreen .infoMiniList li{
+            font-size: 0.76rem;
+            color: rgba(226,234,247,0.92);
+            line-height: 1.36;
+        }
+        #startScreen .infoMiniList li::before{
+            content: "• ";
+            color: #82c7ff;
+            font-weight: 900;
+        }
+        #startScreen .infoRichWrap{
+            display: grid;
+            gap: 9px;
+        }
+        #startScreen .infoRichBadges{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        #startScreen .infoRichBadge{
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 999px;
+            padding: 4px 9px;
+            background: rgba(10,16,26,0.72);
+            color: rgba(226,236,250,0.96);
+            font-size: 0.74rem;
+            font-weight: 800;
+        }
+        #startScreen .infoRichGrid{
+            display: grid;
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+            gap: 8px;
+        }
+        #startScreen .infoRichCard{
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 9px;
+            padding: 8px 9px;
+            background: rgba(255,255,255,0.02);
+        }
+        #startScreen .infoRichCardTitle{
+            font-size: 0.79rem;
+            font-weight: 900;
+            color: #d5ebff;
+            letter-spacing: 0.2px;
+            margin-bottom: 6px;
+        }
+        #startScreen .infoRichHint{
+            border: 1px dashed rgba(129,199,255,0.40);
+            border-radius: 9px;
+            padding: 7px 9px;
+            color: rgba(190,220,255,0.94);
+            background: rgba(7,15,28,0.60);
+            font-size: 0.76rem;
+            line-height: 1.4;
+        }
+        #startScreen .infoAmmoDesc{
+            font-size: 0.83rem;
+            line-height: 1.45;
+            color: rgba(228,234,245,0.92);
+        }
+        #startScreen .infoAmmoMeta{
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(150px, 1fr));
+            gap: 6px;
+        }
+        #startScreen .infoAmmoMeta .infoStatChip{
+            border-radius: 8px;
+            padding: 5px 8px;
+        }
+        #startScreen .infoAmmoLvTitle{
+            margin-top: 10px;
+            font-size: 0.82rem;
+            font-weight: 900;
+            letter-spacing: 0.25px;
+            color: #bfe4ff;
+        }
+        #startScreen .infoAmmoTableWrap{
+            margin-top: 6px;
+            overflow: auto;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.18);
+        }
+        #startScreen .infoAmmoTable{
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 860px;
+        }
+        #startScreen .infoAmmoTable th,
+        #startScreen .infoAmmoTable td{
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            text-align: left;
+            font-size: 0.76rem;
+            line-height: 1.35;
+            color: rgba(226,234,247,0.92);
+            white-space: nowrap;
+        }
+        #startScreen .infoAmmoTable th{
+            position: sticky;
+            top: 0;
+            background: rgba(15,24,38,0.96);
+            color: #ffe7a9;
+            font-weight: 900;
+            z-index: 1;
+        }
+        #startScreen .infoAmmoTable td:last-child{
+            white-space: normal;
+            min-width: 230px;
+        }
+        #startScreen .infoAmmoTable tr:last-child td{
+            border-bottom: none;
+        }
+        #startScreen .infoAmmoNote{
+            margin-top: 7px;
+            font-size: 0.75rem;
+            color: rgba(174,194,219,0.92);
+            line-height: 1.4;
+        }
+        #startScreen .startLeft,
+        #startScreen .startRight{
+            background: rgba(0,0,0,0.22);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 14px;
+            padding: 12px;
+            min-height: 0;
+        }
+        #startScreen .panelTitle{
+            font-weight: 900;
+            letter-spacing: 0.7px;
+            color: #FFD700;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        #startScreen .systemList{
+            display:flex;
+            flex-direction:column;
+            gap: 10px;
+            overflow:auto;
+            padding-right: 4px;
+            max-height: calc(100% - 140px);
+        }
+        #startScreen .sysItem{
+            display:grid;
+            grid-template-columns: 18px 86px 1fr;
+            align-items:center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(10,10,10,0.35);
+            cursor:pointer;
+            transition: transform 120ms ease, border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
+            text-align:left;
+        }
+        #startScreen .sysItem:hover{
+            transform: translateY(-1px);
+            border-color: rgba(76,175,80,0.35);
+            box-shadow: 0 0 16px rgba(76,175,80,0.10);
+        }
+        #startScreen .sysItem.active{
+            border-color: rgba(76,175,80,0.65);
+            box-shadow: 0 0 22px rgba(76,175,80,0.22);
+            background: rgba(20,20,20,0.55);
+        }
+        #startScreen .sysItem input{
+            transform: translateY(1px);
+        }
+        #startScreen .sysMini{
+            width: 84px;
+            height: 56px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.10);
+        }
+        #startScreen .sysName{
+            font-weight: 900;
+            font-size: 15px;
+            color:#eaeaea;
+        }
+        #startScreen .sysDesc{
+            font-size: 12px;
+            color:#aaa;
+            margin-top: 2px;
+            line-height: 1.2;
+        }
+        #startScreen .leftFootNote{
+            margin-top: 10px;
+            font-size: 12px;
+            color:#8fdba6;
+            text-align:left;
+            opacity: 0.9;
+        }
+        #startScreen .keyGuideWide{
+            margin-top: 10px;
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 12px;
+            align-items:center;
+        }
+        #startScreen .kg{
+            display:flex;
+            gap:10px;
+            align-items:center;
+            justify-content:flex-start;
+            color:#cfcfcf;
+            font-size: 12px;
+        }
+        #startScreen .kg .key{
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 7px;
+            padding: 4px 8px;
+            font-weight: 800;
+            color:#fff;
+            min-width: 56px;
+            text-align:center;
+        }
+
+        #startScreen .startRight{
+            display:flex;
+            flex-direction:column;
+            gap: 12px;
+        }
+        #startScreen .previewWrap{
+            background: rgba(0,0,0,0.18);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 10px;
+        }
+        #startScreen #systemPreview{
+            width: 100%;
+            height: auto;
+            border-radius: 14px;
+            background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.06), rgba(0,0,0,0.40) 65%);
+            border: 1px solid rgba(255,255,255,0.10);
+        }
+        #startScreen .previewMeta{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-top: 8px;
+            gap: 10px;
+            flex-wrap:wrap;
+        }
+        #startScreen .sysTagline{
+            font-weight: 800;
+            color:#eaeaea;
+            font-size: 13px;
+            opacity: 0.95;
+            text-align:left;
+        }
+        #startScreen .progressLine{
+            font-size: 12px;
+            color:#bbb;
+            opacity: 0.9;
+        }
+        #startScreen .progressLine span{ color:#4CAF50; font-weight:900; }
+
+        #startScreen .skillsWrap{
+            flex:1;
+            background: rgba(0,0,0,0.18);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 10px;
+            min-height: 0;
+            overflow:auto;
+        }
+        #startScreen .systemDetails{
+            display:flex;
+            flex-direction:column;
+            gap: 10px;
+        }
+        #startScreen .sysQuickStats{
+            display:flex;
+            flex-wrap:wrap;
+            gap: 6px;
+            padding: 6px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.25);
+        }
+        #startScreen .sysStatChip{
+            font-size: 11px;
+            color:#d8d8d8;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.04);
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+        #startScreen .sysStatChip b{
+            color:#fff;
+        }
+        #startScreen .skillCard{
+            display:grid;
+            grid-template-columns: 46px 1fr;
+            gap: 10px;
+            align-items:flex-start;
+            padding: 10px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(10,10,10,0.35);
+        }
+        #startScreen .skillKey{
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight: 1000;
+            color:#fff;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.06);
+        }
+        #startScreen .skillName{
+            font-weight: 900;
+            color:#fff;
+            font-size: 14px;
+        }
+        #startScreen .skillDesc{
+            color:#cfcfcf;
+            font-size: 12px;
+            margin-top: 3px;
+            line-height: 1.25;
+        }
+        #startScreen .skillStats{
+            margin-top: 6px;
+            font-size: 12px;
+            color:#9bb3ff;
+            opacity: 0.95;
+        }
+
+        #startScreen .startBottom{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+        #startScreen .startBtnBig{
+            font-size: 1.35rem;
+            padding: 14px 54px;
+            border-radius: 14px;
+            box-shadow: 0 0 24px rgba(76,175,80,0.25);
+        }
+
+
+        #startScreen .saveRow{
+            display:grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            align-items:center;
+            gap: 12px;
+            margin: 10px 0 12px;
+            pointer-events: auto;
+        }
+        #startScreen .saveRow .btn{
+            width: 100%;
+        }
+        #startScreen .blessingQuickRow{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap: 10px;
+            margin: 0 0 8px;
+        }
+        #startScreen .blessingBtn{
+            margin-top: 0;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            background: linear-gradient(180deg, rgba(53, 90, 210, 0.34), rgba(30, 40, 90, 0.24));
+            border: 1px solid rgba(123, 170, 255, 0.35);
+            box-shadow: 0 0 16px rgba(120, 170, 255, 0.24);
+        }
+        #startScreen .blessingMetaQuick{
+            font-size: 12px;
+            color: rgba(255,255,255,0.84);
+        }
+        #startScreen .blessingMetaQuick span{
+            color: #FFD54F;
+            font-weight: 900;
+        }
+        #startScreen .saveBtnContinue{
+            background: linear-gradient(180deg, rgba(0,200,255,0.35), rgba(0,200,255,0.10));
+            border: 1px solid rgba(0,200,255,0.45);
+            box-shadow: 0 0 26px rgba(0,200,255,0.20);
+        }
+        #startScreen .saveBtnContinue:hover{
+            box-shadow: 0 0 34px rgba(0,200,255,0.32);
+            transform: translateY(-1px);
+        }
+        #startScreen .saveBtnClear{
+            font-size: 0.98rem;
+            padding: 11px 18px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 0 18px rgba(255,255,255,0.08);
+            opacity: 0.92;
+        }
+        #startScreen .saveBtnClear:hover{
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+        @media (max-width: 900px){
+            #startScreen{ padding: 14px; }
+            #startScreen .startZones{ grid-template-columns: 1fr 1fr; }
+            #startScreen .startTop{ flex-direction: column; align-items: flex-start; }
+            #startScreen .startHints{ justify-content: flex-start; text-align: left; }
+            #startScreen .startInfoHub{ grid-template-columns: 1fr; min-height: 0; }
+            #startScreen .startInfoNav{ grid-template-columns: 1fr 1fr; }
+            #startScreen .startInfoBody{ min-height: 0; }
+            #startScreen .infoAmmoMeta{ grid-template-columns: 1fr; }
+            #startScreen .infoSystemGrid{ grid-template-columns: 1fr; }
+            #startScreen .infoRichGrid{ grid-template-columns: 1fr; }
+            #startScreen .startMain{ grid-template-columns: 1fr; }
+            #startScreen .systemList{ max-height: none; }
+            #startScreen .keyGuideWide{ grid-template-columns: 1fr 1fr; }
+            #startScreen .blessingQuickRow{ flex-direction: column; align-items: stretch; }
+            #startScreen .blessingMetaQuick{ text-align: center; }
+        }
+        @media (max-width: 620px){
+            #startScreen .startZones{ grid-template-columns: 1fr; gap: 8px; }
+            #startScreen .startZone{ min-height: 64px; }
+            #startScreen .startInfoNav{ grid-template-columns: 1fr; }
+            #startScreen .zoneShopActions{ flex-direction: column; align-items: stretch; }
+            #startScreen .zoneShopActions .blessingMetaQuick{ text-align: center; }
+        }
+
+        /* === Start Screen 16:9 Layout Hotfix (v28) ===
+           - Widen frame a bit
+           - Give Skills panel more real estate (flex column on right)
+         */
+        #startScreen{
+            width: 100vw;
+            height: 100vh;
+            padding: 16px;
+        }
+        #startScreen .startMain{
+            grid-template-columns: 0.90fr 1.45fr;
+            gap: 16px;
+        }
+        #startScreen .startRight{
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+            min-height: 0;
+        }
+        #startScreen .previewWrap{
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #startScreen #systemPreview{
+            max-height: 44vh;
+        }
+        #startScreen .skillsWrap{
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: auto;
+            padding: 12px;
+        }
+        #startScreen .systemDetails{
+            padding-bottom: 10px;
+        }
+
+        /* === Start Screen 16:9 Layout Hotfix (v29) ===
+           - Move Deploy + Best stats to LEFT column
+           - Let Skills panel extend further down
+         */
+        #startScreen .startLeft{
+            display:flex;
+            flex-direction:column;
+            gap: 10px;
+        }
+        #startScreen .systemList{
+            flex: 1 1 auto;
+            max-height: none;
+            overflow:auto;
+        }
+        #startScreen .leftActions{
+            margin-top: 10px;
+            display:flex;
+            flex-direction:column;
+            gap: 10px;
+        }
+        #startScreen .leftActions .startBtnBig{
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1.18rem;
+            border-radius: 14px;
+        }
+        #startScreen .leftStats{
+            font-size: 12px;
+            color:#bbb;
+            text-align:center;
+            opacity: 0.95;
+        }
+        #startScreen .leftStats span{ color:#4CAF50; font-weight:900; }
+        #startScreen #systemPreview{
+            width: min(100%, calc(46vh * 16 / 9));
+            height: auto;
+            max-height: 46vh;
+            margin: 0 auto;
+        }
+
+
+
+        /* === Start UI v30: Equalize Preview + Skills ===
+           START UI v30: Equalize Preview (blue) + Skills (yellow)
+           - Preview & skill panels share 50/50 height
+           - Remove canvas max-height cap
+           - Keep Best Score/Best Wave only in left panel
+         */
+        #startScreen .startRight{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            min-height:0;
+        }
+        #startScreen .previewWrap{
+            flex: 1 1 0 !important;
+            min-height:0;
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+        #startScreen #systemPreview{
+            flex: 1 1 0 !important;
+            width:100%;
+            height:100% !important;
+            max-height:none !important;
+        }
+        #startScreen .previewMeta{
+            margin-top:auto;
+        }
+        #startScreen .skillsWrap{
+            flex: 1 1 0 !important;
+            min-height:0;
+            overflow:auto;
+        }
+
+
+        /* === Start Mode Selector (Hard/Easy, 1P/2P) === */
+        #startScreen{ overflow-y:auto; overscroll-behavior: contain; }
+        #startScreen .start16{ height:auto; min-height:100%; }
+        #startScreen .modeBox{
+            margin-top: 10px;
+            background: rgba(0,0,0,0.20);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 14px;
+            padding: 10px 10px 8px;
+        }
+        #startScreen .modeTitle{
+            font-weight: 900;
+            letter-spacing: 0.7px;
+            color: #9be7b0;
+            font-size: 12px;
+            margin-bottom: 8px;
+            text-align:left;
+            opacity: 0.95;
+        }
+        #startScreen .modeRow{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:10px;
+            margin: 6px 0;
+        }
+        #startScreen .modeLabel{
+            font-size: 12px;
+            color:#bbb;
+            min-width: 78px;
+            text-align:left;
+        }
+        #startScreen .modeSeg{
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+            justify-content:flex-end;
+        }
+        #startScreen .modeSeg label{
+            display:flex;
+            align-items:center;
+            gap:6px;
+            padding: 6px 10px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.10);
+            cursor: pointer;
+            user-select:none;
+        }
+        #startScreen .modeSeg input{
+            accent-color: #4CAF50;
+        }
+        #startScreen .modeSeg span{
+            font-size: 12px;
+            color:#eee;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+        }
+        #startScreen .modeSelect{
+            width: 100%;
+            max-width: 230px;
+            padding: 7px 10px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.25);
+            color: #eee;
+            border: 1px solid rgba(255,255,255,0.14);
+            outline: none;
+            font-family: inherit;
+        }
+        #startScreen .modeNote{
+            margin-top: 6px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.75);
+            text-align:left;
+            line-height: 1.25;
+        }
+        #startScreen .pvpLoadoutWrap{
+            width:100%;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:8px;
+        }
+        #startScreen .pvpLoadCard{
+            background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.10);
+            border-radius:10px;
+            padding:8px;
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+        }
+        #startScreen .pvpLoadTitle{
+            font-size:11px;
+            font-weight:900;
+            color:#9be7b0;
+            letter-spacing:0.6px;
+        }
+        #startScreen .pvpItemsGrid{
+            display:grid;
+            grid-template-columns:1fr;
+            gap:6px;
+        }
+        #startScreen .pvpLoadCard .modeSelect{
+            max-width:none;
+            width:100%;
+            font-size:11px;
+            padding:6px 8px;
+        }
+        @media (max-height: 760px){
+            #startScreen .startMain{ flex: 0 0 auto; }
+        }
+
+        /* === Start Screen Responsive Optimize (v35) === */
+        #startScreen .startMain{
+            grid-template-columns: minmax(360px, 1fr) minmax(520px, 1.35fr);
+        }
+        @media (min-width: 1600px){
+            #startScreen{ padding: 22px 30px; }
+            #startScreen .startMain{
+                grid-template-columns: minmax(440px, 1fr) minmax(760px, 1.5fr);
+                gap: 18px;
+            }
+            #startScreen .systemList{ max-height: none; }
+        }
+        @media (max-width: 1200px){
+            #startScreen .startMain{
+                display:flex;
+                flex-direction:column;
+                gap: 12px;
+            }
+            #startScreen .startLeft,
+            #startScreen .startRight{ width: 100%; }
+            #startScreen .systemList{ max-height: 40vh; }
+            #startScreen .previewWrap{ max-height: 40vh; flex: 0 0 auto !important; }
+            #startScreen #systemPreview{ max-height: 32vh; height: auto !important; }
+            #startScreen .skillsWrap{ max-height: 36vh; flex: 0 0 auto !important; }
+        }
+        @media (max-height: 820px){
+            #startScreen{ padding: 12px 14px; }
+            #startScreen .startTop{ flex-direction:column; gap:10px; align-items:flex-start; }
+            #startScreen .startHints{ max-width: 100%; }
+            #startScreen .keyGuideWide{ grid-template-columns: 1fr 1fr; }
+            #startScreen .systemList{ max-height: 48vh; }
+        }
+        @media (max-height: 800px){
+            #startScreen .leftFootNote{ display:none; }
+            #startScreen .keyGuideWide{ display:none; }
+            #startScreen .modeNote{ display:none; }
+            #startScreen .modeBox{ margin-top: 8px; padding: 8px 8px 6px; }
+            #startScreen .modeRow{ margin: 4px 0; }
+            #startScreen .leftActions{ gap: 6px; margin-top: 8px; }
+            #startScreen .saveRow{ margin: 4px 0 6px; gap: 8px; }
+            #startScreen .startBtnBig{ font-size: 1.02rem; padding: 9px 14px; border-radius: 12px; }
+            #startScreen .leftActions .startBtnBig{ padding: 9px 14px; font-size: 1.02rem; }
+            #startScreen .systemList{ max-height: 70vh; }
+        }
+        @media (max-height: 760px){
+            #startScreen .startTop{ gap: 8px; }
+            #startScreen .startTitle{ font-size: clamp(22px, 2.6vw, 34px); letter-spacing: 3px; }
+            #startScreen .startSubtitle{ margin-top: 4px; font-size: 12px; }
+            #startScreen .startHints{ padding: 6px 8px; }
+            #startScreen .hintLine{ font-size: 11px; line-height: 1.15; margin: 2px 0; }
+            #startScreen .startMain{ gap: 10px; }
+            #startScreen .startLeft,
+            #startScreen .startRight{ padding: 10px; }
+            #startScreen .startLeft{ gap: 8px; }
+            #startScreen .systemList{ max-height: 74vh; }
+            #startScreen .sysItem{ padding: 8px; grid-template-columns: 18px 74px 1fr; gap: 8px; }
+            #startScreen .sysMini{ width: 72px; height: 48px; }
+            #startScreen .sysName{ font-size: 14px; }
+            #startScreen .sysDesc{ font-size: 11px; }
+            #startScreen .leftFootNote{ margin-top: 6px; font-size: 11px; }
+            #startScreen .keyGuideWide{ margin-top: 6px; gap: 6px 10px; }
+            #startScreen .kg{ font-size: 11px; gap: 8px; }
+            #startScreen .kg .key{ min-width: 46px; padding: 3px 6px; font-size: 10px; border-radius: 6px; }
+            #startScreen .modeBox{ margin-top: 8px; padding: 8px 8px 6px; }
+            #startScreen .modeRow{ margin: 4px 0; }
+            #startScreen .modeSeg label{ padding: 5px 8px; border-radius: 10px; }
+            #startScreen .modeLabel{ min-width: 68px; font-size: 11px; }
+            #startScreen .modeSelect{ padding: 6px 8px; max-width: 200px; }
+            #startScreen .modeNote{ font-size: 10px; }
+            #startScreen .leftActions{ gap: 8px; margin-top: 8px; }
+            #startScreen .saveRow{ margin: 4px 0 6px; gap: 8px; }
+            #startScreen .startBtnBig{ font-size: 1.05rem; padding: 10px 16px; border-radius: 12px; }
+            #startScreen .leftActions .startBtnBig{ padding: 10px 16px; font-size: 1.05rem; }
+            #startScreen .saveBtnClear{ font-size: 0.9rem; padding: 8px 12px; border-radius: 10px; }
+            #startScreen .leftStats{ font-size: 11px; }
+        }
+
+
+        /* === Welcome Overlay (pre-menu) === */
+        #welcomeOverlay{
+            position:fixed;
+            inset:0;
+            display:none;
+            align-items:center;
+            justify-content:center;
+            background:transparent;
+            z-index:999999;
+            padding:18px;
+        }
+        #welcomeCard{
+            width:min(760px, 94vw);
+            max-height:min(78vh, 640px);
+            overflow:auto;
+            background:rgba(18, 20, 26, 0.92);
+            border:1px solid rgba(255,255,255,0.12);
+            border-radius:18px;
+            padding:22px 22px 18px;
+            box-shadow:0 30px 90px rgba(0,0,0,0.55);
+            backdrop-filter: blur(10px);
+        }
+        #welcomeCard h2{
+            margin:0 0 10px 0;
+            font-size:26px;
+            letter-spacing:0.5px;
+            color:#ffe36e;
+            text-shadow:0 0 10px rgba(255,227,110,0.25);
+        }
+        #welcomeCard p{
+            margin:8px 0;
+            line-height:1.45;
+            opacity:0.95;
+        }
+        #welcomeCard a{
+            color:#8fd3ff;
+            text-decoration:none;
+            border-bottom:1px dotted rgba(143,211,255,0.55);
+        }
+        #welcomeCard a:hover{ opacity:0.95; }
+
+/* === Welcome Glow + Bounce (Phase 12 polish) === */
+#welcomeCard{
+    /* slightly brighter but still dark */
+    background: linear-gradient(180deg, rgba(32, 36, 52, 0.96), rgba(18, 20, 26, 0.92));
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow:
+        0 30px 90px rgba(0,0,0,0.55),
+        0 0 46px rgba(143,211,255,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+#welcomeCard a{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:3px 10px;
+    border-radius:999px;
+    color:#d8f0ff;
+    text-decoration:none;
+    border:1px solid rgba(143,211,255,0.28);
+            border-bottom:none;
+    background: rgba(143,211,255,0.10);
+    box-shadow: 0 0 0 rgba(143,211,255,0);
+    transform: translateZ(0);
+    will-change: transform, box-shadow, background;
+    transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+#welcomeCard a:hover{
+    opacity:1;
+    transform: translateY(-2px) scale(1.03);
+    background: rgba(143,211,255,0.16);
+    border-color: rgba(143,211,255,0.45);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.30), 0 0 18px rgba(143,211,255,0.32);
+}
+#welcomeCard a:active{
+    transform: translateY(0px) scale(0.98);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.28), 0 0 12px rgba(143,211,255,0.22);
+}
+#welcomeCard a:focus-visible{
+    outline:none;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.30), 0 0 0 2px rgba(143,211,255,0.35), 0 0 18px rgba(143,211,255,0.32);
+}
+
+#welcomeContinueBtn{
+    transform: translateZ(0);
+    will-change: transform, box-shadow, filter;
+    transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+#welcomeContinueBtn:hover{
+    transform: translateY(-2px) scale(1.02);
+    filter: brightness(1.06);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.40), 0 0 22px rgba(255,227,110,0.26);
+}
+#welcomeContinueBtn:active{
+    transform: translateY(0px) scale(0.98);
+    filter: brightness(0.98);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.35), 0 0 18px rgba(255,227,110,0.18);
+}
+#welcomeContinueBtn:focus-visible{
+    outline:none;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.40), 0 0 0 2px rgba(255,227,110,0.35), 0 0 22px rgba(255,227,110,0.26);
+}
+
+        #welcomeCard .welcomeRow{
+            margin-top:14px;
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            align-items:center;
+            justify-content:flex-end;
+        }
+        #welcomeContinueBtn{
+            cursor:pointer;
+            border:none;
+            border-radius:14px;
+            padding:10px 16px;
+            font-weight:700;
+            color:#0f1116;
+            background:linear-gradient(180deg, #ffe36e, #f5c84a);
+            box-shadow:0 10px 22px rgba(0,0,0,0.35), 0 0 18px rgba(255,227,110,0.18);
+        }
+        #welcomeContinueBtn:active{ transform: translateY(0px) scale(0.98); filter: brightness(0.98); }
+        #welcomeHint{
+            font-size:12px;
+            opacity:0.8;
+            margin-right:auto;
+        }
+
+/* === Shop Tab Full-Height Fit (large screens) === */
+#startScreen .startTabAltViews.active{
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+    overflow:hidden;
+}
+#startScreen .startAltView.active{
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+    height:100%;
+    overflow:auto;
+}
+#startScreen #startTabShopView.active{
+    overflow:auto;
+}
+#startScreen #startTabShopView #startShopBlessingHost{
+    margin-top:10px;
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+}
+#startScreen #startTabShopView #startShopBlessingHost #blessingPanel.blessing-inline{
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
+    min-height:0;
+    overflow:hidden;
+}
+#startScreen #startTabShopView #startShopBlessingHost #blessingPanel.blessing-inline .shopSectionView.active{
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
+    min-height:0;
+}
+#startScreen #startTabShopView #startShopBlessingHost #blessingPanel.blessing-inline #shopSectionBlessingView.active{
+    overflow:auto;
+}
+#startScreen #startTabShopView #startShopBlessingHost #blessingPanel.blessing-inline #shopSectionSkinView.active{
+    overflow:hidden;
+}
+#startScreen #startTabShopView #startShopBlessingHost #blessingPanel.blessing-inline #shopSectionSkinView.active .skinShopSection{
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+}
+#startScreen #startTabShopView #startShopBlessingHost #blessingPanel.blessing-inline #shopSectionSkinView.active .skinCards{
+    flex:0 0 clamp(138px, 21vh, 220px);
+    height:clamp(138px, 21vh, 220px);
+    overflow:auto;
+    align-content:start;
+    padding-bottom:10px;
+}
+#startScreen #startTabShopView #startShopBlessingHost #blessingPanel.blessing-inline #shopSectionSkinView.active .skinShowcase{
+    flex:1 1 auto;
+    min-height:0;
+}
+#startScreen #startTabShopView #startShopBlessingHost #blessingPanel.blessing-inline #shopSectionSkinView.active .skinShowcaseImage,
+#startScreen #startTabShopView #startShopBlessingHost #blessingPanel.blessing-inline #shopSectionSkinView.active .skinShowcasePreview{
+    height:clamp(170px, 22vh, 250px);
+}
