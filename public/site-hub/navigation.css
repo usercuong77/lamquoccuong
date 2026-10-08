@@ -1,0 +1,94 @@
+body.lqc-hub-page {
+  padding-bottom: 5.75rem !important;
+}
+
+.lqc-hub-dock {
+  position: fixed;
+  z-index: 2147483000;
+  left: 50%;
+  bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  width: min(calc(100% - 2rem), 58rem);
+  padding: .45rem;
+  overflow-x: auto;
+  transform: translateX(-50%);
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 999px;
+  background: rgba(20, 23, 33, .82);
+  box-shadow: 0 1rem 3rem rgba(5, 8, 18, .22), inset 0 1px rgba(255, 255, 255, .16);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  scrollbar-width: none;
+}
+
+.lqc-hub-dock::-webkit-scrollbar {
+  display: none;
+}
+
+.lqc-hub-dock a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.35rem;
+  padding: .5rem .8rem;
+  color: rgba(255, 255, 255, .78);
+  font: 700 .68rem/1 "Arial Narrow", Arial, sans-serif;
+  letter-spacing: .08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color .25s ease, background .25s ease, transform .25s ease;
+}
+
+.lqc-hub-dock a:hover,
+.lqc-hub-dock a:focus-visible,
+.lqc-hub-dock a[aria-current="page"] {
+  color: #141721;
+  border-radius: 999px;
+  background: #ffcf61;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.lqc-hub-dock .lqc-hub-home {
+  gap: .45rem;
+  color: #fff;
+  letter-spacing: .13em;
+}
+
+.lqc-hub-dock .lqc-hub-home::before {
+  width: .42rem;
+  height: .42rem;
+  content: "";
+  border-radius: 50%;
+  background: #ff6f61;
+  box-shadow: 0 0 .8rem #ff6f61;
+}
+
+.lqc-hub-dock .lqc-hub-home small {
+  color: rgba(255, 255, 255, .58);
+  font-size: .56rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  text-transform: none;
+}
+
+@media (max-width: 620px) {
+  .lqc-hub-dock {
+    bottom: .6rem;
+    width: calc(100% - 1rem);
+  }
+
+  .lqc-hub-dock a {
+    padding-inline: .68rem;
+    font-size: .61rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lqc-hub-dock a {
+    transition: none;
+  }
+}

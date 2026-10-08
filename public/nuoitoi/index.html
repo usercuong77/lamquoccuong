@@ -1,0 +1,2402 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+  <base href="/nuoitoi/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuôi Tôi | Lâm Quốc Cường</title>
+  <meta name="description" content="Nuôi Tôi - trang donation vui nhộn, hơi hỗn loạn, đầy màu sắc và cực kỳ có personality." />
+  <link rel="canonical" href="/nuoitoi/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Nuôi Tôi | Lâm Quốc Cường" />
+  <meta property="og:description" content="Nuôi Tôi - trang donation vui nhộn, hơi hỗn loạn, đầy màu sắc và cực kỳ có personality." />
+  <meta property="og:url" content="/nuoitoi/" />
+  <meta property="og:image" content="https://mxh.lamquoccuong.com/photo-public.jpg" />
+  <meta property="og:image:width" content="1400" />
+  <meta property="og:image:height" content="1400" />
+  <meta property="og:image:alt" content="Lâm Quốc Cường - Social Media Engineer" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Nuôi Tôi | Lâm Quốc Cường" />
+  <meta name="twitter:description" content="Nuôi Tôi - trang donation vui nhộn, hơi hỗn loạn, đầy màu sắc và cực kỳ có personality." />
+  <meta name="twitter:image" content="https://mxh.lamquoccuong.com/photo-public.jpg" />
+  <meta name="twitter:image:alt" content="Lâm Quốc Cường - Social Media Engineer" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA2NCA2NCc+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSdnJyB4MT0nMCcgeTE9JzAnIHgyPScxJyB5Mj0nMSc+PHN0b3Agb2Zmc2V0PScwJScgc3RvcC1jb2xvcj0nI2ZmNGY5YScvPjxzdG9wIG9mZnNldD0nNTUlJyBzdG9wLWNvbG9yPScjZmZiMzQ3Jy8+PHN0b3Agb2Zmc2V0PScxMDAlJyBzdG9wLWNvbG9yPScjMzVlMmZmJy8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9JzY0JyBoZWlnaHQ9JzY0JyByeD0nMTYnIGZpbGw9J3VybCgjZyknLz48Y2lyY2xlIGN4PSc1MCcgY3k9JzE0JyByPSc1JyBmaWxsPScjZmZmOGE4Jy8+PHBhdGggZD0nTTE2IDM5YzAtNyA2LTEzIDE2LTEzczE2IDYgMTYgMTN2M0gxNnonIGZpbGw9JyMyYjIzNTUnLz48cmVjdCB4PScxNCcgeT0nNDInIHdpZHRoPSczNicgaGVpZ2h0PSc2JyByeD0nMycgZmlsbD0nIzFlMWQyYycvPjx0ZXh0IHg9JzMyJyB5PScyNCcgdGV4dC1hbmNob3I9J21pZGRsZScgZm9udC1zaXplPScxNCcgZm9udC1mYW1pbHk9J0FyaWFsLHNhbnMtc2VyaWYnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9J3doaXRlJz5OVDwvdGV4dD48L3N2Zz4=">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #fff7df;
+      --ink: #1e1d2c;
+      --muted: #555877;
+      --pink: #ff4f9a;
+      --orange: #ff9830;
+      --yellow: #ffd649;
+      --purple: #9058ff;
+      --blue: #3f8cff;
+      --cyan: #35e2ff;
+      --lime: #81e54e;
+      --red: #ff4a4a;
+      --card: #ffffff;
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow: 0 16px 38px rgba(27, 25, 45, 0.18);
+      --outline: 2px solid rgba(27, 25, 45, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Be Vietnam Pro", sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 8% 4%, rgba(255, 122, 176, 0.35), transparent 40%),
+        radial-gradient(circle at 94% 6%, rgba(83, 225, 255, 0.35), transparent 38%),
+        radial-gradient(circle at 20% 80%, rgba(255, 215, 92, 0.23), transparent 42%),
+        linear-gradient(130deg, #fff9e8 0%, #ffeef7 34%, #ecf7ff 65%, #efffe9 100%);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      z-index: 120;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(3px);
+      border-bottom: 1px solid rgba(32, 34, 58, 0.1);
+      pointer-events: none;
+    }
+
+    .scroll-progress__bar {
+      display: block;
+      height: 100%;
+      width: 100%;
+      transform-origin: left center;
+      transform: scaleX(0);
+      background: linear-gradient(90deg, #ff4f9a 0%, #ff9830 30%, #ffd649 55%, #35e2ff 80%, #9058ff 100%);
+      box-shadow: 0 4px 12px rgba(56, 32, 112, 0.25);
+      transition: transform 0.08s linear;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.2;
+      background-image: radial-gradient(rgba(27, 27, 46, 0.2) 0.5px, transparent 0.5px);
+      background-size: 4px 4px;
+      mix-blend-mode: soft-light;
+    }
+
+    .decor-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 999px;
+      opacity: 0.45;
+      filter: blur(1px);
+      animation: floaty 9s ease-in-out infinite alternate;
+    }
+
+    .blob.b1 {
+      width: 180px;
+      height: 180px;
+      top: 2%;
+      left: -70px;
+      background: linear-gradient(145deg, #ff5ca3, #ffc657);
+    }
+
+    .blob.b2 {
+      width: 140px;
+      height: 140px;
+      top: 26%;
+      right: -40px;
+      background: linear-gradient(145deg, #56e7ff, #6f82ff);
+      animation-delay: 1.2s;
+    }
+
+    .blob.b3 {
+      width: 190px;
+      height: 190px;
+      top: 61%;
+      left: -65px;
+      background: linear-gradient(145deg, #ffe06d, #8be94b);
+      animation-delay: 0.4s;
+    }
+
+    .blob.b4 {
+      width: 120px;
+      height: 120px;
+      top: 82%;
+      right: 5%;
+      background: linear-gradient(145deg, #d28fff, #ff8fb5);
+      animation-delay: 2.1s;
+    }
+
+    .spark {
+      position: absolute;
+      font-size: 1.1rem;
+      opacity: 0.65;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+
+    .spark.s1 { top: 12%; left: 24%; }
+    .spark.s2 { top: 30%; right: 16%; animation-delay: 1s; }
+    .spark.s3 { top: 58%; right: 22%; animation-delay: 2s; }
+    .spark.s4 { top: 76%; left: 15%; animation-delay: 0.5s; }
+
+    @keyframes floaty {
+      from { transform: translateY(-6px) translateX(-3px) rotate(-4deg); }
+      to { transform: translateY(11px) translateX(9px) rotate(7deg); }
+    }
+
+    @keyframes twinkle {
+      0%, 100% { transform: scale(0.85) rotate(0); opacity: 0.4; }
+      50% { transform: scale(1.2) rotate(12deg); opacity: 0.95; }
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+    }
+
+    .wrap {
+      width: min(1140px, calc(100% - 2rem));
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .section {
+      padding: 4.4rem 0;
+      position: relative;
+    }
+
+    h1, h2, h3 {
+      font-family: "Baloo 2", cursive;
+      letter-spacing: 0.2px;
+      line-height: 1.08;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 6.2vw, 3.3rem);
+      margin-bottom: 0.8rem;
+    }
+
+    .lead {
+      font-size: clamp(1rem, 2.3vw, 1.15rem);
+      color: var(--muted);
+      max-width: 66ch;
+    }
+
+    .kicker-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 1rem;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-weight: 800;
+      border: 2px solid rgba(24, 23, 40, 0.12);
+      background: white;
+      box-shadow: 0 7px 15px rgba(24, 26, 46, 0.11);
+      transform: rotate(var(--r, -2deg));
+      animation: kickerBob 4.2s ease-in-out infinite;
+    }
+
+    .kicker:nth-child(2n) { --r: 2deg; }
+    .kicker:nth-child(3n) { --r: -4deg; }
+    .kicker:nth-child(2n) { animation-delay: 0.4s; }
+    .kicker:nth-child(3n) { animation-delay: 0.8s; }
+    .kicker.hot { background: linear-gradient(120deg, #ffe16f, #ffba7b); }
+    .kicker.cool { background: linear-gradient(120deg, #b5f4ff, #d5c2ff); }
+    .kicker.spicy { background: linear-gradient(120deg, #ff95c3, #ffcf6b); }
+
+    @keyframes kickerBob {
+      0%, 100% { transform: translateY(0) rotate(var(--r, -2deg)); }
+      50% { transform: translateY(-2px) rotate(calc(var(--r, -2deg) + 0.8deg)); }
+    }
+
+    .hero {
+      padding-top: 2rem;
+      padding-bottom: 3rem;
+    }
+
+    .hero-box {
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.65), transparent 40%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.85));
+      border-radius: calc(var(--radius-xl) + 8px);
+      border: 2px solid rgba(255, 255, 255, 0.82);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-box::before {
+      content: "";
+      position: absolute;
+      left: -45%;
+      top: -100%;
+      width: 70%;
+      height: 280%;
+      pointer-events: none;
+      z-index: 1;
+      background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.4) 50%, transparent 80%);
+      animation: heroShine 8.5s ease-in-out infinite;
+    }
+
+    @keyframes heroShine {
+      0%, 22% { transform: translateX(-120%); opacity: 0; }
+      30% { opacity: 0.8; }
+      50% { transform: translateX(190%); opacity: 0.8; }
+      62%, 100% { transform: translateX(190%); opacity: 0; }
+    }
+
+    .hype-strip {
+      margin-bottom: 0.95rem;
+      border-radius: 999px;
+      border: 1.5px solid rgba(30, 33, 62, 0.13);
+      background: linear-gradient(120deg, rgba(255, 247, 199, 0.95), rgba(231, 243, 255, 0.95));
+      box-shadow: 0 8px 14px rgba(25, 29, 52, 0.08);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hype-track {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      width: max-content;
+      padding: 0.38rem 0.52rem;
+      animation: hypeTicker 24s linear infinite;
+      will-change: transform;
+    }
+
+    .hype-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 0.2rem 0.58rem;
+      font-size: 0.67rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      white-space: nowrap;
+      color: #2d3158;
+      border: 1px solid rgba(29, 33, 59, 0.13);
+      background: #fff;
+    }
+
+    .hype-pill:nth-child(3n + 1) {
+      background: linear-gradient(120deg, #fff2ad, #ffd6be);
+    }
+
+    .hype-pill:nth-child(3n + 2) {
+      background: linear-gradient(120deg, #dff6ff, #e5ddff);
+    }
+
+    .hype-pill:nth-child(3n + 3) {
+      background: linear-gradient(120deg, #ffe0f1, #ffe9be);
+    }
+
+    @keyframes hypeTicker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 1.3rem;
+      padding: 1.4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 14vw, 6.4rem);
+      color: #25163f;
+      text-shadow: 0 5px 0 rgba(255, 216, 81, 0.85);
+      margin-bottom: 0.3rem;
+      display: inline-block;
+      position: relative;
+    }
+
+    .hero-title::after {
+      content: "chương trình nuôi tôi phi chính thức";
+      position: absolute;
+      right: -6px;
+      top: -16px;
+      font-size: 0.64rem;
+      font-family: "Be Vietnam Pro", sans-serif;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 0.24rem 0.52rem;
+      border-radius: 999px;
+      border: 2px solid rgba(30, 23, 52, 0.2);
+      background: white;
+      transform: rotate(9deg);
+      box-shadow: 0 5px 12px rgba(27, 22, 46, 0.12);
+    }
+
+    .hero-sub {
+      font-size: clamp(1.08rem, 3.4vw, 1.28rem);
+      font-weight: 600;
+      color: #343754;
+      margin-bottom: 1rem;
+      max-width: 32ch;
+    }
+
+    .hero-copy {
+      color: #4f5475;
+      margin-bottom: 1.25rem;
+      max-width: 56ch;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+
+    .section-donate-cta {
+      margin-top: 1.05rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .section-donate-btn {
+      min-width: 240px;
+      padding: 0.95rem 1.35rem;
+      box-shadow: 0 11px 20px rgba(255, 111, 122, 0.28);
+      font-size: 1rem;
+    }
+
+    .hero-cta .btn.main {
+      padding: 0.95rem 1.35rem;
+      box-shadow: 0 10px 18px rgba(255, 111, 122, 0.28);
+    }
+
+    .btn.quick-qr {
+      background: linear-gradient(120deg, #e4ffae, #a9f6d6);
+      border-color: rgba(36, 49, 48, 0.2);
+      color: #1f3531;
+      font-size: 0.9rem;
+      padding: 0.65rem 0.95rem;
+    }
+
+    .hero-teaser {
+      margin-top: 0.9rem;
+      border: 1.5px solid rgba(34, 38, 65, 0.14);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(247, 255, 247, 0.9));
+      box-shadow: 0 8px 14px rgba(24, 28, 49, 0.08);
+      padding: 0.62rem 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.48rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #2d3159;
+      max-width: 470px;
+    }
+
+    .hero-teaser::before {
+      content: "⬇";
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: inline-grid;
+      place-items: center;
+      font-weight: 900;
+      background: linear-gradient(120deg, #ffef9b, #ffc7a0);
+      border: 1px solid rgba(43, 45, 74, 0.22);
+      color: #2b2f56;
+    }
+
+    .hero-teaser strong {
+      color: #1f2a57;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      font-weight: 800;
+      padding: 0.84rem 1.2rem;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      font-size: 0.95rem;
+      transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 11px 20px rgba(25, 22, 47, 0.17);
+      filter: saturate(1.08);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    .btn.main {
+      background: linear-gradient(120deg, #ffe66f, #ff9b5f 45%, #ff609f);
+      color: #2a1530;
+    }
+
+    .btn.alt {
+      background: #ffffff;
+      color: #2c2d51;
+      border-color: #2c2d51;
+    }
+
+    .btn.lime {
+      background: linear-gradient(120deg, #e1ff8e, #69e5a1);
+      color: #1f2b20;
+    }
+
+    .hero-meter {
+      background: linear-gradient(145deg, #ffffff, #fff9f1);
+      border-radius: var(--radius-xl);
+      border: 2px dashed rgba(46, 34, 15, 0.22);
+      padding: 1rem;
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.75);
+    }
+
+    .hero-meter h3 {
+      font-size: 1.45rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .status-list {
+      list-style: none;
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .status-list li {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 0.64rem 0.75rem;
+      border: 1.5px solid rgba(35, 36, 61, 0.1);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .status-list strong { color: #243565; }
+
+    .floating-tags {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .tag {
+      position: absolute;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      font-weight: 800;
+      color: #2b2e53;
+      background: #fff;
+      border: 2px solid rgba(27, 26, 45, 0.12);
+      border-radius: 999px;
+      padding: 0.27rem 0.6rem;
+      box-shadow: 0 6px 13px rgba(30, 33, 59, 0.12);
+      transform: rotate(var(--rot, -8deg));
+      animation: floatTag 5.5s ease-in-out infinite alternate;
+    }
+
+    .tag.t1 { top: 8px; right: 10px; }
+    .tag.t2 { top: 92px; left: -8px; --rot: 6deg; animation-delay: 0.6s; }
+    .tag.t3 { bottom: 16px; left: 44%; --rot: -4deg; animation-delay: 1.2s; }
+    .tag.t4 { top: 180px; right: -6px; --rot: 8deg; animation-delay: 2s; }
+    .tag.t5 { bottom: 72px; right: 34%; --rot: -2deg; animation-delay: 1.7s; }
+
+    @keyframes floatTag {
+      from { transform: translateY(-2px) rotate(var(--rot, -8deg)); }
+      to { transform: translateY(7px) rotate(calc(var(--rot, -8deg) + 2deg)); }
+    }
+
+    .panel {
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.78));
+      border-radius: var(--radius-xl);
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      box-shadow: var(--shadow);
+      padding: 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255, 207, 98, 0.32), transparent 72%);
+      right: -70px;
+      top: -70px;
+      pointer-events: none;
+    }
+
+    .grid {
+      display: grid;
+      gap: 0.9rem;
+      margin-top: 1.25rem;
+      grid-template-columns: 1fr;
+    }
+
+    .fun-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      border: 1.5px solid rgba(31, 30, 58, 0.11);
+      box-shadow: 0 7px 15px rgba(22, 26, 52, 0.08);
+      padding: 1rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fun-card:hover {
+      transform: translateY(-4px) rotate(-0.5deg);
+      box-shadow: 0 13px 24px rgba(23, 26, 49, 0.13);
+    }
+
+    .fun-card .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      padding: 0.2rem 0.54rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(120deg, #dff7ff, #ffe6ff);
+      border: 1px solid rgba(29, 30, 56, 0.14);
+      color: #354068;
+    }
+
+    .fun-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .fun-card p {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .emoji-icon {
+      width: 43px;
+      height: 43px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 0.6rem;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #ffec86, #ffad74);
+      box-shadow: 0 8px 14px rgba(255, 142, 90, 0.28);
+    }
+
+    .benefit-wrap {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .benefit-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.62rem 0.85rem;
+      border-radius: 14px;
+      background: #fff;
+      border: 1.5px solid rgba(33, 35, 62, 0.11);
+      box-shadow: 0 7px 14px rgba(24, 26, 51, 0.07);
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: transform 0.18s ease;
+    }
+
+    .benefit-pill:hover { transform: translateY(-3px) rotate(-1deg); }
+
+    .benefit-pill .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: linear-gradient(130deg, #ff4e9b, #ffa15f);
+      box-shadow: 0 0 0 3px rgba(255, 109, 157, 0.2);
+      flex-shrink: 0;
+    }
+
+    .spend-grid {
+      margin-top: 1.2rem;
+      display: grid;
+      gap: 0.85rem;
+      grid-template-columns: 1fr;
+    }
+
+    .spend-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1.4px solid rgba(31, 34, 58, 0.12);
+      padding: 0.9rem;
+    }
+
+    .spend-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .spend-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    .spend-percent {
+      font-weight: 800;
+      font-size: 0.83rem;
+      color: #2f3062;
+      background: linear-gradient(120deg, #ffe373, #ffbb8f);
+      border: 1px solid rgba(36, 38, 64, 0.14);
+      border-radius: 999px;
+      padding: 0.15rem 0.5rem;
+      white-space: nowrap;
+    }
+
+    .bar {
+      width: 100%;
+      height: 9px;
+      border-radius: 999px;
+      background: #edf0ff;
+      border: 1px solid rgba(34, 36, 62, 0.1);
+      overflow: hidden;
+      margin-bottom: 0.42rem;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      width: var(--w, 40%);
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ff8a63, #ffd54f, #76e66d);
+      transition: width 0.5s ease;
+    }
+
+    .spend-note {
+      color: #5b5f7c;
+      font-size: 0.85rem;
+    }
+
+    .total-chaos {
+      margin-top: 0.95rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 14px;
+      background: linear-gradient(140deg, #fff0b7, #ffd9cc);
+      border: 1.5px dashed rgba(78, 53, 22, 0.25);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #573918;
+    }
+
+    .qr-grid {
+      margin-top: 1.2rem;
+      display: grid;
+      gap: 0.9rem;
+      grid-template-columns: 1fr;
+    }
+
+    .qr-card {
+      background: linear-gradient(145deg, #fff, #fff9f2);
+      border-radius: var(--radius-lg);
+      border: 2px dashed rgba(35, 37, 65, 0.2);
+      min-height: 400px;
+      padding: 1rem;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .qr-box {
+      width: min(330px, 100%);
+      aspect-ratio: 1 / 1;
+      border-radius: 18px;
+      border: 2px solid #282a57;
+      background:
+        linear-gradient(90deg, rgba(34, 36, 71, 0.06) 1px, transparent 1px),
+        linear-gradient(rgba(34, 36, 71, 0.06) 1px, transparent 1px),
+        linear-gradient(145deg, #fff, #f1f6ff);
+      background-size: 16px 16px, 16px 16px, auto;
+      box-shadow: 0 10px 20px rgba(25, 30, 58, 0.16);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0.8rem;
+    }
+
+    .qr-box::before {
+      content: "scan zone";
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: #2e3560;
+      background: #fff;
+      border: 1px solid rgba(31, 34, 58, 0.17);
+      border-radius: 999px;
+      padding: 0.2rem 0.5rem;
+    }
+
+    .scan-line {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, #2ef2ff, transparent);
+      animation: scan 2.4s ease-in-out infinite;
+      opacity: 0.75;
+    }
+
+    @keyframes scan {
+      0% { top: 14%; }
+      50% { top: 72%; }
+      100% { top: 14%; }
+    }
+
+    .qr-text {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 800;
+      color: #2f355f;
+      font-size: 0.84rem;
+      padding: 2.2rem;
+      text-align: center;
+    }
+
+    .qr-real-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      position: relative;
+      z-index: 2;
+      padding: 0.6rem;
+    }
+
+    .payment {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      border: 1.5px solid rgba(32, 35, 59, 0.12);
+      box-shadow: 0 9px 17px rgba(25, 28, 51, 0.08);
+      padding: 1rem;
+    }
+
+    .payment h3 {
+      font-size: 1.42rem;
+      margin-bottom: 0.62rem;
+    }
+
+    .payment ul {
+      list-style: none;
+      display: grid;
+      gap: 0.55rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .payment li {
+      background: #fcfcff;
+      border-radius: 12px;
+      border: 1.2px solid rgba(32, 34, 57, 0.11);
+      padding: 0.65rem 0.75rem;
+      display: grid;
+      gap: 0.12rem;
+    }
+
+    .payment .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      color: #6a6f8a;
+      font-weight: 800;
+    }
+
+    .payment .value {
+      font-weight: 700;
+      font-size: 0.94rem;
+      color: #25264b;
+      overflow-wrap: anywhere;
+    }
+
+    .payment .tip {
+      font-size: 0.85rem;
+      color: #4d5370;
+      font-weight: 600;
+      border: 1px dashed rgba(42, 117, 91, 0.4);
+      background: linear-gradient(145deg, #e8fff4, #f5fcff);
+      border-radius: 12px;
+      padding: 0.62rem 0.72rem;
+    }
+
+    .message-box {
+      margin-bottom: 0.82rem;
+      border-radius: 12px;
+      border: 1.2px solid rgba(33, 37, 65, 0.12);
+      background: linear-gradient(145deg, #f5f8ff, #fff);
+      padding: 0.72rem;
+    }
+
+    .message-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #2d3156;
+      margin-bottom: 0.45rem;
+      line-height: 1.45;
+    }
+
+    .message-textarea {
+      width: 100%;
+      border: 1.6px solid rgba(43, 47, 82, 0.22);
+      border-radius: 10px;
+      background: #fff;
+      font: inherit;
+      color: #222448;
+      padding: 0.62rem 0.74rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .message-textarea {
+      min-height: 88px;
+      resize: vertical;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .message-textarea:focus {
+      border-color: #7694ff;
+      box-shadow: 0 0 0 3px rgba(118, 148, 255, 0.16);
+    }
+
+    .message-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .message-send-btn {
+      border: 1.3px solid rgba(35, 38, 68, 0.18);
+      border-radius: 999px;
+      background: linear-gradient(120deg, #dff7ff, #e6deff);
+      color: #29315c;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.32rem 0.7rem;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.2s ease;
+    }
+
+    .message-send-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(24, 26, 49, 0.12);
+    }
+
+    .message-send-btn:disabled {
+      opacity: 0.65;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .message-status {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #5c627f;
+    }
+
+    .message-status.ok {
+      color: #1f7b52;
+    }
+
+    .message-status.err {
+      color: #b23a4f;
+    }
+
+    .amount-box {
+      margin-bottom: 0.82rem;
+      border-radius: 12px;
+      border: 1.2px solid rgba(33, 37, 65, 0.12);
+      background: linear-gradient(145deg, #fff8eb, #fff);
+      padding: 0.72rem;
+    }
+
+    .amount-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #2d3156;
+      margin-bottom: 0.45rem;
+      line-height: 1.45;
+    }
+
+    .amount-input-wrap {
+      position: relative;
+    }
+
+    .amount-input {
+      width: 100%;
+      border: 1.6px solid rgba(43, 47, 82, 0.22);
+      border-radius: 10px;
+      background: #fff;
+      font: inherit;
+      font-weight: 700;
+      color: #222448;
+      padding: 0.62rem 3.5rem 0.62rem 0.74rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .amount-input:focus {
+      border-color: #ff8b63;
+      box-shadow: 0 0 0 3px rgba(255, 143, 95, 0.18);
+    }
+
+    .amount-currency {
+      position: absolute;
+      right: 0.62rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      color: #5a607b;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .amount-presets {
+      margin-top: 0.55rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.42rem;
+    }
+
+    .preset-btn {
+      border: 1.3px solid rgba(35, 38, 68, 0.17);
+      border-radius: 999px;
+      background: #fff;
+      color: #2e3259;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 0.23rem 0.56rem;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .preset-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(24, 26, 49, 0.12);
+      background: linear-gradient(120deg, #fff6d7, #ffe1d0);
+    }
+
+    .preset-btn.active {
+      background: linear-gradient(120deg, #ffed8b, #ffb97c);
+      border-color: rgba(35, 38, 68, 0.24);
+    }
+
+    .amount-note {
+      margin-top: 0.48rem;
+      font-size: 0.8rem;
+      color: #565c79;
+      font-weight: 600;
+    }
+
+    .donor-grid {
+      margin-top: 1.2rem;
+      display: grid;
+      gap: 0.85rem;
+      grid-template-columns: 1fr;
+    }
+
+    .donor {
+      background: linear-gradient(155deg, #fff, #fffaf1);
+      border-radius: var(--radius-md);
+      border: 1.5px solid rgba(34, 34, 61, 0.11);
+      box-shadow: 0 8px 16px rgba(26, 27, 48, 0.08);
+      padding: 0.92rem;
+      display: grid;
+      gap: 0.38rem;
+    }
+
+    .donor-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .donor-name {
+      font-family: "Baloo 2", cursive;
+      font-size: 1.33rem;
+      line-height: 1;
+    }
+
+    .donor-amount {
+      font-weight: 800;
+      font-size: 0.9rem;
+      border-radius: 999px;
+      padding: 0.23rem 0.55rem;
+      background: linear-gradient(120deg, #ffe67e, #ffbd8d);
+      border: 1px solid rgba(34, 36, 63, 0.16);
+      white-space: nowrap;
+    }
+
+    .donor-note {
+      color: #505570;
+      font-size: 0.91rem;
+      font-weight: 500;
+    }
+
+    .donor-badge {
+      justify-self: start;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.25px;
+      border-radius: 999px;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid rgba(31, 38, 77, 0.2);
+      background: linear-gradient(120deg, #d5f7ff, #e5e3ff);
+      color: #2d3970;
+    }
+
+    .faq-wrap {
+      margin-top: 1.2rem;
+      display: grid;
+      gap: 0.62rem;
+    }
+
+    .faq-item {
+      border-radius: 14px;
+      border: 1.4px solid rgba(33, 35, 61, 0.13);
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 7px 14px rgba(24, 28, 53, 0.08);
+    }
+
+    .faq-item summary {
+      cursor: pointer;
+      padding: 0.85rem 0.95rem;
+      font-weight: 800;
+      list-style: none;
+      position: relative;
+      color: #2f3257;
+      padding-right: 2.2rem;
+    }
+
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-item summary::after {
+      content: "+";
+      position: absolute;
+      right: 0.9rem;
+      top: 0.8rem;
+      font-size: 1.1rem;
+      transition: transform 0.2s ease;
+    }
+
+    .faq-item[open] summary::after {
+      transform: rotate(45deg);
+    }
+
+    .faq-content {
+      padding: 0 0.95rem 0.9rem;
+      color: #515674;
+      font-weight: 500;
+      font-size: 0.93rem;
+    }
+
+    .final-box {
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.45), transparent 44%),
+        linear-gradient(135deg, #ff699f, #ffb652 45%, #75e27f 100%);
+      border-radius: calc(var(--radius-xl) + 8px);
+      border: 2px solid rgba(255, 255, 255, 0.74);
+      box-shadow: 0 17px 33px rgba(24, 21, 41, 0.2);
+      padding: 1.4rem;
+      color: #2d1f28;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-box::before {
+      content: "✦";
+      position: absolute;
+      font-size: 11rem;
+      right: -20px;
+      bottom: -46px;
+      color: rgba(255, 255, 255, 0.17);
+      line-height: 1;
+      transform: rotate(-12deg);
+      pointer-events: none;
+    }
+
+    .final-box p {
+      font-weight: 600;
+      max-width: 65ch;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      padding: 2.6rem 0 2rem;
+      text-align: center;
+      color: #52556d;
+      font-size: 0.92rem;
+    }
+
+    .footer-note {
+      display: inline-block;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(34, 35, 64, 0.15);
+      padding: 0.42rem 0.82rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+
+    .divider {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      line-height: 0;
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    .divider svg {
+      width: 100%;
+      height: 58px;
+      display: block;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px) scale(0.985);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.show {
+      opacity: 1;
+      transform: none;
+    }
+
+    .spark-pop {
+      position: fixed;
+      font-size: 1.2rem;
+      pointer-events: none;
+      z-index: 99;
+      animation: pop 780ms ease forwards;
+    }
+
+    @keyframes pop {
+      0% { transform: translateY(0) scale(0.7); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-46px) scale(1.25); opacity: 0; }
+    }
+
+    @media (max-width: 759px) {
+      .wrap {
+        width: min(1140px, calc(100% - 1.15rem));
+      }
+
+      .section {
+        padding: 3.3rem 0;
+      }
+
+      .hero {
+        padding-top: 1.1rem;
+        padding-bottom: 2.2rem;
+      }
+
+      .kicker-row {
+        gap: 0.42rem;
+        margin-bottom: 0.78rem;
+      }
+
+      .kicker {
+        transform: rotate(var(--r-mobile, -2deg));
+        font-size: 0.66rem;
+        padding: 0.3rem 0.62rem;
+        animation: kickerBob 3.1s ease-in-out infinite;
+      }
+
+      .hero > .wrap > .kicker-row .kicker:nth-child(n + 4) {
+        display: none;
+      }
+
+      .hero > .wrap > .kicker-row .kicker:nth-child(odd) {
+        --r-mobile: -2.2deg;
+      }
+
+      .hero > .wrap > .kicker-row .kicker:nth-child(even) {
+        --r-mobile: 2.2deg;
+      }
+
+      .hype-strip {
+        margin-bottom: 0.72rem;
+      }
+
+      .hype-track {
+        gap: 0.35rem;
+        padding: 0.32rem 0.42rem;
+        animation-duration: 18s;
+      }
+
+      .hype-pill {
+        font-size: 0.61rem;
+        padding: 0.16rem 0.5rem;
+      }
+
+      .floating-tags .tag {
+        display: none;
+      }
+
+      .floating-tags .tag.t3 {
+        display: inline-flex;
+        left: 12px;
+        bottom: 10px;
+        font-size: 0.58rem;
+        padding: 0.2rem 0.5rem;
+        --rot: -4deg;
+      }
+
+      .hero-grid {
+        padding: 1rem;
+        gap: 1rem;
+      }
+
+      .hero-title {
+        font-size: clamp(2.6rem, 14vw, 4rem);
+      }
+
+      .hero-title::after {
+        right: 0;
+        top: -12px;
+        font-size: 0.56rem;
+        padding: 0.22rem 0.46rem;
+        transform: rotate(4deg);
+      }
+
+      .hero-sub {
+        margin-bottom: 0.72rem;
+      }
+
+      .hero-copy {
+        margin-bottom: 0.95rem;
+      }
+
+      .hero-cta .btn {
+        flex: 1 1 100%;
+      }
+
+      .section-donate-cta {
+        margin-top: 0.92rem;
+      }
+
+      .section-donate-btn {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .hero-teaser {
+        max-width: unset;
+        width: 100%;
+      }
+
+      .hero-meter {
+        padding: 0.85rem;
+      }
+
+      .status-list li {
+        font-size: 0.88rem;
+        padding: 0.56rem 0.66rem;
+      }
+
+      .panel {
+        padding: 0.96rem;
+      }
+
+      .section:nth-of-type(odd) .panel {
+        border-radius: 30px 24px 32px 22px;
+      }
+
+      .section:nth-of-type(even) .panel {
+        border-radius: 22px 32px 24px 30px;
+      }
+
+      .lead {
+        max-width: 54ch;
+      }
+
+      .qr-grid {
+        gap: 0.75rem;
+      }
+
+      .qr-card {
+        min-height: 0;
+        padding: 0.88rem;
+        transform: translateX(-2px) rotate(-0.55deg);
+      }
+
+      .qr-box {
+        width: min(360px, 100%);
+      }
+
+      .payment {
+        padding: 0.85rem;
+        transform: translateX(2px) rotate(0.55deg);
+      }
+
+      .payment h3 {
+        font-size: 1.2rem;
+      }
+
+      .message-actions {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .message-send-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .grid .fun-card:nth-child(odd),
+      .spend-card:nth-child(odd),
+      .donor:nth-child(odd),
+      .faq-item:nth-child(odd) {
+        transform: translateX(-2px) rotate(-0.65deg);
+      }
+
+      .grid .fun-card:nth-child(even),
+      .spend-card:nth-child(even),
+      .donor:nth-child(even),
+      .faq-item:nth-child(even) {
+        transform: translateX(2px) rotate(0.65deg);
+      }
+
+      .hero-meter {
+        transform: rotate(-0.4deg);
+      }
+
+      .blob.b2,
+      .blob.b4,
+      .spark {
+        display: none;
+      }
+
+      .noise {
+        opacity: 0.13;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title::after {
+        display: none;
+      }
+
+      .grid .fun-card:nth-child(odd),
+      .spend-card:nth-child(odd),
+      .donor:nth-child(odd),
+      .faq-item:nth-child(odd) {
+        transform: translateX(-1px) rotate(-0.45deg);
+      }
+
+      .grid .fun-card:nth-child(even),
+      .spend-card:nth-child(even),
+      .donor:nth-child(even),
+      .faq-item:nth-child(even) {
+        transform: translateX(1px) rotate(0.45deg);
+      }
+
+      .qr-card,
+      .payment {
+        transform: none;
+      }
+
+      .donor-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+      }
+    }
+
+    @media (min-width: 760px) {
+      .section { padding: 5.3rem 0; }
+      .hero-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 1.1rem;
+        padding: 1.9rem;
+      }
+      .panel { padding: 1.55rem; }
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .spend-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .qr-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+      }
+      .donor-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .final-box {
+        padding: 2rem;
+      }
+    }
+
+    @media (min-width: 1060px) {
+      .grid.reasons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .donor-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .spend-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .hero-sub { max-width: 36ch; }
+    }
+  </style>
+  <link rel="stylesheet" href="/site-hub/navigation.css">
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true">
+    <span class="scroll-progress__bar" id="scrollProgressBar"></span>
+  </div>
+
+  <div class="noise" aria-hidden="true"></div>
+
+  <div class="decor-layer" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <span class="blob b4"></span>
+    <span class="spark s1">✦</span>
+    <span class="spark s2">✶</span>
+    <span class="spark s3">✹</span>
+    <span class="spark s4">✦</span>
+  </div>
+
+  <main class="page">
+    <section class="section hero" id="top">
+      <div class="wrap">
+        <div class="kicker-row reveal">
+          <span class="kicker hot">emotionally underfunded</span>
+          <span class="kicker spicy">snack-powered human</span>
+          <span class="kicker cool">minh bạch trong sự đáng ngờ</span>
+          <span class="kicker hot">đang thiếu ngân sách hồi máu</span>
+          <span class="kicker cool">có thể sống tốt hơn nếu được nuôi</span>
+        </div>
+
+        <div class="hype-strip reveal" aria-label="Bảng tin hỗn loạn đáng yêu">
+          <div class="hype-track">
+            <span class="hype-pill">breaking news: quỹ no bụng đang online</span>
+            <span class="hype-pill">đầu tư nhỏ, hiệu ứng vui to</span>
+            <span class="hype-pill">sinh tồn có phong cách</span>
+            <span class="hype-pill">creative human needs fuel</span>
+            <span class="hype-pill">đây là side quest mang tính nhân văn</span>
+            <span class="hype-pill">một lần quét mã, vạn lần dễ thương</span>
+            <span class="hype-pill">breaking news: quỹ no bụng đang online</span>
+            <span class="hype-pill">đầu tư nhỏ, hiệu ứng vui to</span>
+            <span class="hype-pill">sinh tồn có phong cách</span>
+            <span class="hype-pill">creative human needs fuel</span>
+            <span class="hype-pill">đây là side quest mang tính nhân văn</span>
+            <span class="hype-pill">một lần quét mã, vạn lần dễ thương</span>
+          </div>
+        </div>
+
+        <article class="hero-box reveal">
+          <div class="floating-tags" aria-hidden="true">
+            <span class="tag t1">too much personality</span>
+            <span class="tag t2">meme-grade sincerity</span>
+            <span class="tag t3">donate cho vui</span>
+            <span class="tag t4">creative side quest</span>
+            <span class="tag t5">100% có lý do để nuôi</span>
+          </div>
+
+          <div class="hero-grid">
+            <div>
+              <h1 class="hero-title">Nuôi Tôi</h1>
+              <p class="hero-sub">
+                Một website được lập ra với mục tiêu cao cả: giúp tôi có tiền ăn và tiếp tục sống lạc quan.
+              </p>
+              <p class="hero-copy">
+                Đây không phải quỹ đầu tư. Đây là quỹ duy trì sự tồn tại của tôi trong trạng thái ít hoang mang hơn,
+                nhiều đồ ăn hơn, và vẫn đủ năng lượng để edit video như một công dân internet gương mẫu.
+              </p>
+              <div class="hero-cta">
+                <a class="btn main pop-btn" href="#qr">Tiếp tế cho tôi liền</a>
+                <a class="btn quick-qr" href="#qr">Quét mã luôn</a>
+                <a class="btn alt" href="#spend">Xem tiền sẽ đi đâu</a>
+              </div>
+
+              <div class="hero-teaser">
+                <strong>Khu QR donation có sẵn bên dưới</strong> - kéo xuống một chút là quét được ngay.
+              </div>
+            </div>
+
+            <aside class="hero-meter">
+              <h3>Tình trạng khẩn cấp nhẹ</h3>
+              <ul class="status-list">
+                <li><strong>Mức no bụng:</strong> 46% và giảm dần sau 10:30 tối.</li>
+                <li><strong>Mức caffeine:</strong> đủ nói chuyện lịch sự trong 2 giờ tới.</li>
+                <li><strong>Mức ý chí sống:</strong> ổn định nếu có trà sữa chiến lược.</li>
+                <li><strong>Mục tiêu:</strong> sống tử tế, vui vẻ, và không cãi nhau với mì gói.</li>
+              </ul>
+            </aside>
+          </div>
+        </article>
+      </div>
+      <div class="divider" aria-hidden="true">
+        <svg viewBox="0 0 1440 70" preserveAspectRatio="none">
+          <path fill="rgba(255,255,255,0.45)" d="M0,64L40,53.3C80,43,160,21,240,16C320,11,400,21,480,32C560,43,640,53,720,50.7C800,48,880,32,960,21.3C1040,11,1120,5,1200,8C1280,11,1360,21,1400,26.7L1440,32L1440,70L1400,70C1360,70,1280,70,1200,70C1120,70,1040,70,960,70C880,70,800,70,720,70C640,70,560,70,480,70C400,70,320,70,240,70C160,70,80,70,40,70L0,70Z"></path>
+        </svg>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <div class="wrap">
+        <article class="panel reveal">
+          <div class="kicker-row">
+            <span class="kicker hot">vì sao bạn nên nuôi tôi</span>
+            <span class="kicker cool">lý do nghe buồn cười nhưng hợp lý</span>
+          </div>
+          <h2>Vì Sao Bạn Nên Nuôi Tôi?</h2>
+          <p class="lead">
+            Nuôi tôi không làm bạn nghèo đi ngay lập tức, nhưng có thể giúp internet có thêm một con người được tài trợ đúng lúc,
+            đúng nhu cầu, đúng cơn đói.
+          </p>
+
+          <div class="grid reasons">
+            <article class="fun-card">
+              <div class="emoji-icon">🍱</div>
+              <span class="mini-tag">văn minh hóa bữa ăn</span>
+              <h3>Ăn Uống Có Trật Tự</h3>
+              <p>Để tôi tiếp tục ăn uống một cách văn minh, thay vì cân nhắc “không ăn tối có phải tiết kiệm không?”.</p>
+            </article>
+
+            <article class="fun-card">
+              <div class="emoji-icon">☕</div>
+              <span class="mini-tag">caffeine diplomacy</span>
+              <h3>Đỡ Nhìn Đời Cay Cú</h3>
+              <p>Để tôi bớt nhìn cuộc đời bằng ánh mắt thiếu caffeine và tăng khả năng trả lời tin nhắn tử tế.</p>
+            </article>
+
+            <article class="fun-card">
+              <div class="emoji-icon">🎬</div>
+              <span class="mini-tag">edit mode on</span>
+              <h3>Tăng Tinh Thần Sản Xuất</h3>
+              <p>Để tôi có thêm tinh thần edit video, làm việc ngon lành và tồn tại hữu ích trong xã hội.</p>
+            </article>
+
+            <article class="fun-card">
+              <div class="emoji-icon">🌐</div>
+              <span class="mini-tag">internet approved</span>
+              <h3>Giữ Cân Bằng Hệ Sinh Thái</h3>
+              <p>Internet sẽ có thêm một cá thể sáng tạo không bị tụt mood vì tủ lạnh trống trơn.</p>
+            </article>
+
+            <article class="fun-card">
+              <div class="emoji-icon">😌</div>
+              <span class="mini-tag">tử tế nhưng vẫn vui</span>
+              <h3>Niềm Vui Nội Tâm</h3>
+              <p>Bạn sẽ có cảm giác vừa làm điều tử tế, vừa tham gia một side quest hài hước có ích.</p>
+            </article>
+
+            <article class="fun-card">
+              <div class="emoji-icon">🛟</div>
+              <span class="mini-tag">mood rescue</span>
+              <h3>Chống Tụt Năng Lượng</h3>
+              <p>Mỗi khoản ủng hộ giống như một chiếc phao giúp tôi bơi qua các ngày ngân sách mỏng.</p>
+            </article>
+          </div>
+
+          <div class="section-donate-cta">
+            <a class="btn main pop-btn section-donate-btn" href="#qr">Chốt kèo nuôi tôi</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="benefits">
+      <div class="wrap">
+        <article class="panel reveal">
+          <div class="kicker-row">
+            <span class="kicker spicy">nuôi tôi thì được gì?</span>
+            <span class="kicker cool">phúc lợi phi tài chính</span>
+            <span class="kicker hot">shareable absurdity</span>
+          </div>
+          <h2>Nuôi Tôi Thì Được Gì?</h2>
+          <p class="lead">
+            Bạn không nhận cổ phần, không có vest, không có bảng KPI. Nhưng bạn nhận được những thứ vô hình đáng giá bằng cả một cái gật đầu tự hào.
+          </p>
+
+          <div class="benefit-wrap">
+            <span class="benefit-pill"><span class="dot"></span>aura người tốt tăng nhẹ</span>
+            <span class="benefit-pill"><span class="dot"></span>công đức internet được cộng dồn</span>
+            <span class="benefit-pill"><span class="dot"></span>cứu trợ một sinh vật sáng tạo đúng thời điểm</span>
+            <span class="benefit-pill"><span class="dot"></span>lời cảm ơn đầy chân thành và hơi tăng động</span>
+            <span class="benefit-pill"><span class="dot"></span>cảm giác làm nhà đầu tư thiên thần hệ đồ ăn</span>
+            <span class="benefit-pill"><span class="dot"></span>thêm niềm vui nội tâm khó giải thích</span>
+            <span class="benefit-pill"><span class="dot"></span>được ghi danh vào bảng vàng nuôi tôi</span>
+            <span class="benefit-pill"><span class="dot"></span>bonus: thấy cuộc đời dễ thương hơn 2%</span>
+          </div>
+
+          <div class="section-donate-cta">
+            <a class="btn main pop-btn section-donate-btn" href="#qr">Góp quỹ cho tôi nhé</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="spend">
+      <div class="wrap">
+        <article class="panel reveal">
+          <div class="kicker-row">
+            <span class="kicker hot">tiền sẽ đi đâu</span>
+            <span class="kicker cool">fake infographic but real hunger</span>
+            <span class="kicker spicy">minh bạch kiểu meme</span>
+          </div>
+          <h2>Tiền Sẽ Đi Đâu?</h2>
+          <p class="lead">
+            Bảng phân bổ dưới đây được lập theo mô hình khoa học ứng dụng: đói ở đâu, cứu ở đó.
+          </p>
+
+          <div class="spend-grid">
+            <article class="spend-card">
+              <div class="spend-head">
+                <span class="spend-title">Bữa cơm hồi máu</span>
+                <span class="spend-percent">38%</span>
+              </div>
+              <div class="bar"><span style="--w:38%"></span></div>
+              <p class="spend-note">Khoản cốt lõi để tôi không suy nghĩ tiêu cực lúc 11h đêm.</p>
+            </article>
+
+            <article class="spend-card">
+              <div class="spend-head">
+                <span class="spend-title">Cà phê duy trì nhân phẩm</span>
+                <span class="spend-percent">23%</span>
+              </div>
+              <div class="bar"><span style="--w:23%"></span></div>
+              <p class="spend-note">Giữ thái độ chuyên nghiệp và tránh trả lời tin nhắn bằng dấu ba chấm.</p>
+            </article>
+
+            <article class="spend-card">
+              <div class="spend-head">
+                <span class="spend-title">Ăn ngon để bớt tiêu cực</span>
+                <span class="spend-percent">17%</span>
+              </div>
+              <div class="bar"><span style="--w:17%"></span></div>
+              <p class="spend-note">Đầu tư vào sự tử tế nội tâm thông qua thực phẩm có chất lượng.</p>
+            </article>
+
+            <article class="spend-card">
+              <div class="spend-head">
+                <span class="spend-title">Động lực sáng tạo</span>
+                <span class="spend-percent">12%</span>
+              </div>
+              <div class="bar"><span style="--w:12%"></span></div>
+              <p class="spend-note">Nuôi tinh thần để tiếp tục làm việc, edit video và không than thở quá nhiều.</p>
+            </article>
+
+            <article class="spend-card">
+              <div class="spend-head">
+                <span class="spend-title">Mì gói khẩn cấp + chống tuyệt vọng</span>
+                <span class="spend-percent">10%</span>
+              </div>
+              <div class="bar"><span style="--w:10%"></span></div>
+              <p class="spend-note">Khoản chi rất đáng ngờ nhưng hợp lý trong mọi kịch bản cuối tháng.</p>
+            </article>
+
+            <article class="spend-card">
+              <div class="spend-head">
+                <span class="spend-title">Trà sữa chiến lược</span>
+                <span class="spend-percent">23%</span>
+              </div>
+              <div class="bar"><span style="--w:23%"></span></div>
+              <p class="spend-note">Được gọi là chiến lược vì nó cứu tâm trạng nhanh hơn mọi cuộc họp.</p>
+            </article>
+          </div>
+
+          <p class="total-chaos">Tổng cộng: 123%. Vì đời không phải bảng Excel và tôi cũng không giả vờ là startup nghiêm túc.</p>
+          <div class="section-donate-cta">
+            <a class="btn main pop-btn section-donate-btn" href="#qr">Nạp ngân sách no bụng</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="qr">
+      <div class="wrap">
+        <article class="panel reveal">
+          <div class="kicker-row">
+            <span class="kicker cool">chuyển khoản nhanh</span>
+            <span class="kicker hot">thông tin rõ ràng</span>
+          </div>
+
+          <h2>Ủng Hộ Nhanh Qua QR</h2>
+          <p class="lead">
+            Quét mã để mở app ngân hàng và chuyển khoản nhanh. Bạn có thể kiểm tra đầy đủ thông tin tài khoản bên dưới trước khi gửi.
+          </p>
+
+          <div class="qr-grid">
+            <div class="qr-card">
+              <div class="qr-box">
+                <img id="qrImage" class="qr-real-image" alt="QR chuyển khoản Nuôi Tôi" hidden>
+                <span class="scan-line"></span>
+                <span class="qr-text" id="qrFallback">QR Placeholder<br>đặt mã thật vào đây</span>
+              </div>
+              <p class="lead" style="font-size:0.9rem; max-width:35ch;">
+                Quét mã để vào app ngân hàng và chuyển khoản trong vài giây.
+              </p>
+            </div>
+
+            <aside class="payment">
+              <h3>Thông Tin Chuyển Khoản</h3>
+              <ul>
+                <li>
+                  <span class="label">Tên ngân hàng</span>
+                  <span class="value" id="bankNameValue">TPBank</span>
+                </li>
+                <li>
+                  <span class="label">Tên tài khoản</span>
+                  <span class="value" id="accountNameValue">LAM QUOC CUONG</span>
+                </li>
+                <li>
+                  <span class="label">Số tài khoản</span>
+                  <span class="value" id="accountNumberValue">02653834001</span>
+                </li>
+              </ul>
+              <p class="lead" style="font-size:0.85rem; margin:0 0 1rem; max-width:unset;">
+                Nội dung chuyển khoản qua QR được đặt sẵn là: <strong>vui len nhe</strong>.
+              </p>
+
+              <div class="amount-box">
+                <label for="donationAmount" class="amount-label">
+                  Nhập số tiền bạn muốn ủng hộ
+                </label>
+                <div class="amount-input-wrap">
+                  <input
+                    id="donationAmount"
+                    class="amount-input"
+                    type="number"
+                    inputmode="numeric"
+                    min="0"
+                    step="1000"
+                    placeholder="Ví dụ: 50000"
+                  >
+                  <span class="amount-currency">VND</span>
+                </div>
+                <div class="amount-presets">
+                  <button type="button" class="preset-btn" data-amount="20000">20k</button>
+                  <button type="button" class="preset-btn" data-amount="50000">50k</button>
+                  <button type="button" class="preset-btn" data-amount="100000">100k</button>
+                  <button type="button" class="preset-btn" data-amount="200000">200k</button>
+                </div>
+                <p class="amount-note" id="amountFunnyNote">
+                  Nhập số tiền bất kỳ hoặc chọn nhanh bên dưới. QR sẽ cập nhật ngay.
+                </p>
+              </div>
+
+              <div class="message-box">
+                <label class="message-label" for="supportMessage">
+                  Bạn có thể để lại lời nhắn cho tôi (không bắt buộc).
+                </label>
+                <textarea
+                  id="supportMessage"
+                  class="message-textarea"
+                  maxlength="500"
+                  placeholder="Ví dụ: Chúc bạn luôn no bụng, sáng tạo bùng nổ và ngủ đúng giờ."
+                ></textarea>
+                <div class="message-actions">
+                  <button type="button" class="message-send-btn" id="sendMessageBtn">
+                    Gửi lời nhắn cho tôi
+                  </button>
+                  <span class="message-status" id="messageStatus">Gửi mình một lời nhắn dễ thương nhé.</span>
+                </div>
+              </div>
+
+              <p class="tip">
+                Mức khuyến nghị: từ 20k trở lên. Chuyển ít hay nhiều đều đáng quý, cảm ơn bạn thật lòng.
+              </p>
+            </aside>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="donors">
+      <div class="wrap">
+        <article class="panel reveal">
+          <div class="kicker-row">
+            <span class="kicker hot">hall of fame nuôi tôi</span>
+            <span class="kicker cool">những nhà đầu tư vào sự sống còn của tôi</span>
+            <span class="kicker spicy">có tâm thật sự</span>
+          </div>
+
+          <h2>Những Người Đã Góp Phần Nuôi Tôi</h2>
+          <p class="lead">
+            Bảng vàng tài trợ sự tồn tại: ấm lòng, hài hước, và khiến tôi tin loài người vẫn rất đáng yêu.
+          </p>
+
+          <div class="donor-grid" id="donorWall">
+            <article class="donor">
+              <div class="donor-top">
+                <span class="donor-name">Nguyễn Văn Tử Tế</span>
+                <span class="donor-amount">50.000đ</span>
+              </div>
+              <p class="donor-note">Cảm ơn bạn đã giúp tôi có thêm lý do để tin vào loài người.</p>
+              <span class="donor-badge">AURA +2</span>
+            </article>
+
+            <article class="donor">
+              <div class="donor-top">
+                <span class="donor-name">Trần Thị Có Tâm</span>
+                <span class="donor-amount">20.000đ</span>
+              </div>
+              <p class="donor-note">Một khoản nhỏ cho bạn, một bước tiến lớn cho bữa ăn của tôi.</p>
+              <span class="donor-badge">NHÀ TÀI TRỢ CHIẾN LƯỢC</span>
+            </article>
+
+            <article class="donor">
+              <div class="donor-top">
+                <span class="donor-name">Anonymous Hero</span>
+                <span class="donor-amount">100.000đ</span>
+              </div>
+              <p class="donor-note">Bạn không để lại tên, nhưng bạn để lại hy vọng.</p>
+              <span class="donor-badge">LEGEND</span>
+            </article>
+
+            <article class="donor">
+              <div class="donor-top">
+                <span class="donor-name">Người Qua Đường Tốt Bụng</span>
+                <span class="donor-amount">30.000đ</span>
+              </div>
+              <p class="donor-note">Tôi không biết bạn là ai, nhưng ngân sách của tôi biết ơn bạn.</p>
+              <span class="donor-badge">MVP HỆ ĐỒ ĂN</span>
+            </article>
+
+            <article class="donor">
+              <div class="donor-top">
+                <span class="donor-name">Bé Trà Sữa Mặn Mà</span>
+                <span class="donor-amount">69.000đ</span>
+              </div>
+              <p class="donor-note">Cho anh cốc trà sữa để anh ngừng drama với deadline.</p>
+              <span class="donor-badge">MOOD SAVER</span>
+            </article>
+
+            <article class="donor">
+              <div class="donor-top">
+                <span class="donor-name">Hội Bạn Không Để Bạn Đói</span>
+                <span class="donor-amount">120.000đ</span>
+              </div>
+              <p class="donor-note">Tụi này đầu tư vào tương lai no bụng và sáng tạo của mày.</p>
+              <span class="donor-badge">TEAMWORK</span>
+            </article>
+          </div>
+
+          <div class="section-donate-cta">
+            <a class="btn main pop-btn section-donate-btn" href="#qr">Gia nhập hội nuôi tôi</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="wrap">
+        <article class="panel reveal">
+          <div class="kicker-row">
+            <span class="kicker cool">fun faq</span>
+            <span class="kicker spicy">hỏi nhanh đáp gọn</span>
+            <span class="kicker hot">có phần vô tri</span>
+          </div>
+          <h2>FAQ Cực Kỳ Thiện Chí</h2>
+
+          <div class="faq-wrap">
+            <details class="faq-item" open>
+              <summary>Đây có phải dự án nghiêm túc không?</summary>
+              <div class="faq-content">Không. Đây là dự án nghiêm túc về việc không nghiêm túc.</div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Tiền có thật sự được dùng để ăn uống không?</summary>
+              <div class="faq-content">Khả năng cao là có. Và đôi khi dùng để mua đồ uống giữ bình tĩnh.</div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Ủng hộ xong tôi có giàu không?</summary>
+              <div class="faq-content">Chưa, nhưng tâm hồn bạn sẽ giàu hơn và có thể hơi phát sáng.</div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Nếu không ủng hộ thì sao?</summary>
+              <div class="faq-content">Không sao cả. Tôi vẫn quý bạn, chỉ là sẽ tiếp tục nhìn đời với ánh mắt ngân sách mỏng.</div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Tại sao web này lại màu mè dữ vậy?</summary>
+              <div class="faq-content">Vì nỗi đói và sự sáng tạo gặp nhau trong một chiều đầy cảm hứng.</div>
+            </details>
+          </div>
+
+          <div class="section-donate-cta">
+            <a class="btn main pop-btn section-donate-btn" href="#qr">Ủng hộ tôi một cú</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="final">
+      <div class="wrap">
+        <article class="final-box reveal">
+          <div class="kicker-row" style="margin-bottom:0.8rem;">
+            <span class="kicker hot">bạn kéo tới đây là có duyên</span>
+            <span class="kicker cool">một lần chuyển khoản, muôn vàn vui vẻ</span>
+          </div>
+          <h2>Chốt Deal Nuôi Tôi Nhé?</h2>
+          <p>
+            Bạn đã kéo tới tận đây thì về mặt đạo đức, nuôi tôi một chút là hợp lý. Nếu thấy web này buồn cười,
+            hãy chuyển khoản như một cách thể hiện tình cảm và tinh thần đồng đội giữa người với người.
+          </p>
+          <div class="hero-cta">
+            <a class="btn main pop-btn" href="#qr">Nuôi tôi ngay và luôn</a>
+            <a class="btn alt" href="#qr">Xem QR chuyển khoản</a>
+            <a class="btn lime pop-btn" href="#qr">Góp quỹ hồi máu</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap reveal">
+      <p class="footer-note">Không phải quỹ từ thiện. Chỉ là quỹ nuôi tôi.</p>
+      <p>Website này được vận hành bằng hy vọng, màu mè và ngân sách mong manh.</p>
+      <p>Minh bạch một cách đáng ngờ.</p>
+      <p style="margin-top:0.35rem;"><strong>nuoitoi.lamquoccuong.com</strong> | <strong>lamquoccuong.com</strong> | © <span id="year"></span></p>
+    </div>
+  </footer>
+
+  <script>
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+
+    revealEls.forEach((el) => io.observe(el));
+
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const id = link.getAttribute('href');
+        const target = id ? document.querySelector(id) : null;
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    const scrollProgressBarEl = document.getElementById('scrollProgressBar');
+    const updateScrollProgress = () => {
+      if (!scrollProgressBarEl) return;
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const progress = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
+      scrollProgressBarEl.style.transform = `scaleX(${progress})`;
+    };
+
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    window.addEventListener('resize', updateScrollProgress);
+    updateScrollProgress();
+
+    // ======================
+    // Cấu hình dễ chỉnh (không cần đụng phần còn lại)
+    // ======================
+    const APP_CONFIG = {
+      bankCode: 'TPBank',
+      bankName: 'TPBank',
+      accountName: 'LAM QUOC CUONG',
+      accountNumber: '02653834001',
+      transferNote: 'vui len nhe',
+      qrTemplate: 'compact2',
+      defaultAmount: 0, // để 0 nếu muốn người ủng hộ tự nhập số tiền
+      // Gửi lời nhắn trực tiếp sang hệ mxh (đã tự fan-out Telegram ở phía đó)
+      mxhWebhookUrl: 'https://clean-webhook-checker.onrender.com/webhook/lead',
+      mxhWebhookMethod: 'POST',
+      mxhWebhookRequestMode: 'cors',
+      // Dán URL Apps Script Web App tại đây (kết thúc bằng /exec)
+      // Ví dụ: https://script.google.com/macros/s/AKfycb.../exec
+      gasWebAppUrl: '',
+      // Token bí mật: giống token bạn đặt trong Code.gs
+      publicToken: 'REPLACE_WITH_LONG_RANDOM_TOKEN'
+    };
+
+    const donorWallEl = document.getElementById('donorWall');
+    const qrImageEl = document.getElementById('qrImage');
+    const qrFallbackEl = document.getElementById('qrFallback');
+    const bankNameEl = document.getElementById('bankNameValue');
+    const accountNameEl = document.getElementById('accountNameValue');
+    const accountNumberEl = document.getElementById('accountNumberValue');
+    const amountInputEl = document.getElementById('donationAmount');
+    const amountNoteEl = document.getElementById('amountFunnyNote');
+    const presetButtons = Array.from(document.querySelectorAll('.preset-btn'));
+    const supportMessageEl = document.getElementById('supportMessage');
+    const sendMessageBtnEl = document.getElementById('sendMessageBtn');
+    const messageStatusEl = document.getElementById('messageStatus');
+
+    let dynamicAmount = Math.max(0, Math.round(Number(APP_CONFIG.defaultAmount) || 0));
+
+    const escapeHtml = (text) => String(text)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+
+    const renderDonorWall = (donors) => {
+      if (!donorWallEl || !Array.isArray(donors) || !donors.length) return;
+      donorWallEl.innerHTML = donors.map((d) => `
+        <article class="donor">
+          <div class="donor-top">
+            <span class="donor-name">${escapeHtml(d.name || 'Mạnh Thường Quân Ẩn Danh')}</span>
+            <span class="donor-amount">${escapeHtml(d.amountText || '')}</span>
+          </div>
+          <p class="donor-note">${escapeHtml(d.note || 'Cảm ơn bạn đã tiếp sức cho quỹ nuôi tôi.')}</p>
+          <span class="donor-badge">${escapeHtml(d.badge || 'Nhà Tài Trợ Dễ Thương')}</span>
+        </article>
+      `).join('');
+    };
+
+    const buildQrImageUrl = (amountValue = 0) => {
+      const params = new URLSearchParams({
+        acc: APP_CONFIG.accountNumber,
+        bank: APP_CONFIG.bankCode,
+        des: APP_CONFIG.transferNote,
+        template: APP_CONFIG.qrTemplate
+      });
+      if (Number(amountValue) > 0) {
+        params.set('amount', String(amountValue));
+      }
+      return `https://qr.sepay.vn/img?${params.toString()}`;
+    };
+
+    const formatVnd = (value) => {
+      const amount = Number(value || 0);
+      return `${Math.round(amount).toLocaleString('vi-VN')}đ`;
+    };
+
+    const normalizeAmount = (value) => {
+      const numeric = Number(String(value || '').replace(/[^\d]/g, ''));
+      if (!Number.isFinite(numeric) || numeric <= 0) return 0;
+      return Math.round(numeric);
+    };
+
+    const funnyNoteByAmount = (amount) => {
+      if (amount <= 0) return 'Nhập số tiền bất kỳ hoặc chọn nhanh bên dưới. QR sẽ cập nhật ngay.';
+      if (amount < 50000) return 'Khoản ủng hộ nhỏ nhưng rất quý. Cảm ơn bạn.';
+      if (amount < 100000) return 'Mức này đủ để tiếp thêm năng lượng làm việc.';
+      if (amount < 200000) return 'Rất cảm ơn bạn. Mức này giúp quỹ no bụng ổn định hơn.';
+      return 'Mức ủng hộ rất lớn. Cảm ơn bạn rất nhiều.';
+    };
+
+    const syncPresetButtons = (amount) => {
+      presetButtons.forEach((btn) => {
+        const v = Number(btn.dataset.amount || 0);
+        btn.classList.toggle('active', v === amount && amount > 0);
+      });
+    };
+
+    const setDynamicAmount = (amount) => {
+      dynamicAmount = normalizeAmount(amount);
+
+      if (amountInputEl) {
+        const nextValue = dynamicAmount > 0 ? String(dynamicAmount) : '';
+        if (amountInputEl.value !== nextValue) {
+          amountInputEl.value = nextValue;
+        }
+      }
+
+      if (amountNoteEl) {
+        amountNoteEl.textContent = funnyNoteByAmount(dynamicAmount);
+      }
+
+      syncPresetButtons(dynamicAmount);
+      applyPaymentInfo();
+    };
+
+    const applyPaymentInfo = () => {
+      if (bankNameEl) bankNameEl.textContent = APP_CONFIG.bankName;
+      if (accountNameEl) accountNameEl.textContent = APP_CONFIG.accountName;
+      if (accountNumberEl) accountNumberEl.textContent = APP_CONFIG.accountNumber;
+
+      const qrUrl = buildQrImageUrl(dynamicAmount);
+      if (qrImageEl && qrUrl) {
+        qrImageEl.src = qrUrl;
+        qrImageEl.hidden = false;
+        if (qrFallbackEl) qrFallbackEl.hidden = true;
+      }
+    };
+
+    const jsonp = (url, timeoutMs = 12000) => new Promise((resolve, reject) => {
+      const callbackName = `__nuoiToiCb_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+      const script = document.createElement('script');
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('JSONP timeout'));
+      }, timeoutMs);
+
+      const cleanup = () => {
+        clearTimeout(timer);
+        delete window[callbackName];
+        script.remove();
+      };
+
+      window[callbackName] = (payload) => {
+        cleanup();
+        resolve(payload);
+      };
+
+      script.onerror = () => {
+        cleanup();
+        reject(new Error('JSONP load failed'));
+      };
+
+      const separator = url.includes('?') ? '&' : '?';
+      script.src = `${url}${separator}callback=${callbackName}`;
+      document.body.appendChild(script);
+    });
+
+    const loadDonations = async () => {
+      applyPaymentInfo();
+
+      if (!APP_CONFIG.gasWebAppUrl || APP_CONFIG.gasWebAppUrl.includes('REPLACE')) {
+        return;
+      }
+
+      try {
+        const endpoint = `${APP_CONFIG.gasWebAppUrl}?action=list&token=${encodeURIComponent(APP_CONFIG.publicToken)}&limit=12`;
+        const payload = await jsonp(endpoint);
+        if (!payload || payload.success !== true) return;
+        renderDonorWall(payload.donations || []);
+      } catch (error) {
+        console.warn('Không thể tải donor wall từ Google Sheets lúc này.', error);
+      }
+    };
+
+    const setMessageStatus = (text, type = '') => {
+      if (!messageStatusEl) return;
+      messageStatusEl.textContent = text;
+      messageStatusEl.classList.remove('ok', 'err');
+      if (type) messageStatusEl.classList.add(type);
+    };
+
+    const postMessageToMxhWebhook = async (payloadText, requestMode) => {
+      const response = await fetch(APP_CONFIG.mxhWebhookUrl, {
+        method: APP_CONFIG.mxhWebhookMethod || 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: payloadText,
+        mode: requestMode,
+        keepalive: true
+      });
+
+      if (requestMode !== 'no-cors' && !response.ok) {
+        throw new Error(`Webhook status ${response.status}`);
+      }
+
+      if (requestMode !== 'no-cors') {
+        let webhookPayload = null;
+        try {
+          webhookPayload = await response.json();
+        } catch (parseError) {
+          webhookPayload = null;
+        }
+        if (webhookPayload && webhookPayload.ok === false) {
+          throw new Error(webhookPayload.error || 'Webhook returned ok=false');
+        }
+      }
+    };
+
+    const sendSupportMessage = async () => {
+      if (!APP_CONFIG.mxhWebhookUrl) {
+        setMessageStatus('Webhook mxh đang trống nên chưa gửi được nè.', 'err');
+        return;
+      }
+
+      const message = (supportMessageEl?.value || '').trim();
+      const amount = dynamicAmount;
+
+      if (message.length < 2) {
+        setMessageStatus('Viết dài hơn 1 chữ xíu nha, để tôi còn cảm động.', 'err');
+        supportMessageEl?.focus();
+        return;
+      }
+
+      if (sendMessageBtnEl) sendMessageBtnEl.disabled = true;
+      setMessageStatus('Đang gửi lời nhắn của bạn...', '');
+
+      try {
+        const amountText = amount > 0 ? formatVnd(amount) : 'chưa chọn mức cụ thể';
+        const noteLines = [
+          'Loi nhan tu web Nuoi Toi',
+          `Muc ung ho dang chon: ${amountText}`,
+          `Noi dung: ${message}`
+        ];
+
+        const webhookPayload = {
+          source: 'nuoitoi.lamquoccuong.com',
+          formId: 'nuoiToiMessageBox',
+          submittedAt: new Date().toISOString(),
+          service: 'Loi nhan gui toi tu Nuoi Toi',
+          note: noteLines.join('\n'),
+          tags: 'nuoi-toi,message'
+        };
+        const payloadText = JSON.stringify(webhookPayload);
+        const preferredMode = APP_CONFIG.mxhWebhookRequestMode || 'cors';
+
+        try {
+          await postMessageToMxhWebhook(payloadText, preferredMode);
+        } catch (primaryError) {
+          if (preferredMode !== 'no-cors') {
+            await postMessageToMxhWebhook(payloadText, 'no-cors');
+          } else {
+            throw primaryError;
+          }
+        }
+
+        setMessageStatus('Đã gửi! Tôi vừa nhận được lời nhắn dễ thương từ bạn.', 'ok');
+        if (supportMessageEl) supportMessageEl.value = '';
+      } catch (error) {
+        console.warn('Gửi lời nhắn thất bại:', error);
+        setMessageStatus('Ối, gửi chưa thành công. Bạn bấm lại giúp tôi nha.', 'err');
+      } finally {
+        if (sendMessageBtnEl) sendMessageBtnEl.disabled = false;
+      }
+    };
+
+    if (amountInputEl) {
+      amountInputEl.addEventListener('input', () => {
+        setDynamicAmount(amountInputEl.value);
+      });
+    }
+
+    presetButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        setDynamicAmount(btn.dataset.amount || 0);
+      });
+    });
+
+    if (sendMessageBtnEl) {
+      sendMessageBtnEl.addEventListener('click', sendSupportMessage);
+    }
+
+    if (supportMessageEl) {
+      supportMessageEl.addEventListener('keydown', (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+          event.preventDefault();
+          sendSupportMessage();
+        }
+      });
+    }
+
+    setDynamicAmount(dynamicAmount);
+    loadDonations();
+    setInterval(loadDonations, 15000);
+
+    const sparkChars = ['✦', '✶', '★', '✹', '💥'];
+    document.querySelectorAll('.pop-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const count = 6;
+        for (let i = 0; i < count; i += 1) {
+          const s = document.createElement('span');
+          s.className = 'spark-pop';
+          s.textContent = sparkChars[Math.floor(Math.random() * sparkChars.length)];
+          const offsetX = (Math.random() - 0.5) * 70;
+          const offsetY = (Math.random() - 0.5) * 28;
+          s.style.left = `${e.clientX + offsetX}px`;
+          s.style.top = `${e.clientY + offsetY}px`;
+          document.body.appendChild(s);
+          setTimeout(() => s.remove(), 780);
+        }
+      });
+    });
+
+    document.querySelectorAll('.faq-item').forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (!item.open) return;
+        document.querySelectorAll('.faq-item').forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  <script src="/site-hub/navigation.js" defer></script>
+</body>
+</html>

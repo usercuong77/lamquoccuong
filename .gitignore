@@ -21,7 +21,7 @@ pnpm-debug.log*
 Thumbs.db
 
 # Keep local static backup out of deploy
-index.html
+/index.html
 
 # Local Netlify folder
 .netlify

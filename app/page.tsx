@@ -7,6 +7,7 @@ import { createPortal } from "react-dom";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { ExperienceLayer } from "@/components/ui/experience-layer";
+import { LoveTree } from "@/components/ui/love-tree";
 
 const copy = {
   en: {
@@ -37,6 +38,13 @@ const copy = {
     funFact: "Fun fact",
     funFactText: "I always think I look handsome. The evidence is currently under review.",
     funFactHint: "(tap to verify)",
+    loveTreeEyebrow: "A softer corner of the internet",
+    loveTreeTitle: "Some things look better when they are given time to grow.",
+    loveTreeText: "I brought back the old heart tree and planted it between the pixels. Give it one good watering, then watch the seed fall, the branches grow and the hearts bloom.",
+    loveTreeButton: "Plant a seed",
+    loveTreeProgress: "Seeds planted:",
+    loveTreeNote: "A tiny garden for big feelings",
+    loveTreeComplete: "The tree is in full bloom",
     playgroundEyebrow: "My playground",
     playgroundTitle: "Things I enjoy making move",
     tankPreviewEyebrow: "A tiny playable detour",
@@ -123,6 +131,13 @@ const copy = {
     funFact: "Một sự thật vui",
     funFactText: "Mình luôn thấy mình đẹp trai. Nếu bạn chưa đồng ý thì chắc chúng ta cần nói chuyện thêm.",
     funFactHint: "(bấm để kiểm chứng)",
+    loveTreeEyebrow: "Một góc mềm mại trên internet",
+    loveTreeTitle: "Có những thứ càng kiên nhẫn, càng nở đẹp.",
+    loveTreeText: "Mình mang nguyên cây trái tim cũ về trồng lại giữa đống pixel. Chỉ cần tưới một lần, rồi xem hạt tim rơi xuống, thân cây mọc lên và tán tim nở dần nhé.",
+    loveTreeButton: "Gieo hạt",
+    loveTreeProgress: "Đã gieo:",
+    loveTreeNote: "một khu vườn nhỏ cho những cảm xúc lớn",
+    loveTreeComplete: "Cây đã nở rộ rồi!",
     playgroundEyebrow: "Mình thích làm",
     playgroundTitle: "Những thứ mình thường làm chuyển động",
     tankPreviewEyebrow: "Rẽ vào chơi một chút",
@@ -362,7 +377,7 @@ export default function Home() {
             <motion.p className="hero-lead" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.16 }}>{t.lead}</motion.p>
             <motion.p className="hero-intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}>{t.intro}</motion.p>
             <motion.div className="hero-actions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}>
-              <a className="button button-primary" href="https://edit.lamquoccuong.com" target="_blank" rel="noreferrer">{t.work} <span>↗</span></a>
+              <a className="button button-primary" href="/edit/">{t.work} <span>↗</span></a>
               <a className="button button-quiet" href="#links">{t.links} <span>↓</span></a>
             </motion.div>
           </div>
@@ -387,10 +402,10 @@ export default function Home() {
         <section id="explore" className="explore-section shell section-anchor" aria-labelledby="explore-title">
           <div className="explore-heading"><motion.div className="section-kicker" initial={{ opacity: 0, x: -14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .45 }}><span>✳</span><span>{t.exploreLabel}</span></motion.div><ScrollWords id="explore-title" text={t.exploreTitle} /><motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .5, delay: .12 }}>{t.exploreHint}</motion.p></div>
           <div className="explore-links">
-            <motion.a className="portal-card portal-edit" href="https://edit.lamquoccuong.com" target="_blank" rel="noreferrer" initial={{ opacity: 0, y: 24, rotate: -3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: -1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .04, ease: "easeOut" }}><span>01</span><strong>EDIT</strong><em>{t.visitWork} ↗</em><div className="portal-art" aria-hidden="true"><i /><i /><i /><b>▶</b></div></motion.a>
+            <motion.a className="portal-card portal-edit" href="/edit/" initial={{ opacity: 0, y: 24, rotate: -3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: -1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .04, ease: "easeOut" }}><span>01</span><strong>EDIT</strong><em>{t.visitWork} ↗</em><div className="portal-art" aria-hidden="true"><i /><i /><i /><b>▶</b></div></motion.a>
             <motion.a className="portal-card portal-tank" href="/tank/index.html" initial={{ opacity: 0, y: 24, rotate: 3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: 1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .12, ease: "easeOut" }}><span>02</span><strong>TANK 2D</strong><em>{t.visitTank} ↗</em><div className="portal-art" aria-hidden="true"><i /><i /><i /><b>▰</b></div></motion.a>
-            <motion.a className="portal-card portal-bio" href="https://bio.lamquoccuong.com" target="_blank" rel="noreferrer" initial={{ opacity: 0, y: 24, rotate: -3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: -1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .2, ease: "easeOut" }}><span>03</span><strong>BIO</strong><em>{t.visitContact} ↗</em><div className="portal-art" aria-hidden="true"><i /><b>☺</b></div></motion.a>
-            <motion.a className="portal-card portal-feed" href="https://nuoitoi.lamquoccuong.com" target="_blank" rel="noreferrer" initial={{ opacity: 0, y: 24, rotate: 3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: 1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .28, ease: "easeOut" }}><span>04</span><strong>FEED</strong><em>{t.visitSupport} ↗</em><div className="portal-art" aria-hidden="true"><i /><b>♥</b></div></motion.a>
+            <motion.a className="portal-card portal-bio" href="/bio/" initial={{ opacity: 0, y: 24, rotate: -3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: -1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .2, ease: "easeOut" }}><span>03</span><strong>BIO</strong><em>{t.visitContact} ↗</em><div className="portal-art" aria-hidden="true"><i /><b>☺</b></div></motion.a>
+            <motion.a className="portal-card portal-feed" href="/nuoitoi/" initial={{ opacity: 0, y: 24, rotate: 3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: 1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .28, ease: "easeOut" }}><span>04</span><strong>FEED</strong><em>{t.visitSupport} ↗</em><div className="portal-art" aria-hidden="true"><i /><b>♥</b></div></motion.a>
           </div>
         </section>
 
@@ -404,6 +419,16 @@ export default function Home() {
             </button>
             <i>— Cuong, probably</i>
           </motion.div>
+        </section>
+
+        <section id="love-tree" className="love-tree-section shell section-anchor" aria-labelledby="love-tree-title">
+          <div className="love-tree-copy">
+            <motion.div className="section-kicker" initial={{ opacity: 0, x: -14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .45 }}><span>✦</span><span>{t.loveTreeEyebrow}</span></motion.div>
+            <ScrollWords id="love-tree-title" text={t.loveTreeTitle} />
+            <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }} transition={{ duration: .5, delay: .12 }}>{t.loveTreeText}</motion.p>
+            <motion.span className="love-tree-side-note" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: .5, delay: .22 }}>01 / GROW SOMETHING GOOD</motion.span>
+          </div>
+          <LoveTree locale={locale} />
         </section>
 
         <section className="mid-portal shell" aria-label={t.midEyebrow}>
@@ -420,7 +445,7 @@ export default function Home() {
             <motion.p initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }} transition={{ duration: .5, delay: .1 }}>{t.tankPreviewText}</motion.p>
             <div className="tank-preview-actions">
               <button className="button button-primary" type="button" onClick={launchTankFullscreen}>{t.tankPreviewLoad} <span>↗</span></button>
-              <a className="tank-full-link" href="/tank/index.html" target="_blank" rel="noreferrer">{t.tankPreviewFull} <span>↗</span></a>
+              <a className="tank-full-link" href="/tank/index.html">{t.tankPreviewFull} <span>↗</span></a>
             </div>
             <p className="tank-preview-hint">{t.tankPreviewHint}</p>
           </div>
@@ -447,10 +472,10 @@ export default function Home() {
             <motion.div className="section-kicker" initial={{ opacity: 0, x: -14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .45 }}><span>04</span><span>{t.linkEyebrow}</span></motion.div>
             <ScrollWords id="links-title" className="links-title" text={t.linkTitle} />
             <div className="link-grid">
-              <motion.a className="link-card link-edit" href="https://edit.lamquoccuong.com" target="_blank" rel="noreferrer" initial={{ opacity: 0, y: 28, rotate: -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .04 }} whileHover={{ y: -10, rotate: -2 }}><span>01 / {t.products}</span><strong>EDIT<span>↗</span></strong><p>{t.productsText}</p></motion.a>
+              <motion.a className="link-card link-edit" href="/edit/" initial={{ opacity: 0, y: 28, rotate: -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .04 }} whileHover={{ y: -10, rotate: -2 }}><span>01 / {t.products}</span><strong>EDIT<span>↗</span></strong><p>{t.productsText}</p></motion.a>
               <motion.a className="link-card link-tank" href="/tank/index.html" initial={{ opacity: 0, y: 28, rotate: 2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .12 }} whileHover={{ y: -10, rotate: 2 }}><span>02 / {t.tank}</span><strong>TANK 2D<span>↗</span></strong><p>{t.tankText}</p></motion.a>
-              <motion.a className="link-card link-bio" href="https://bio.lamquoccuong.com" target="_blank" rel="noreferrer" initial={{ opacity: 0, y: 28, rotate: -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .2 }} whileHover={{ y: -10, rotate: -2 }}><span>03 / {t.contact}</span><strong>BIO<span>↗</span></strong><p>{t.contactText}</p></motion.a>
-              <motion.a className="link-card link-support" href="https://nuoitoi.lamquoccuong.com" target="_blank" rel="noreferrer" initial={{ opacity: 0, y: 28, rotate: 2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .28 }} whileHover={{ y: -10, rotate: 2 }}><span>04 / {t.support}</span><strong>{t.supportName}<span>↗</span></strong><p>{t.supportText}</p></motion.a>
+              <motion.a className="link-card link-bio" href="/bio/" initial={{ opacity: 0, y: 28, rotate: -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .2 }} whileHover={{ y: -10, rotate: -2 }}><span>03 / {t.contact}</span><strong>BIO<span>↗</span></strong><p>{t.contactText}</p></motion.a>
+              <motion.a className="link-card link-support" href="/nuoitoi/" initial={{ opacity: 0, y: 28, rotate: 2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .28 }} whileHover={{ y: -10, rotate: 2 }}><span>04 / {t.support}</span><strong>{t.supportName}<span>↗</span></strong><p>{t.supportText}</p></motion.a>
             </div>
           </div>
         </section>
@@ -466,7 +491,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="fun-footer shell"><Link className="brand-mark" href="#top"><span className="brand-dot" /><span>CUONGLQ</span></Link><p>{t.footer}</p><a href="https://bio.lamquoccuong.com" target="_blank" rel="noreferrer">bio.lamquoccuong.com ↗</a></footer>
+      <footer className="fun-footer shell"><Link className="brand-mark" href="#top"><span className="brand-dot" /><span>CUONGLQ</span></Link><p>{t.footer}</p><a href="/bio/">{locale === "en" ? "Contact / Bio" : "Liên hệ / Bio"} ↗</a></footer>
     </div>
   );
 }

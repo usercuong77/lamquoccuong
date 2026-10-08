@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heart Tree | Cuonglq</title>
+  <link rel="icon" type="image/x-icon" href="image/favicon.ico">
+  <link rel="stylesheet" href="./renxi/default.css">
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; overflow: hidden; }
+    body { background: #fffde9; color: #24202a; font-family: "DM Mono", "Courier New", monospace; }
+    button { font: inherit; }
+    .love-shell { margin: 0 auto; max-width: 1100px; padding: 10px 10px 14px; }
+    .love-toolbar { align-items: center; display: flex; justify-content: space-between; margin: 0 auto 10px; max-width: 1060px; }
+    .love-kicker { color: #ff5f66; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
+    .love-progress { color: rgba(36, 32, 42, .6); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+    #wrap { background: #fffde9; border: 1px solid rgba(36, 32, 42, .16); border-radius: 24px; box-shadow: 8px 9px 0 rgba(36, 32, 42, .12); height: auto; margin: 0; overflow: hidden; position: relative; width: 100%; }
+    #canvas { background: #fffde9; display: block; height: auto; margin-left: -9%; width: 118%; }
+    .love-controls { align-items: center; display: flex; height: 86px; justify-content: center; position: relative; }
+    .water-control { align-items: center; background: rgba(255, 253, 233, .94); border: 1px solid rgba(36, 32, 42, .18); border-radius: 999px; box-shadow: 6px 7px 0 rgba(36, 32, 42, .12); cursor: pointer; display: flex; gap: 12px; justify-content: center; min-height: 48px; min-width: 132px; padding: 8px 14px 8px 10px; position: relative; transition: background .25s, box-shadow .25s, transform .25s; z-index: 5; }
+    .water-control:hover, .water-control:focus-visible { background: #ffcad8; box-shadow: 2px 3px 0 rgba(36, 32, 42, .12); outline: none; transform: translate(2px, 2px); }
+    .water-control:disabled { cursor: default; opacity: .72; transform: none; }
+    .water-control::before { border: 1px solid rgba(85, 191, 245, .45); border-radius: inherit; content: ""; inset: -7px; opacity: 0; pointer-events: none; position: absolute; }
+    .water-control::after { border: 1px dashed rgba(85, 191, 245, .48); border-radius: inherit; content: ""; inset: 4px; opacity: .8; pointer-events: none; position: absolute; transform: rotate(-2deg); transition: opacity .25s, transform .25s; }
+    .water-control:hover::after, .water-control:focus-visible::after { opacity: 1; transform: rotate(2deg) scale(1.02); }
+    .water-control.watering::before { animation: water-ripple .9s ease-out; }
+    .water-control.watering { animation: watering-pulse .9s ease-in-out; }
+    .water-icon { align-items: center; background: #72c9ff; border: 2px solid #24202a; border-radius: 7px 7px 11px 11px; display: inline-flex; height: 34px; justify-content: center; position: relative; width: 38px; }
+    .water-icon::before { border: 2px solid #24202a; border-bottom: 0; border-radius: 10px 10px 0 0; content: ""; height: 13px; left: 25px; position: absolute; top: 4px; transform: rotate(16deg); width: 9px; }
+    .water-icon::after { background: #e8f8ff; border-radius: 50%; content: ""; height: 6px; position: absolute; right: -14px; top: 4px; width: 6px; }
+    .water-label { color: #24202a; font-size: 10px; letter-spacing: .07em; line-height: 1.2; text-align: left; text-transform: uppercase; }
+    .water-label strong { display: block; color: #ff5f66; font-size: 9px; margin-top: 2px; }
+    .water-control.watering .water-icon { animation: bucket-shake .48s ease-in-out 2; }
+    .water-drop { background: #55bff5; border: 1px solid rgba(36, 32, 42, .24); border-radius: 100% 0 100% 100%; height: 10px; left: 50%; opacity: 0; pointer-events: none; position: absolute; top: 22px; transform: rotate(45deg) translate(0, 0) scale(.6); width: 10px; z-index: 4; }
+    .water-drop.fall { opacity: .9; transform: rotate(45deg) translate(var(--drift), -52px) scale(1); transition: opacity .8s ease, transform .85s cubic-bezier(.2, .75, .3, 1); }
+    .water-drop.splash { opacity: 0; transform: rotate(45deg) translate(var(--drift), -66px) scale(.2); transition: opacity .2s ease, transform .25s ease; }
+    @keyframes bucket-shake { 0%, 100% { transform: rotate(0); } 35% { transform: rotate(-13deg) translateY(-2px); } 70% { transform: rotate(12deg) translateY(1px); } }
+    @keyframes watering-pulse { 0%, 100% { transform: translateY(0) scale(1); } 25% { transform: translateY(-3px) scale(1.04); } 55% { transform: translateY(1px) scale(.98); } }
+    @keyframes water-ripple { 0% { opacity: .75; transform: scale(.84); } 100% { opacity: 0; transform: scale(1.16); } }
+    @media (max-width: 620px) {
+      .love-shell { padding: 6px 4px 10px; }
+      .love-toolbar { padding: 0 5px; }
+      #wrap { border-radius: 15px; box-shadow: 4px 5px 0 rgba(36, 32, 42, .12); }
+      .love-controls { height: 76px; }
+      .water-control { gap: 9px; min-height: 44px; min-width: 118px; padding: 6px 10px 6px 8px; }
+      .water-icon { height: 29px; width: 33px; }
+      .water-label { font-size: 9px; }
+      .water-label strong { font-size: 8px; }
+      .water-drop.fall { transform: rotate(45deg) translate(var(--drift), -42px) scale(.8); }
+    }
+  </style>
+</head>
+<body>
+  <main class="love-shell">
+    <div class="love-toolbar">
+      <span class="love-kicker" id="kicker">✦ Heart tree</span>
+      <span class="love-progress" id="progressText">Water once</span>
+    </div>
+    <div id="wrap">
+      <canvas id="canvas" width="1100" height="680" aria-label="Cây trái tim của Cường"></canvas>
+    </div>
+    <div class="love-controls" id="loveControls">
+      <button class="water-control" id="waterButton" type="button">
+        <span class="water-icon" aria-hidden="true"></span>
+        <span class="water-label"><span id="waterLabel">Tưới</span><strong id="waterCount">1 lần</strong></span>
+      </button>
+    </div>
+  </main>
+
+  <script src="./renxi/jquery.min.js"></script>
+  <script src="./renxi/jscex.min.js"></script>
+  <script src="./renxi/jscex-parser.js"></script>
+  <script src="./renxi/jscex-jit.js"></script>
+  <script src="./renxi/jscex-builderbase.min.js"></script>
+  <script src="./renxi/jscex-async.min.js"></script>
+  <script src="./renxi/jscex-async-powerpack.min.js"></script>
+  <script src="./renxi/functions.js"></script>
+  <script src="./renxi/love.js"></script>
+  <script>
+    (function () {
+      var english = new URLSearchParams(window.location.search).get("lang") === "en";
+      var copy = english ? {
+        kicker: "✦ Heart tree",
+        water: "Water",
+        ready: "1 time",
+        growing: "Growing...",
+        progress: "1 / 1"
+      } : {
+        kicker: "✦ Cây trái tim",
+        water: "Tưới",
+        ready: "1 lần",
+        growing: "Đang nở...",
+        progress: "1 / 1"
+      };
+      document.documentElement.lang = english ? "en" : "vi";
+      document.getElementById("kicker").textContent = copy.kicker;
+      document.getElementById("waterLabel").textContent = copy.water;
+
+      var canvas = document.getElementById("canvas");
+      var context = canvas.getContext("2d");
+      var width = 1100;
+      var height = 680;
+      var started = false;
+      var busy = false;
+      var finalised = false;
+      var opts = {
+        seed: { x: width / 2 - 20, color: "rgb(190, 26, 37)", scale: 2 },
+        branch: [[535, 680, 570, 250, 500, 200, 30, 100, [
+          [540, 500, 455, 417, 340, 400, 13, 100, [[450, 435, 434, 430, 394, 395, 2, 40]]],
+          [550, 445, 600, 356, 680, 345, 12, 100, [[578, 400, 648, 409, 661, 426, 3, 80]]],
+          [539, 281, 537, 248, 534, 217, 3, 40],
+          [546, 397, 413, 247, 328, 244, 9, 80, [[427, 286, 383, 253, 371, 205, 2, 40], [498, 345, 435, 315, 395, 330, 4, 60]]],
+          [546, 357, 608, 252, 678, 221, 6, 100, [[590, 293, 646, 277, 648, 271, 2, 80]]]
+        ]]],
+        bloom: { num: 700, width: 1080, height: 650 },
+        footer: { width: 1200, height: 5, speed: 10 }
+      };
+      var tree = new Tree(canvas, width, height, opts);
+      var wrap = document.getElementById("wrap");
+      var controls = document.getElementById("loveControls");
+      var button = document.getElementById("waterButton");
+      var count = document.getElementById("waterCount");
+      var progressText = document.getElementById("progressText");
+
+      function drawGround() {
+        tree.footer.length = tree.footer.width;
+        tree.footer.draw();
+      }
+
+      function drawStarter() {
+        tree.seed.drawHeart();
+        tree.flower(2);
+        drawGround();
+      }
+
+      function waterDrops() {
+        button.classList.add("watering");
+        for (var i = 0; i < 7; i += 1) {
+          var drop = document.createElement("i");
+          drop.className = "water-drop";
+          drop.style.setProperty("--drift", ((i - 3) * 9) + "px");
+          controls.appendChild(drop);
+          (function (item, delay) {
+            setTimeout(function () { item.classList.add("fall"); }, delay);
+            setTimeout(function () { item.classList.add("splash"); }, delay + 720);
+            setTimeout(function () { item.remove(); }, delay + 1050);
+          })(drop, i * 34);
+        }
+        setTimeout(function () { button.classList.remove("watering"); }, 900);
+      }
+
+      function growBranches(done) {
+        if (tree.canGrow()) {
+          tree.grow();
+          drawGround();
+          window.setTimeout(function () { growBranches(done); }, 10);
+          return;
+        }
+        done();
+      }
+
+      function flowerAll(done) {
+        tree.flower(2);
+        drawGround();
+        if (tree.bloomsCache.length || tree.blooms.length) {
+          window.setTimeout(function () { flowerAll(done); }, 10);
+          return;
+        }
+        done();
+      }
+
+      function animateSeed(done) {
+        function shrink() {
+          if (tree.seed.canScale()) {
+            tree.seed.scale(0.95);
+            drawGround();
+            window.requestAnimationFrame(shrink);
+            return;
+          }
+          fall();
+        }
+        function fall() {
+          if (tree.seed.canMove()) {
+            tree.seed.move(0, 2);
+            drawGround();
+            window.requestAnimationFrame(fall);
+            return;
+          }
+          done();
+        }
+        shrink();
+      }
+
+      function showCompleteTree() {
+        var image = canvas.toDataURL("image/png");
+        wrap.style.backgroundImage = "url(" + image + ")";
+        wrap.style.backgroundPosition = "center";
+        wrap.style.backgroundRepeat = "no-repeat";
+        // The live canvas is intentionally enlarged a little inside the frame.
+        // Match that scale when it becomes the static layer so the tree never
+        // compresses for one frame before the falling hearts begin.
+        wrap.style.backgroundSize = "118% 100%";
+        context.clearRect(0, 0, width, height);
+        canvas.style.background = "transparent";
+        finalised = true;
+        button.disabled = true;
+        var fallingFrame = function () {
+          context.clearRect(0, 0, width, height);
+          for (var i = tree.blooms.length - 1; i >= 0; i -= 1) tree.blooms[i].jump();
+          while (tree.blooms.length < 3) {
+            // Start inside the centered canopy, then send each heart leftward
+            // toward the same kind of off-screen destination as the old tree.
+            tree.blooms.push(tree.createBloom(width, height, 240, tree.seed.heart.figure, null, 1, null, .7 + Math.random() * .35, new Point(-90 + Math.random() * 470, height + 40 + Math.random() * 70), 170 + Math.random() * 80));
+          }
+          drawGround();
+          window.requestAnimationFrame(fallingFrame);
+        };
+        window.requestAnimationFrame(fallingFrame);
+      }
+
+      function updateLabels() {
+        progressText.textContent = finalised ? copy.progress : (started ? copy.growing : (english ? "Water once" : "Tưới một lần"));
+        count.textContent = finalised ? (english ? "Done" : "Đã xong") : (started ? copy.growing : copy.ready);
+      }
+
+      button.addEventListener("click", function () {
+        if (busy || started || finalised) return;
+        started = true;
+        busy = true;
+        button.disabled = true;
+        updateLabels();
+        waterDrops();
+        setTimeout(function () {
+          animateSeed(function () {
+            growBranches(function () {
+              flowerAll(function () {
+                showCompleteTree();
+                busy = false;
+                updateLabels();
+              });
+            });
+          });
+        }, 260);
+      });
+
+      drawStarter();
+      updateLabels();
+    })();
+  </script>
+</body>
+</html>
