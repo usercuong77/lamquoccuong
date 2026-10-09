@@ -1,253 +1,988 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Heart Tree | Cuonglq</title>
-  <link rel="icon" type="image/x-icon" href="image/favicon.ico">
-  <link rel="stylesheet" href="./renxi/default.css">
-  <style>
-    :root { color-scheme: light; }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; overflow: hidden; }
-    body { background: #fffde9; color: #24202a; font-family: "DM Mono", "Courier New", monospace; }
-    button { font: inherit; }
-    .love-shell { margin: 0 auto; max-width: 1100px; padding: 10px 10px 14px; }
-    .love-toolbar { align-items: center; display: flex; justify-content: space-between; margin: 0 auto 10px; max-width: 1060px; }
-    .love-kicker { color: #ff5f66; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
-    .love-progress { color: rgba(36, 32, 42, .6); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
-    #wrap { background: #fffde9; border: 1px solid rgba(36, 32, 42, .16); border-radius: 24px; box-shadow: 8px 9px 0 rgba(36, 32, 42, .12); height: auto; margin: 0; overflow: hidden; position: relative; width: 100%; }
-    #canvas { background: #fffde9; display: block; height: auto; margin-left: -9%; width: 118%; }
-    .love-controls { align-items: center; display: flex; height: 86px; justify-content: center; position: relative; }
-    .water-control { align-items: center; background: rgba(255, 253, 233, .94); border: 1px solid rgba(36, 32, 42, .18); border-radius: 999px; box-shadow: 6px 7px 0 rgba(36, 32, 42, .12); cursor: pointer; display: flex; gap: 12px; justify-content: center; min-height: 48px; min-width: 132px; padding: 8px 14px 8px 10px; position: relative; transition: background .25s, box-shadow .25s, transform .25s; z-index: 5; }
-    .water-control:hover, .water-control:focus-visible { background: #ffcad8; box-shadow: 2px 3px 0 rgba(36, 32, 42, .12); outline: none; transform: translate(2px, 2px); }
-    .water-control:disabled { cursor: default; opacity: .72; transform: none; }
-    .water-control::before { border: 1px solid rgba(85, 191, 245, .45); border-radius: inherit; content: ""; inset: -7px; opacity: 0; pointer-events: none; position: absolute; }
-    .water-control::after { border: 1px dashed rgba(85, 191, 245, .48); border-radius: inherit; content: ""; inset: 4px; opacity: .8; pointer-events: none; position: absolute; transform: rotate(-2deg); transition: opacity .25s, transform .25s; }
-    .water-control:hover::after, .water-control:focus-visible::after { opacity: 1; transform: rotate(2deg) scale(1.02); }
-    .water-control.watering::before { animation: water-ripple .9s ease-out; }
-    .water-control.watering { animation: watering-pulse .9s ease-in-out; }
-    .water-icon { align-items: center; background: #72c9ff; border: 2px solid #24202a; border-radius: 7px 7px 11px 11px; display: inline-flex; height: 34px; justify-content: center; position: relative; width: 38px; }
-    .water-icon::before { border: 2px solid #24202a; border-bottom: 0; border-radius: 10px 10px 0 0; content: ""; height: 13px; left: 25px; position: absolute; top: 4px; transform: rotate(16deg); width: 9px; }
-    .water-icon::after { background: #e8f8ff; border-radius: 50%; content: ""; height: 6px; position: absolute; right: -14px; top: 4px; width: 6px; }
-    .water-label { color: #24202a; font-size: 10px; letter-spacing: .07em; line-height: 1.2; text-align: left; text-transform: uppercase; }
-    .water-label strong { display: block; color: #ff5f66; font-size: 9px; margin-top: 2px; }
-    .water-control.watering .water-icon { animation: bucket-shake .48s ease-in-out 2; }
-    .water-drop { background: #55bff5; border: 1px solid rgba(36, 32, 42, .24); border-radius: 100% 0 100% 100%; height: 10px; left: 50%; opacity: 0; pointer-events: none; position: absolute; top: 22px; transform: rotate(45deg) translate(0, 0) scale(.6); width: 10px; z-index: 4; }
-    .water-drop.fall { opacity: .9; transform: rotate(45deg) translate(var(--drift), -52px) scale(1); transition: opacity .8s ease, transform .85s cubic-bezier(.2, .75, .3, 1); }
-    .water-drop.splash { opacity: 0; transform: rotate(45deg) translate(var(--drift), -66px) scale(.2); transition: opacity .2s ease, transform .25s ease; }
-    @keyframes bucket-shake { 0%, 100% { transform: rotate(0); } 35% { transform: rotate(-13deg) translateY(-2px); } 70% { transform: rotate(12deg) translateY(1px); } }
-    @keyframes watering-pulse { 0%, 100% { transform: translateY(0) scale(1); } 25% { transform: translateY(-3px) scale(1.04); } 55% { transform: translateY(1px) scale(.98); } }
-    @keyframes water-ripple { 0% { opacity: .75; transform: scale(.84); } 100% { opacity: 0; transform: scale(1.16); } }
-    @media (max-width: 620px) {
-      .love-shell { padding: 6px 4px 10px; }
-      .love-toolbar { padding: 0 5px; }
-      #wrap { border-radius: 15px; box-shadow: 4px 5px 0 rgba(36, 32, 42, .12); }
-      .love-controls { height: 76px; }
-      .water-control { gap: 9px; min-height: 44px; min-width: 118px; padding: 6px 10px 6px 8px; }
-      .water-icon { height: 29px; width: 33px; }
-      .water-label { font-size: 9px; }
-      .water-label strong { font-size: 8px; }
-      .water-drop.fall { transform: rotate(45deg) translate(var(--drift), -42px) scale(.8); }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Heart Tree V6.1 | Ultimate Polish — Fairy × Cinema</title>
+<style>
+  :root{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#594452;background:transparent}
+  *{box-sizing:border-box}
+  html{background-color:transparent;color-scheme:normal}
+  body{margin:0;min-height:0;display:block;padding:0;overflow:hidden;color:#594452;background-color:transparent;transition:color .9s ease}
+  body.night{color:#ffe6f5;background-color:transparent}
+  .tree-shell{width:min(1030px,100%);position:relative;z-index:1}
+  .tree-frame{position:relative;isolation:isolate;overflow:hidden;background:#e7f1f6;border:1px solid rgba(255,255,255,.95);border-radius:30px;box-shadow:0 22px 75px rgba(94,112,150,.14);transition:background .85s ease,box-shadow .8s ease,border-color .8s ease}
+  body.night .tree-frame{border-color:rgba(255,176,237,.28);box-shadow:0 25px 95px rgba(7,3,30,.65),0 0 55px rgba(217,55,157,.12)}
+  canvas{display:block;width:100%;height:auto;aspect-ratio:960/700;touch-action:pan-y;cursor:crosshair}
+  .topline{pointer-events:none;position:absolute;top:18px;left:24px;right:24px;display:flex;justify-content:space-between;gap:16px;align-items:center;z-index:2;font:600 10px/1.5 ui-monospace,monospace;letter-spacing:1.7px;color:#936076;text-shadow:0 1px rgba(255,255,255,.75)}
+  .topline .counter{font-weight:400;opacity:.72}
+  body.night .topline{color:#ffb9e4}
+  .subline{pointer-events:none;position:absolute;left:28px;bottom:28px;z-index:2;display:flex;flex-direction:column;gap:8px}
+  .subline .chapter{font:700 12px ui-monospace,monospace;letter-spacing:2px;color:#b24f77;text-shadow:0 2px 10px #ffffffcc}
+  .subline .hint{font:500 11px ui-monospace,monospace;letter-spacing:1px;color:#926f84}
+  body.night .subline .chapter{color:#ffd0e8;text-shadow:0 0 12px #f69bd8a8}
+  body.night .subline .hint{color:#cba9cc}
+  .progress-track{position:absolute;left:0;right:0;bottom:0;height:4px;z-index:5;background:rgba(244,145,181,.14)}
+  .progress-fill{width:0;height:100%;background:linear-gradient(90deg,#ffbc6d,#ff669e,#d47dff);box-shadow:0 0 14px #f76ca9;transition:width .08s linear}
+  .controls{display:grid;grid-template-columns:1.2fr 1.35fr 1.2fr;align-items:stretch;gap:clamp(7px,1vw,12px);margin:18px auto 0}
+  .controls button{min-width:0;white-space:nowrap;padding-inline:clamp(8px,1.2vw,17px);font-size:clamp(10px,1vw,13px)}
+  .controls .water-button{padding-left:8px}
+  .controls .water-icon{width:clamp(22px,3vw,38px);height:clamp(22px,3vw,38px)}
+  button{appearance:none;cursor:pointer;font:700 11px/1.2 ui-monospace,Consolas,monospace;letter-spacing:.3px;transition:transform .2s,box-shadow .75s ease,background .75s ease,color .75s ease,border-color .75s ease;min-height:49px}
+  button:focus-visible{outline:3px solid #ec679b;outline-offset:4px}
+  button:hover{transform:translateY(-3px)}button:active{transform:translateY(1px)}
+  .water-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:7px 20px 7px 9px;border:1px solid #f5c1cf;border-radius:60px;background:#fffdfa;color:#be577c;box-shadow:4px 5px 0 rgba(94,49,78,.09)}
+  .water-icon{width:38px;height:38px;flex:none;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+  .water-button.watering .water-icon{transform:rotate(-27deg)}
+  .button-label{display:flex;flex-direction:column;align-items:start;gap:3px;font-size:12px}.button-label span{font-size:10px;color:#a391a2}
+  .effect-button{border-radius:50px;padding:12px 17px;border:1px solid rgba(214,96,145,.21);background:#fffcfa;color:#bd547a;box-shadow:4px 5px 0 rgba(94,49,78,.07)}
+  .effect-button.strong{color:white;border-color:#fd628f;background:linear-gradient(110deg,#ff965e,#fb4d91 60%,#bd62ce);box-shadow:0 6px 22px rgba(246,72,144,.27)}
+  body.night .effect-button,body.night .water-button{background:#372442;color:#ffe3f5;border-color:#664565;box-shadow:4px 5px 0 rgba(0,0,0,.2)}
+  body.night .effect-button.strong{background:linear-gradient(105deg,#f86b68,#ed468f,#9751dc);border-color:#f77cb5;box-shadow:0 7px 26px #e7528a55}
+  body.night .button-label span{color:#d7afca}
+  .water-button{animation:water-invitation 2.8s ease-in-out infinite;position:relative}
+  .effect-button.strong{background-size:180% 180%}
+  .effect-button.strong{animation:magic-invitation 4.2s ease-in-out infinite}
+  .water-button:hover,.effect-button.strong:hover{animation-play-state:paused;box-shadow:0 0 0 4px #ff8fbd33,0 8px 28px #f757bb44}
+  @keyframes water-invitation{0%,100%{transform:translateY(0);box-shadow:4px 5px 0 rgba(94,49,78,.09),0 0 0 0 #ff8fbd00}50%{transform:translateY(-2px);box-shadow:4px 7px 0 rgba(94,49,78,.07),0 0 0 6px #ff8fbd12}}
+  @keyframes magic-invitation{0%,100%{filter:saturate(1);box-shadow:0 7px 24px #ff63ab35,inset 0 1px #ffffff88}50%{filter:saturate(1.18);box-shadow:0 8px 34px #ff63ab68,inset 0 1px #ffffffaa}}
+  .footnote{text-align:center;color:#b58da5;margin:15px auto 0;font:500 11px/1.7 ui-monospace,Consolas,monospace;min-height:19px;letter-spacing:.2px}
+  body.night .footnote{color:#cba9d5}
+  @media(max-width:520px){body{padding:9px}.tree-frame{border-radius:18px}.topline{top:11px;left:13px;right:13px;font-size:8px;letter-spacing:.9px}.subline{bottom:14px;left:14px;gap:5px}.subline .chapter{font-size:9px;letter-spacing:.7px}.subline .hint{display:none}.controls{gap:8px;margin-top:16px}.water-button,.effect-button{min-height:42px;font-size:10px;padding:9px 12px}.water-icon{width:30px;height:30px}.button-label span{font-size:8px}.button-label strong{font-size:10px}.footnote{font-size:9px}}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+  .tree-frame{background:#e8eef3;transform:translateZ(0)}
+  .topline{font-size:10px;letter-spacing:1.85px}
+  .subline .chapter{transition:opacity .45s ease;letter-spacing:2.2px}
+  .effect-button.strong{background:linear-gradient(110deg,#ffb160,#fa5d97 48%,#ad68d5)}
+  .controls{gap:9px}
+  @media(max-width:520px){.topline{font-size:8px}.subline .chapter{letter-spacing:.6px}.effect-button.strong{font-size:9px}}
+  @media(max-width:520px){body{padding:0}.controls{gap:6px;margin-top:12px}.controls button{min-height:42px;font-size:clamp(9px,2.6vw,11px);padding:6px 5px;letter-spacing:0}.controls .water-button{gap:4px;padding-left:4px}.controls .water-icon{width:23px;height:23px}.controls .button-label span{display:none}.controls .button-label strong{font-size:clamp(9px,2.7vw,11px)}.footnote{margin-top:9px;min-height:0}}
+
+
+  /* V6.1: premium pearlescent chrome frame, deliberately restrained so the tree shines. */
+  .tree-frame::before{content:none}
+  .effect-button.strong{background:linear-gradient(105deg,#ffb55b,#ff619d 47%,#a65eff);border-color:#ff92c8;box-shadow:0 7px 30px #ff63ab50,inset 0 1px #ffffff88}
+  body.night .effect-button.strong{background:linear-gradient(105deg,#ffab5e,#fb539d 48%,#a86cf1);border-color:#ff87cb;box-shadow:0 6px 32px #f757bb55}
+  .tree-frame{box-shadow:0 28px 100px rgba(70,89,128,.17)}
+  body.night .tree-frame{box-shadow:0 25px 95px rgba(7,3,30,.65),0 0 55px rgba(217,55,157,.12)}
+  body.night .tree-frame{background:#111022}
+  .theme-snapshot{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;pointer-events:none;opacity:1;transition:opacity .85s cubic-bezier(.22,.61,.36,1)}
+  .theme-snapshot.fade-out{opacity:0}
+  html.embed-stage .controls,html.embed-stage .footnote{display:none}
+</style>
+<script>if(new URLSearchParams(location.search).get('embed')==='stage')document.documentElement.classList.add('embed-stage');</script>
 </head>
 <body>
-  <main class="love-shell">
-    <div class="love-toolbar">
-      <span class="love-kicker" id="kicker">✦ Heart tree</span>
-      <span class="love-progress" id="progressText">Water once</span>
-    </div>
-    <div id="wrap">
-      <canvas id="canvas" width="1100" height="680" aria-label="Cây trái tim của Cường"></canvas>
-    </div>
-    <div class="love-controls" id="loveControls">
-      <button class="water-control" id="waterButton" type="button">
-        <span class="water-icon" aria-hidden="true"></span>
-        <span class="water-label"><span id="waterLabel">Tưới</span><strong id="waterCount">1 lần</strong></span>
-      </button>
-    </div>
-  </main>
+<main class="tree-shell" aria-label="Cây trái tim điện ảnh tương tác">
+  <section class="tree-frame">
+    <div class="topline"><span>✦ CÂY TRÁI TIM <span id="modeName" style="opacity:.55">/ GOLDEN MORNING</span></span><span class="counter">V6.1 &nbsp;·&nbsp; 1 / 1</span></div>
+    <canvas id="stage" width="960" height="700" role="img" aria-label="Cây trái tim hoạt hình với trái tim nở từ dưới lên trong nắng ban mai, có thể chuyển sang đêm cổ tích rực sáng."></canvas>
+    <div class="subline" aria-live="off"><span class="chapter" id="chapter">CHƯƠNG I · MỘT ĐIỀU ƯỚC</span><span class="hint" id="sceneHint">mỗi trái tim đều có một phép màu ♡</span></div>
+    <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progress"></div></div>
+  </section>
+  <div class="controls">
+    <button type="button" class="water-button" id="water" aria-label="Xem lại hành trình cây nở từ đầu">
+      <svg class="water-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M11 9h21c5 0 7 4 6 9l-5 23a6 6 0 0 1-6 5H13a7 7 0 0 1-7-7V16a7 7 0 0 1 5-7Z" fill="#A0DDF3" stroke="#48546D" stroke-width="2"/><path d="M28 13c6-8 13-6 13 0v6" stroke="#48546D" stroke-width="2.5" stroke-linecap="round"/><path d="M7 12c7-4 17-4 27-2" stroke="#689BB4" stroke-width="1.5" opacity=".8"/></svg>
+      <span class="button-label"><span>ĐÁNH THỨC CÂY</span><strong id="wateringLabel">TƯỚI NƯỚC ♡</strong></span>
+    </button>
+    <button type="button" class="effect-button strong" id="love" aria-label="Bắt đầu màn trình diễn ánh sáng">✧ &nbsp; DIỆU KỲ</button>
+    <button type="button" class="effect-button" id="mode" aria-pressed="false" aria-label="Bật đêm cổ tích">☾ &nbsp; ĐÊM CỔ TÍCH</button>
+  </div>
+  <p class="footnote" id="caption">Một khu vườn biết thở · Di chuột qua tán, chạm hoặc giữ để thả điều ước ✧</p>
+</main>
+<script>
+(()=>{'use strict';
+  const canvas=document.getElementById('stage');const ctx=canvas.getContext('2d',{alpha:false});const treeFrame=document.querySelector('.tree-frame');
+  const button=document.getElementById('water'),label=document.getElementById('wateringLabel'),caption=document.getElementById('caption');
+  const loveButton=document.getElementById('love'),modeButton=document.getElementById('mode'),chapter=document.getElementById('chapter'),sceneHint=document.getElementById('sceneHint'),progressBar=document.getElementById('progress');
+  let night=new URLSearchParams(window.location.search).get('theme')==='night', sceneFlash=0, glitters=[], clickWaves=[], fallingStars=[],heartRain=[],comets=[],climaxAt=-100,climaxFired=false,chapterIndex=-1;
+  const W=960,H=700,G=690;
+  const V6_DURATION=18, STORY_SPEED=13.3/V6_DURATION;
+  let pixelRatio=1,elapsed=0,last=0,startedAt=0,raf=0,wind=0,mouseX=0,mouseY=0;
+  let renderQuality=1,drawTimeMean=0,slowFrames=0,fastFrames=0;
+  let pointerDownAt=-1,pointerDownX=480,pointerDownY=350;
+  let smoothMouseX=0,smoothMouseY=0,pendingClimax=false;
 
-  <script src="./renxi/jquery.min.js"></script>
-  <script src="./renxi/jscex.min.js"></script>
-  <script src="./renxi/jscex-parser.js"></script>
-  <script src="./renxi/jscex-jit.js"></script>
-  <script src="./renxi/jscex-builderbase.min.js"></script>
-  <script src="./renxi/jscex-async.min.js"></script>
-  <script src="./renxi/jscex-async-powerpack.min.js"></script>
-  <script src="./renxi/functions.js"></script>
-  <script src="./renxi/love.js"></script>
-  <script>
-    (function () {
-      var english = new URLSearchParams(window.location.search).get("lang") === "en";
-      var copy = english ? {
-        kicker: "✦ Heart tree",
-        water: "Water",
-        ready: "1 time",
-        growing: "Growing...",
-        progress: "1 / 1"
-      } : {
-        kicker: "✦ Cây trái tim",
-        water: "Tưới",
-        ready: "1 lần",
-        growing: "Đang nở...",
-        progress: "1 / 1"
-      };
-      document.documentElement.lang = english ? "en" : "vi";
-      document.getElementById("kicker").textContent = copy.kicker;
-      document.getElementById("waterLabel").textContent = copy.water;
+  let running=false, seeded=false, burst=[],drifters=[];const motionLess=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pendingTheme=null;
+  const commitTheme=(value,notify)=>{night=value;document.body.classList.toggle('night',night);modeButton.setAttribute('aria-pressed',String(night));modeButton.innerHTML=night?'☀ &nbsp; NẮNG BAN MAI':'☾ &nbsp; ĐÊM CỔ TÍCH';canvas.setAttribute('aria-label',night?'Cây trái tim nhiều màu tỏa sáng giữa đêm cổ tích.':'Cây trái tim nở rực rỡ trong nắng ban mai, những hạt phấn sáng lấp lánh.');document.getElementById('modeName').textContent=night?'/ FAIRY NIGHT':'/ GOLDEN MORNING';modeButton.setAttribute('aria-label',night?'Bật nắng ban mai':'Bật đêm cổ tích');caption.textContent=night?'Đêm xuống, những điều ước tỏa sáng lấp lánh ✨':'Nắng ban mai dịu ngọt — mỗi cánh tim là một sắc hoa ✦';if(notify)window.parent.postMessage({type:'heart-tree-theme',night},window.location.origin);};
+  const applyTheme=(nextNight,notify=false)=>{const targetNight=Boolean(nextNight);if(pendingTheme!==null)return;if(targetNight===night||motionLess){commitTheme(targetNight,notify);return;}const snapshot=document.createElement('canvas');snapshot.className='theme-snapshot';snapshot.width=canvas.width;snapshot.height=canvas.height;const snapshotContext=snapshot.getContext('2d');if(!snapshotContext){commitTheme(targetNight,notify);return;}snapshotContext.drawImage(canvas,0,0);treeFrame.append(snapshot);pendingTheme=targetNight;modeButton.disabled=true;commitTheme(targetNight,notify);requestAnimationFrame(()=>snapshot.classList.add('fade-out'));setTimeout(()=>{snapshot.remove();pendingTheme=null;modeButton.disabled=false;},860);};
+  if(night)applyTheme(true);
+  window.addEventListener('message',event=>{if(event.origin!==window.location.origin)return;const data=event.data;if(data?.type==='heart-tree-parent-theme'){if(pendingTheme===null)applyTheme(data.night);return;}if(data?.type!=='heart-tree-action')return;if(data.action==='water')button.click();if(data.action==='magic')loveButton.click();if(data.action==='mode')modeButton.click();});
+  const reportHeight=()=>{const target=document.documentElement.classList.contains('embed-stage')?treeFrame:document.querySelector('.tree-shell');window.parent.postMessage({type:'heart-tree-height',height:Math.ceil(target.getBoundingClientRect().height)},window.location.origin);};
+  new ResizeObserver(reportHeight).observe(document.querySelector('.tree-shell'));
+  window.addEventListener('load',reportHeight);
+  const PALETTE=['#ffab25','#ffde5b','#ff7046','#ff8346','#ff284e','#ff087b','#e900b3','#fa49b2','#ff8cb9','#ffc2df','#ff738e','#ffd1a6','#fff185','#ff405c','#fa008d','#ff4fa0','#ff9c23','#ffb8cc','#ffa352','#ef43ec'];
+  function mulberry32(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+  const rand=mulberry32(513249);
+  const r=(a,b)=>a+(b-a)*rand();const clamp=(n,a=0,b=1)=>Math.max(a,Math.min(b,n));
+  const easeOutCubic=t=>1-Math.pow(1-clamp(t),3);const easeOutBack=t=>{t=clamp(t);return 1+2.5*Math.pow(t-1,3)+1.5*Math.pow(t-1,2)};
+  // V6.1: Hand-painted translucent glass-petal sprites, baked ONCE. Rendering
+  // individual hearts is still just drawImage: gradients never run per leaf.
+  function makeSprite(color){
+    const base=[parseInt(color.slice(1,3),16),parseInt(color.slice(3,5),16),parseInt(color.slice(5,7),16)];
+    const rgba=(light,alpha=1)=>'rgba('+base.map(v=>Math.round(v+(light>0?(255-v):v)*light)).join(',')+','+alpha+')';
+    const c=document.createElement('canvas');c.width=c.height=64;
+    const k=c.getContext('2d');k.translate(32,33);
+    const shape=()=>{k.beginPath();k.moveTo(0,18);k.bezierCurveTo(-8,12,-24,3,-24,-11);k.bezierCurveTo(-24,-28,-7,-29,0,-17);k.bezierCurveTo(8,-29,24,-26,24,-10);k.bezierCurveTo(23,4,9,13,0,18);k.closePath();};
+    k.save();k.shadowColor='rgba(73,25,51,.24)';k.shadowBlur=4.3;k.shadowOffsetY=2.1;shape();k.fillStyle=color;k.fill();k.restore();
+    k.save();shape();k.clip();
+    const shade=k.createLinearGradient(-21,-24,20,20);
+    shade.addColorStop(0,rgba(.39));shade.addColorStop(.34,rgba(.14));
+    shade.addColorStop(.67,color);shade.addColorStop(1,rgba(-.23));
+    k.fillStyle=shade;k.fillRect(-27,-29,55,52);
+    const translucency=k.createRadialGradient(-11,-17,0,-7,-8,32);
+    translucency.addColorStop(0,'rgba(255,250,245,.27)');
+    translucency.addColorStop(.43,'rgba(255,230,237,.085)');
+    translucency.addColorStop(1,'rgba(55,0,54,.07)');
+    k.fillStyle=translucency;k.fillRect(-27,-29,55,52);
+    // Soft pearly rim and crease, no neon or thick white border.
+    k.lineCap='round';k.lineWidth=1.45;k.strokeStyle='rgba(255,250,248,.26)';
+    k.beginPath();k.moveTo(-21,-11);k.bezierCurveTo(-23,-23,-9,-26,-2,-18);k.stroke();
+    k.lineWidth=1;k.strokeStyle='rgba(91,27,69,.11)';
+    k.beginPath();k.moveTo(.5,-13);k.quadraticCurveTo(-1,-6,0,2);k.stroke();
+    k.fillStyle='rgba(255,255,255,.26)';k.beginPath();k.ellipse(-12,-15,5.8,2.7,-.65,0,Math.PI*2);k.fill();
+    k.fillStyle='rgba(255,251,244,.16)';k.beginPath();k.ellipse(11,-17,3.8,1.7,.6,0,Math.PI*2);k.fill();
+    k.restore();return c;
+  }
+    const sprites=PALETTE.map(makeSprite);
+  const SPRITE_STEPS=24,SPRITE_EDGE=74;
+  const spriteIndex=new Map(sprites.map((sprite,i)=>[sprite,i]));
+  const rotatedSprites=sprites.map(sprite=>Array.from({length:SPRITE_STEPS},(_,i)=>{
+    const c=document.createElement('canvas');c.width=c.height=SPRITE_EDGE;
+    const k=c.getContext('2d');k.translate(SPRITE_EDGE/2,SPRITE_EDGE/2);
+    k.rotate(i*2*Math.PI/SPRITE_STEPS);k.drawImage(sprite,-32,-32);return c;
+  }));
+  function insideHeart(nx,ny){return Math.pow(nx*nx+ny*ny-1,3)-nx*nx*ny*ny*ny<-.001;}
+  const leaves=[];
+  for(let i=0;i<1640;i++){
+    let x,y,nx,ny,tries=0;
+    do{nx=r(-1.18,1.18);ny=r(-1.1,1.22);tries++;}while(!insideHeart(nx,ny)&&tries<300);
+    // Organic heart-shaped canopy with bright colored heart blossoms on several layers.
+    x=480+nx*279+r(-7,7);y=350-ny*221+r(-7,7);
+    let depth=r(0,1),sz=r(15,26)*(.74+.39*depth);
+    // A petal cohort hears the same breeze with a delayed response.
+    const windCell=Math.floor((x-180)/92)+Math.floor((y-125)/105)*5;
+    // V5: the bloom front climbs from the lower branches to the crown (V3's organic order).
+    // Small stagger and clustering makes it feel like living blossoms rather than a hard wipe.
+    const altitude=clamp((557-y)/475);
+    const cluster=(Math.sin(x*.032+Math.cos(y*.023)*2.1)+1)*.105;
+    let delay=4.48+altitude*2.30+r(0,.56)+cluster+.12*Math.abs(nx);
+    leaves.push({x,y,size:sz,color:Math.floor(r(0,sprites.length)),rotation:r(-Math.PI,Math.PI),phase:r(0,Math.PI*2),freq:r(.55,1.55),depth,delay,shape:rand()<.27?'petal':'heart',twinkle:rand()<.115,glow:rand()<.105,drift:r(.7,1.4),windCell,burst:r(0,1),zspin:r(-.4,.4)});
+  }
+  leaves.sort((a,b)=>a.depth-b.depth);
+  function reset(){elapsed=0;last=performance.now();running=true;pendingClimax=false;seeded=false;burst=[];drifters=[];glitters=[];clickWaves=[];fallingStars=[];heartRain=[];comets=[];fountain.length=0;sceneFlash=0;climaxAt=-100;climaxFired=false;chapterIndex=-1;button.classList.add('watering');label.textContent='ĐANG NẢY MẦM';caption.textContent='Từng mầm sáng đang thức giấc từ gốc cây ✦';clearTimeout(button._wTimer);button._wTimer=setTimeout(()=>button.classList.remove('watering'),1350);}
+  button.addEventListener('click',reset);
+  function resize(){let box=canvas.getBoundingClientRect();pixelRatio=Math.min(devicePixelRatio||1,box.width<600?1.5:1.8);canvas.width=Math.round(box.width*pixelRatio);canvas.height=Math.round(box.height*pixelRatio);ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);}
+  new ResizeObserver(resize).observe(canvas);resize();
+  canvas.addEventListener('pointermove',e=>{let p=canvas.getBoundingClientRect();mouseX=((e.clientX-p.left)/p.width-.5)*2;mouseY=((e.clientY-p.top)/p.height-.5)*2;},{passive:true});
+  canvas.addEventListener('pointerleave',()=>{mouseX=0;mouseY=0;});
+  function loveExplosion(x,y,count=55){
+    if(elapsed*STORY_SPEED<3.6)return;
+    clickWaves.push({x,y,age:0,life:.9});sceneFlash=.18;
+    for(let j=0;j<count;j++){
+      const angle=r(0,Math.PI*2),speed=r(55,220)*Math.sqrt(r(.1,1));
+      burst.push({x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed-45,size:r(7,21),rot:r(-3,3),rv:r(-5,5),age:0,life:r(1.1,2.3),c:Math.floor(r(0,sprites.length))});
+    }
+    while(burst.length>250)burst.shift();
+  }
+  canvas.addEventListener('pointerdown',e=>{
+    const b=canvas.getBoundingClientRect();pointerDownAt=performance.now();
+    pointerDownX=(e.clientX-b.left)/b.width*W;
+    pointerDownY=(e.clientY-b.top)/b.height*H;
+  });
+  canvas.addEventListener('pointerup',e=>{
+    if(pointerDownAt<0)return;
+    const held=performance.now()-pointerDownAt;pointerDownAt=-1;
+    if(held>450&&elapsed*STORY_SPEED>4.5){
+      loveExplosion(pointerDownX,pointerDownY,Math.min(82,38+Math.floor(held/33)));
+      caption.textContent='Một điều ước vừa được gửi theo gió ♡';
+    }else loveExplosion(pointerDownX,pointerDownY,36);
+  });
+  canvas.addEventListener('pointercancel',()=>pointerDownAt=-1);
 
-      var canvas = document.getElementById("canvas");
-      var context = canvas.getContext("2d");
-      var width = 1100;
-      var height = 680;
-      var started = false;
-      var busy = false;
-      var finalised = false;
-      var opts = {
-        seed: { x: width / 2 - 20, color: "rgb(190, 26, 37)", scale: 2 },
-        branch: [[535, 680, 570, 250, 500, 200, 30, 100, [
-          [540, 500, 455, 417, 340, 400, 13, 100, [[450, 435, 434, 430, 394, 395, 2, 40]]],
-          [550, 445, 600, 356, 680, 345, 12, 100, [[578, 400, 648, 409, 661, 426, 3, 80]]],
-          [539, 281, 537, 248, 534, 217, 3, 40],
-          [546, 397, 413, 247, 328, 244, 9, 80, [[427, 286, 383, 253, 371, 205, 2, 40], [498, 345, 435, 315, 395, 330, 4, 60]]],
-          [546, 357, 608, 252, 678, 221, 6, 100, [[590, 293, 646, 277, 648, 271, 2, 80]]]
-        ]]],
-        bloom: { num: 700, width: 1080, height: 650 },
-        footer: { width: 1200, height: 5, speed: 10 }
-      };
-      var tree = new Tree(canvas, width, height, opts);
-      var wrap = document.getElementById("wrap");
-      var controls = document.getElementById("loveControls");
-      var button = document.getElementById("waterButton");
-      var count = document.getElementById("waterCount");
-      var progressText = document.getElementById("progressText");
-
-      function drawGround() {
-        tree.footer.length = tree.footer.width;
-        tree.footer.draw();
+  loveButton.addEventListener('click',()=>{
+    if(elapsed*STORY_SPEED<8.8){
+      // Never jump forward in time: doing so makes the whole tree visibly pop.
+      pendingClimax=true;caption.textContent='Cây đang gom ánh sáng, chờ hoa nở trọn vẹn ♡';
+      return;
+    }
+    climaxFired=true;triggerClimax(true);
+    caption.textContent='Mọi cánh tim đang tỏa sáng trong khoảnh khắc diệu kỳ ✦';
+  });
+  modeButton.addEventListener('click',()=>applyTheme(!night,true));
+  function drawSprite(sprite,x,y,size,rotation,alpha=1,stretch=1){
+    const a=((rotation%(Math.PI*2))/(Math.PI*2)+1)%1;
+    const slot=Math.round(a*SPRITE_STEPS)%SPRITE_STEPS;
+    const baked=rotatedSprites[spriteIndex.get(sprite)][slot];
+    const w=SPRITE_EDGE*size/52,h=w*stretch;
+    const old=ctx.globalAlpha;ctx.globalAlpha=old*alpha;
+    ctx.drawImage(baked,x-w*.5,y-h*.5,w,h);
+    ctx.globalAlpha=old;
+  }
+  // Bezier tree skeleton. Every twig is connected to its parent; there is NO rectangular reveal/clipping mask.
+  // A growing stroke is tapered to a live rounded tip, so the tree extends organically instead of being cut across.
+  const STEM_START=1.58,STEM_DURATION=2.84;
+  const spine=[[480,704],[470,583],[483,421],[480,264]];
+  function bezierPoint(b,t){const u=1-t;
+    return [u*u*u*b[0][0]+3*u*u*t*b[1][0]+3*u*t*t*b[2][0]+t*t*t*b[3][0],
+      u*u*u*b[0][1]+3*u*u*t*b[1][1]+3*u*t*t*b[2][1]+t*t*t*b[3][1]];
+  }
+  function branchCurve(start,end,bend=0){const dx=end[0]-start[0],dy=end[1]-start[1];
+    return [start,[start[0]+dx*.035+bend*.32,start[1]+dy*.56],
+      [start[0]+dx*.76+bend*.17,start[1]+dy*.91],end];
+  }
+  const branches=[];
+  const mainSpecs=[
+    // at, destination x/y, base thickness, duration, side of bend
+    [.365,294,391,20,1.90,-19],
+    [.395,686,401,18,1.95,22],
+    [.478,342,276,16,1.77,-11],
+    [.512,650,279,15,1.74,15],
+    [.581,405,209,13,1.69,-9],
+    [.630,563,207,12,1.58,11],
+    [.748,451,169,10,1.45,-6],
+    [.693,608,183,11,1.48,8]
+  ];
+  const childSpecs=[
+    // parent branch, location on parent, endpoint, width, growth duration, bend
+    [0,.58,303,298,8,1.13,-24],[0,.74,235,357,7,1.19,-17],[0,.51,341,448,7,1.03,-10],
+    [1,.55,641,335,8,1.12,8],[1,.72,750,333,6,1.16,13],[1,.58,658,446,6,1.08,19],
+    [2,.53,278,230,6,1.07,-14],[2,.77,407,243,5,1.02,11],[2,.64,328,329,5,.95,-8],
+    [3,.49,606,360,6,1.04,-8],[3,.78,713,234,6,1.10,14],
+    [4,.61,353,183,5,.97,-5],[4,.77,454,147,5,.97,12],
+    [5,.55,604,151,5,.99,8],[5,.76,534,140,4,.89,-9],
+    [6,.64,439,121,4,.85,-3],[7,.70,658,148,4,.91,6]
+  ];
+  for(let i=0;i<mainSpecs.length;i++){
+    let [at,x,y,w,duration,bend]=mainSpecs[i],origin=bezierPoint(spine,at);
+    let birth=STEM_START+STEM_DURATION*inverseSmoothGrow(at)+.055;
+    branches.push({curve:branchCurve(origin,[x,y],bend),birth,duration,base:w,tip:2.4,parentIndex:-1,attach:0,liveCurve:null});
+  }
+  for(let i=0;i<childSpecs.length;i++){
+    let [parent,at,x,y,w,duration,bend]=childSpecs[i],p=branches[parent];
+    let origin=bezierPoint(p.curve,at);
+    branches.push({curve:branchCurve(origin,[x,y],bend),birth:p.birth+p.duration*inverseSmoothGrow(at)+.08,
+      duration,base:w,tip:1.5,parentIndex:parent,attach:at,liveCurve:null});
+  }
+  function smoothGrow(p){p=clamp(p);return p*p*(3-2*p);}
+  function inverseSmoothGrow(p){let lo=0,hi=1;
+    for(let i=0;i<15;i++){let mid=(lo+hi)/2;if(smoothGrow(mid)<p)lo=mid;else hi=mid;}
+    return (lo+hi)/2;
+  }
+  function strokeGrowingCurve(path,progress,baseWidth,tipWidth,highlight=false){
+    if(progress<=0)return;
+    const N=baseWidth>25?64:44,steps=Math.max(1,Math.ceil(N*progress));
+    ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+    for(let i=1;i<=steps;i++){
+      const a=(i-1)/N,b=Math.min(i/N,progress);if(a>=b)break;
+      const p0=bezierPoint(path,a),p1=bezierPoint(path,b),mid=(a+b)*.5;
+      let width=baseWidth*(1-Math.pow(mid,.84))+tipWidth*Math.pow(mid,.84);
+      if(progress<.999){const liveTip=clamp((progress-mid)/.14);width*=.025+.975*smoothGrow(liveTip);}
+      ctx.strokeStyle=highlight?(night?'rgba(246,153,195,.38)':'rgba(255,184,161,.30)'):(night?'#765060':'#70505b');
+      ctx.lineWidth=width;
+      ctx.beginPath();ctx.moveTo(p0[0],p0[1]);ctx.lineTo(p1[0],p1[1]);ctx.stroke();
+    }
+    ctx.restore();
+  }
+  function livingBranchCurve(b,t){
+    const c=b.curve;
+    const origin=b.parentIndex<0?c[0]:bezierPoint(branches[b.parentIndex].liveCurve||branches[b.parentIndex].curve,b.attach);
+    const shiftX=origin[0]-c[0][0],shiftY=origin[1]-c[0][1];
+    const fade=motionLess?0:smoothGrow((t-5.45)/2.3);
+    const phase=t*.61-c[3][0]*.0067-c[3][1]*.0012;
+    const tipWind=fade*(1.65*Math.sin(phase)+.65*Math.sin(t*.31+.7));
+    const growthFactor=.5+Math.abs(c[3][0]-480)/300;
+    const dx=tipWind*growthFactor,dy=tipWind*.25;
+    return [origin,
+      [c[1][0]+shiftX*.95+dx*.15,c[1][1]+shiftY*.95+dy*.1],
+      [c[2][0]+shiftX*.65+dx*.68,c[2][1]+shiftY*.65+dy*.58],
+      [c[3][0]+shiftX*.30+dx,c[3][1]+shiftY*.30+dy]];
+  }
+  function drawWood(t){
+    const s=smoothGrow((t-STEM_START)/STEM_DURATION);if(s<=0)return;
+    strokeGrowingCurve(spine,s,69*(.13+.87*Math.pow(s,1.45)),5.5);
+    ctx.save();ctx.globalAlpha=night?.21:.19;strokeGrowingCurve(spine,s,12*(.18+.82*s),1.1,true);ctx.restore();
+    // Extremely subtle bark detail stays inside the grown trunk rather than projecting past its tip.
+    if(s>.38){ctx.save();ctx.globalAlpha=.07;ctx.strokeStyle='#be958b';
+      ctx.lineWidth=1.8;ctx.lineCap='round';ctx.beginPath();
+      const barkEnd=Math.min(.75,s-.16);let pt=bezierPoint(spine,.10);
+      ctx.moveTo(pt[0]-11,pt[1]);
+      for(let u=.12;u<=barkEnd;u+=.025){pt=bezierPoint(spine,u);ctx.lineTo(pt[0]-11+u*5,pt[1]);}
+      ctx.stroke();ctx.restore();}
+    // Draw parent limbs before children. Child timing cannot precede the parent attachment.
+    for(const b of branches){const p=smoothGrow((t-b.birth)/b.duration);
+      b.liveCurve=livingBranchCurve(b,t);
+      if(p>0){strokeGrowingCurve(b.liveCurve,p,b.base*(.3+.7*smoothGrow(p)),b.tip);
+        if(p>.22){ctx.save();ctx.globalAlpha=night?.17:.14;strokeGrowingCurve(b.liveCurve,p,Math.max(1,b.base*.14),.5,true);ctx.restore();}
       }
+    }
+  }
+  function drawSeed(t){if(t>2.28)return;let fall=clamp((t-.18)/1.14);let y=43+easeOutCubic(fall)*621;
+    if(t>1.32)y=664-Math.sin((t-1.32)*15)*Math.max(0,10*(2.15-t));
+    drawSprite(sprites[5],480,y,29,Math.sin(t*7)*.34,clamp(t*2)*clamp((2.28-t)*2));
+    if(t>1.3){for(let i=0;i<4;i++){let a=i*Math.PI/2+t;ctx.globalAlpha=.5*clamp((2.15-t)*2);ctx.fillStyle='#ff7180';ctx.beginPath();ctx.ellipse(480+Math.cos(a)*25,668+Math.sin(a)*11,3.5,3.5,0,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;}
+  }
+  function drawWater(t){if(t>1.6)return;const amount=27;for(let i=0;i<amount;i++){let v=(t-i*.039);if(v<0||v>1.1)continue;let x=530+v*115+Math.sin(i*9.24)*11,y=23+Math.pow(v/.94,1.7)*510+Math.cos(i*12)*8;
+    ctx.fillStyle=i%4===0?'rgba(110,193,228,.60)':'rgba(157,216,238,.57)';ctx.beginPath();ctx.ellipse(x,y,3.5+i%3,6+i%3,-.5,0,Math.PI*2);ctx.fill();}
+  }
+  // Cached light bloom sprites: avoids expensive per-particle radial gradients.
+  function makeGlow(color){const c=document.createElement('canvas');c.width=c.height=96;const k=c.getContext('2d');
+    const g=k.createRadialGradient(48,48,1,48,48,46);g.addColorStop(0,color);g.addColorStop(.17,color.replace(/,\s*[\d.]+\)$/,',.58)'));g.addColorStop(.50,'rgba(255,176,214,.11)');g.addColorStop(1,'rgba(255,136,185,0)');
+    k.fillStyle=g;k.fillRect(0,0,96,96);return c;
+  }
+  const haloPink=makeGlow('rgba(255,96,168,.77)'),haloGold=makeGlow('rgba(255,210,110,.8)'),haloBlue=makeGlow('rgba(147,199,255,.76)');
+  const microStars=[];
+  for(let i=0;i<185;i++){
+    let l=leaves[Math.floor(r(0,leaves.length))];microStars.push({x:l.x+r(-12,12),y:l.y+r(-10,10),phase:r(0,6.28),speed:r(1.2,3.3),size:r(1,3.4),delay:r(4.9,7.9),depth:r(.1,1),gold:rand()<.45});
+  }
+  const skyStars=[];
+  for(let i=0;i<100;i++)skyStars.push({x:r(20,W-20),y:r(24,630),p:r(0,6.28),s:r(.8,2.8),size:r(.55,1.9)});
+  const magicalMotes=[];
+  for(let i=0;i<89;i++){
+    const leaf=leaves[Math.floor(r(0,leaves.length))];
+    magicalMotes.push({x:leaf.x+r(-35,35),y:r(75,620),phase:r(0,6.28),speed:r(6,18),size:r(12,33),warm:rand()<.58});
+  }
+  function drawMagicMotes(t){if(t<5.4)return;
+    const enter=clamp((t-5.4)/2);
+    for(const m of magicalMotes){
+      const y=70+((m.y-70-(t-5)*m.speed+4500)%555);
+      const x=m.x+Math.sin(t*.56+m.phase)*12;
+      const a=(.14+.17*(.5+.5*Math.sin(t*2+m.phase)))*(night?.82:.70)*enter;
+      drawGlow(m.warm?haloGold:haloPink,x,y,m.size,a);
+    }
+  }
+  function startHeartRain(count){if(elapsed*STORY_SPEED<3.6)return;
+    for(let i=0;i<count;i++)heartRain.push({x:r(135,825),y:r(-510,-35),vy:r(90,225),vx:r(-12,12),age:0,rotation:r(-4,4),rv:r(-2.5,2.5),size:r(9,23),color:Math.floor(r(0,sprites.length)),phase:r(0,6.28)});
+    while(heartRain.length>220)heartRain.shift();
+  }
+  function drawHeartRain(dt,t){if(motionLess){heartRain.length=0;return;}
+    for(let i=heartRain.length-1;i>=0;i--){let p=heartRain[i];p.age+=dt;p.x+=(p.vx+Math.sin(t*2+p.phase)*21)*dt;p.y+=p.vy*dt;p.rotation+=p.rv*dt;
+      drawSprite(sprites[p.color],p.x,p.y,p.size,p.rotation,.9);
+      if(p.y>735||p.x<-35||p.x>990)heartRain.splice(i,1);
+    }
+  }
+  function drawGlow(sprite,x,y,size,alpha){if(alpha<=0)return;ctx.save();ctx.globalCompositeOperation='screen';ctx.globalAlpha=alpha;ctx.drawImage(sprite,x-size/2,y-size/2,size,size);ctx.restore();}
+  function drawStar(x,y,size,alpha,color){if(alpha<=0)return;ctx.save();ctx.translate(x,y);ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.lineWidth=.9;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-size,0);ctx.lineTo(size,0);ctx.moveTo(0,-size);ctx.lineTo(0,size);ctx.stroke();ctx.restore();}
+  // DAY EXCLUSIVE: watercolor-blue morning air and golden sunlight. All behind the tree.
+  // No circular blast effects, spotlights, or large overexposed white overlays.
+  const dayRng=mulberry32(20261009);
+  const dayRange=(a,b)=>a+(b-a)*dayRng();
+  const morningPollen=[];
+  for(let i=0;i<72;i++){
+    const edge=dayRng()<.72;
+    morningPollen.push({x:edge?(dayRng()<.5?dayRange(35,205):dayRange(770,925)):dayRange(175,785),
+      y:dayRange(25,630),radius:dayRange(1,3.7),phase:dayRange(0,6.28),speed:dayRange(1.1,3.6),drift:dayRange(2.5,8),gold:dayRng()<.59});
+  }
+  const sunKisses=[];
+  for(let i=0;i<80;i++){
+    const l=leaves[Math.floor(dayRange(0,leaves.length))];
+    sunKisses.push({leaf:l,x:l.x,y:l.y,size:dayRange(1,2.4),phase:dayRange(0,6.28),delay:l.delay,vel:dayRange(.48,1.55),warm:dayRng()<.7});
+  }
+  // Bake the watercolor sky once for each mode; no full-screen gradient work at 60 FPS.
+  function bakeSky(isNight){
+    const c=document.createElement('canvas');c.width=W;c.height=H;
+    const k=c.getContext('2d');
+    const bg=k.createLinearGradient(0,0,0,H);
+    if(isNight){bg.addColorStop(0,'#090d1a');bg.addColorStop(.50,'#161025');bg.addColorStop(1,'#25172d');}
+    else{bg.addColorStop(0,'#dceaf7');bg.addColorStop(.47,'#e1eded');bg.addColorStop(.79,'#f6e6df');bg.addColorStop(1,'#ffe3d4');}
+    k.fillStyle=bg;k.fillRect(0,0,W,H);
+    if(!isNight){
+      let depth=k.createRadialGradient(475,282,30,475,282,480);
+      depth.addColorStop(0,'rgba(153,169,201,.155)');depth.addColorStop(.62,'rgba(169,186,201,.055)');depth.addColorStop(1,'rgba(169,186,201,0)');
+      k.fillStyle=depth;k.fillRect(0,0,W,H);
+      let sun=k.createRadialGradient(913,-45,15,913,-45,515);
+      sun.addColorStop(0,'rgba(255,251,217,.89)');sun.addColorStop(.23,'rgba(255,242,210,.47)');sun.addColorStop(.62,'rgba(255,220,180,.11)');sun.addColorStop(1,'rgba(255,213,192,0)');
+      k.fillStyle=sun;k.fillRect(0,0,W,H);
+      const beam=k.createLinearGradient(870,-20,740,640);
+      beam.addColorStop(0,'rgba(255,251,232,.18)');beam.addColorStop(1,'rgba(255,251,232,0)');
+      k.fillStyle=beam;k.beginPath();k.moveTo(850,-40);k.lineTo(920,-40);k.lineTo(870,670);k.lineTo(770,670);k.closePath();k.fill();
+      let left=k.createRadialGradient(25,480,20,25,480,380);
+      left.addColorStop(0,'rgba(255,228,218,.21)');left.addColorStop(1,'rgba(255,228,218,0)');
+      k.fillStyle=left;k.fillRect(0,0,450,H);
+    }
+    const ground=k.createRadialGradient(480,692,20,480,692,365);
+    ground.addColorStop(0,isNight?'rgba(242,107,177,.13)':'rgba(212,119,126,.13)');ground.addColorStop(1,'rgba(255,255,255,0)');
+    k.fillStyle=ground;k.fillRect(0,0,W,H);
+    return c;
+  }
+  const skyDay=bakeSky(false),skyNight=bakeSky(true);
+  function drawMorningPollen(t){
+    for(let i=0;i<morningPollen.length;i++){
+      const p=morningPollen[i];
+      let x=p.x+Math.sin(t*.34+p.phase)*p.drift;
+      let y=35+((p.y-(t*4.1*p.speed)+2500)%610);
+      const shimmer=.32+.68*Math.pow(.5+.5*Math.sin(t*1.1+p.phase),2);
+      ctx.fillStyle=p.gold?'rgba(255,188,93,'+(.12*shimmer).toFixed(3)+')':'rgba(249,141,173,'+(.09*shimmer).toFixed(3)+')';
+      ctx.beginPath();ctx.arc(x,y,p.radius,0,6.283);ctx.fill();
+    }
+  }
+  function bakeCanopyMist(isNight){
+    const c=document.createElement('canvas');c.width=W;c.height=H;
+    const k=c.getContext('2d');k.globalCompositeOperation='screen';
+    const a=k.createRadialGradient(485,330,12,485,330,365);
+    a.addColorStop(0,isNight?'rgba(185,46,112,.095)':'rgba(145,108,156,.050)');
+    a.addColorStop(.65,isNight?'rgba(189,56,136,.04)':'rgba(248,166,173,.028)');a.addColorStop(1,'rgba(255,128,177,0)');
+    k.fillStyle=a;k.fillRect(60,30,830,645);return c;
+  }
+  const hazeDay=bakeCanopyMist(false),hazeNight=bakeCanopyMist(true);
 
-      function drawStarter() {
-        tree.seed.drawHeart();
-        tree.flower(2);
-        drawGround();
+    function drawMorningHighlights(t){
+    if(night||t<4.6)return;
+    ctx.save();ctx.globalCompositeOperation='screen';
+    for(const p of sunKisses){
+      const reveal=smoothGrow((t-p.delay)/.8);
+      if(reveal<=0)continue;
+      const pulse=Math.pow(.5+.5*Math.sin(t*p.vel+p.phase),7);
+      const a=reveal*(.075+.39*pulse);
+      ctx.fillStyle=p.warm?`rgba(255,245,190,${a*.65})`:`rgba(255,255,255,${a*.72})`;
+      const x=(p.leaf.liveX??p.x), y=(p.leaf.liveY??p.y);
+      ctx.beginPath();ctx.ellipse(x-2,y-2,p.size*1.55,p.size*.56,-.6,0,Math.PI*2);ctx.fill();
+      if(pulse>.87)drawStar(x,y,p.size*1.7,a*.30,p.warm?'#fff2c8':'#ffffff');
+    }
+    ctx.restore();
+  }
+  function drawAtmosphere(t){
+    ctx.drawImage(night?skyNight:skyDay,0,0,W,H);
+    if(!night)drawMorningPollen(t);
+    const stage=t>3.4?smoothGrow((t-3.4)/3.3):0;
+    if(stage>0){
+      ctx.save();ctx.globalAlpha=stage;ctx.drawImage(night?hazeNight:hazeDay,0,0,W,H);ctx.restore();
+      const lum=night?.04:.025;
+      drawGlow(haloPink,260,290,390,lum*stage);drawGlow(haloGold,706,300,375,lum*stage);drawGlow(haloPink,500,170,420,lum*stage);
+    }
+    if(night){for(const st of skyStars){let alpha=.10+.13*Math.pow(.5+.5*Math.sin(t*st.s+st.p),2);drawStar(st.x,st.y,st.size,alpha,'#ffeaf9');}}
+  }
+
+    // A theatre of light: glowing silk curtains, staggered stage spotlights,
+  // and subtle color splitting. Deliberately NO circular shockwaves.
+  const LIGHT_HUES=[['255,94,163','255,198,112'],['248,114,222','255,235,164'],['173,125,255','247,122,189'],['255,197,106','255,99,166']];
+  function showEnvelope(t){
+    const automatic=smoothGrow((t-7.00)/2.22)*(1-smoothGrow((t-12.03)/2.72));
+    const since=t-climaxAt;
+    const triggered=climaxAt>0&&since>=0 ? smoothGrow(since/.52)*(1-smoothGrow((since-2.45)/1.60)) : 0;
+    return Math.max(automatic,triggered);
+  }
+
+    // Low intensity peripheral aurora; it frames the tree, never washes the crown.
+  function drawLightCurtains(t){
+    if(t<6.25)return;
+    const energy=smoothGrow((t-6.25)/2.1)*(.45+.55*showEnvelope(t));
+    ctx.save();ctx.globalCompositeOperation='screen';
+    for(let i=0;i<4;i++){
+      const left=i<2, edge=left?-68:W+68, offset=(i%2)*92;
+      const topX=left?80+offset:W-80-offset;
+      const x=topX+Math.sin(t*.29+i*1.8)*27;
+      const grad=ctx.createLinearGradient(edge,560,x,110);
+      grad.addColorStop(0,i%2?'rgba(255,144,172,0)':'rgba(183,125,255,0)');
+      grad.addColorStop(.50,i%2?`rgba(255,144,172,${energy*.036})`:`rgba(183,125,255,${energy*.026})`);
+      grad.addColorStop(1,'rgba(255,144,172,0)');
+      ctx.fillStyle=grad;ctx.beginPath();ctx.moveTo(edge-65,690);ctx.lineTo(x-54,-25);
+      ctx.lineTo(x+54,-25);ctx.lineTo(edge+65,690);ctx.closePath();ctx.fill();
+    }
+    ctx.restore();
+  }
+  // Stage lighting stays off the canopy. Two dim sidelights only, no flood from the roots.
+  function drawStageBeams(t){
+    if(t<7.0)return;
+    const energy=showEnvelope(t);if(energy<.007)return;
+    ctx.save();ctx.globalCompositeOperation='screen';
+    for(const side of [-1,1]){
+      const x0=side<0?-60:W+60;
+      const x1=side<0?190:W-190;
+      const hue=side<0?'248,154,160':'170,126,241';
+      const light=ctx.createLinearGradient(x0,640,x1,40);
+      light.addColorStop(0,`rgba(${hue},0)`);
+      light.addColorStop(.57,`rgba(${hue},${energy*(night?.045:.034)})`);
+      light.addColorStop(1,`rgba(${hue},0)`);
+      ctx.fillStyle=light;
+      ctx.beginPath();ctx.moveTo(x0-55,700);ctx.lineTo(x1-45,15);
+      ctx.lineTo(x1+45,15);ctx.lineTo(x0+55,700);ctx.closePath();ctx.fill();
+    }
+    ctx.restore();
+  }
+  const silks=Array.from({length:6},(_,i)=>({
+    from:420+i*14,to:170+i*73,bend:Math.sin(i*2.51)*130,
+    start:8.23+i*.15,hue:i%3,phase:i*1.31
+  }));
+  function drawSilkTrails(t){
+    const intensity=showEnvelope(t);
+    if(intensity<.02)return;
+    ctx.save();ctx.globalCompositeOperation='screen';ctx.lineCap='round';
+    for(let i=0;i<silks.length;i++){
+      const s=silks[i],p=clamp((t-s.start)/2.15);if(p<=0)continue;
+      // A thin flowing light filament builds UPWARD, trailing its own spark.
+      const fade=smoothGrow(p)*(1-clamp((t-12.1)/2.8));
+      const points=[];
+      for(let j=0;j<=22;j++){
+        let u=j/22*p;const sway=Math.sin(t*.7+s.phase+u*5)*22*u;
+        const x=(1-u)*(1-u)*s.from+2*(1-u)*u*(475+s.bend)+u*u*s.to+sway;
+        const y=682-u*525-35*Math.sin(Math.PI*u);
+        points.push([x,y]);
       }
-
-      function waterDrops() {
-        button.classList.add("watering");
-        for (var i = 0; i < 7; i += 1) {
-          var drop = document.createElement("i");
-          drop.className = "water-drop";
-          drop.style.setProperty("--drift", ((i - 3) * 9) + "px");
-          controls.appendChild(drop);
-          (function (item, delay) {
-            setTimeout(function () { item.classList.add("fall"); }, delay);
-            setTimeout(function () { item.classList.add("splash"); }, delay + 720);
-            setTimeout(function () { item.remove(); }, delay + 1050);
-          })(drop, i * 34);
+      const hues=['rgba(255,232,160,','rgba(255,156,216,','rgba(190,174,255,'];
+      for(let layer=0;layer<2;layer++){
+        ctx.beginPath();for(let j=0;j<points.length;j++){
+          if(j===0)ctx.moveTo(...points[j]);else ctx.lineTo(...points[j]);
         }
-        setTimeout(function () { button.classList.remove("watering"); }, 900);
+        ctx.strokeStyle=hues[s.hue]+(layer===0?(night?.042:.035)*fade:.18*fade*intensity)+')';
+        ctx.lineWidth=layer===0?5:1.15;ctx.shadowBlur=layer===0?8:3;
+        ctx.shadowColor=['#ffc78c','#ff96d5','#b9aaff'][s.hue];ctx.stroke();
       }
+      if(p<1){const head=points[points.length-1];drawGlow(s.hue===0?haloGold:haloPink,head[0],head[1],42,.18*intensity);
+        drawStar(head[0],head[1],2.4,.46*intensity,'#fffbed');}
+    }
+    ctx.restore();
+  }
+  // A very small, soft afterglow lives behind the blossoms.
+  function drawLightChoir(t){
+    const age=t-climaxAt;if(age<0||age>3.2)return;
+    const p=smoothGrow(age/.45)*(1-smoothGrow((age-1.9)/1.3));
+    drawGlow(haloPink,355,260,225,p*.055);
+    drawGlow(haloGold,615,350,225,p*.052);
+  }
 
-      function growBranches(done) {
-        if (tree.canGrow()) {
-          tree.grow();
-          drawGround();
-          window.setTimeout(function () { growBranches(done); }, 10);
-          return;
+  // V6.1: almost imperceptible negative-space shading beneath foreground petals.
+  // It provides depth without drawing fake bloom silhouettes or muddying the colors.
+  function makeDepthPockets(){
+    const c=document.createElement('canvas');c.width=W;c.height=H;
+    const k=c.getContext('2d');const prng=mulberry32(611061);
+    for(let i=0;i<44;i++){
+      const l=leaves[Math.floor(prng()*leaves.length)];
+      const rr=20+prng()*17;
+      const nx=(l.x-480)/279, ny=(350-l.y)/221;
+      const margin=rr/240;
+      if(!insideHeart(nx+margin,ny)||!insideHeart(nx-margin,ny)||!insideHeart(nx,ny+margin)||!insideHeart(nx,ny-margin))continue;
+      const g=k.createRadialGradient(l.x,l.y,7,l.x,l.y,rr);
+      g.addColorStop(0,'rgba(91,32,75,.15)');
+      g.addColorStop(.48,'rgba(104,52,84,.065)');g.addColorStop(1,'rgba(104,52,84,0)');
+      k.fillStyle=g;k.fillRect(l.x-rr,l.y-rr,rr*2,rr*2);
+    }return c;
+  }
+  const depthPockets=makeDepthPockets();
+  function drawDepthPockets(t){
+    const a=smoothGrow((t-5.6)/2.25)*(night?.60:.41);
+    if(a<=0)return;
+    ctx.save();ctx.globalAlpha=a;ctx.drawImage(depthPockets,0,0);ctx.restore();
+  }
+
+  // V6.1: never swap the live foliage for a frozen bitmap. Every heart stays alive,
+  // so there is no pop during the spectacular-to-resting transition.
+  // Depth layers are drawn back-to-front (leaves are already sorted by depth).
+  function drawFoliage(t){if(t<4)return;
+    const finale=showEnvelope(t);
+    const release=smoothGrow((t-6)/2);
+    const softWind=.55+.45*Math.sin(t*.37+.7);
+    for(let i=0;i<leaves.length;i++){
+      const l=leaves[i],p=clamp((t-l.delay)/.76);if(p<=0)continue;
+      const appear=easeOutBack(p);if(appear<=.02)continue;
+      const depth=l.depth;
+      // Coherent travelling breeze: nearby leaves move together, with a small
+      // phase lag in finer foreground petals, instead of unrelated shaking.
+      const coherent=Math.sin(t*.72-l.x*.0082-l.y*.002+l.windCell*.075);
+      const flutter=Math.sin(t*(1.35+l.freq*.20)+l.phase)*.37;
+      const lag=Math.sin(t*.46-l.x*.0035+.6)*.42;
+      const sway=motionLess?0:(coherent*.66+flutter*.21+lag*.13)*softWind*release;
+      let x=l.x+sway*(2.1+depth*4.3)+smoothMouseX*(.8+depth*9.3);
+      let y=l.y+(motionLess?0:Math.sin(t*.64-l.x*.007+l.phase*.16)*(.42+depth*1.5)*release)+smoothMouseY*(.6+depth*5.9);
+      const altitude=clamp((556-l.y)/475);
+      const blossomBeat=Math.exp(-Math.pow((t-8.46-altitude*1.22)/.37,2));
+      const littleBreath=.009*Math.sin(t*.88+l.phase);
+      const size=l.size*appear*(1+littleBreath+.027*blossomBeat+.012*finale*blossomBeat);
+      const theta=l.rotation+(motionLess?0:sway*.075+flutter*.035)+wind*.012;
+      const alpha=(.70+.30*depth)*clamp(p*4);
+      if(clickWaves.length&&!motionLess){
+        for(const wave of clickWaves){
+          const q=clamp(wave.age/wave.life),reach=12+q*145,dist=Math.hypot(l.x-wave.x,l.y-wave.y);
+          const push=Math.exp(-Math.pow((dist-reach)/65,2))*(1-q)*8;
+          x+=(l.x-wave.x)/Math.max(1,dist)*push;y+=(l.y-wave.y)/Math.max(1,dist)*push;
         }
-        done();
       }
+      l.liveX=x;l.liveY=y;l.liveRot=theta;
+      drawSprite(sprites[l.color],x,y,size,theta,alpha,l.shape==='petal'?.67:1);
+    }
+  }
 
-      function flowerAll(done) {
-        tree.flower(2);
-        drawGround();
-        if (tree.bloomsCache.length || tree.blooms.length) {
-          window.setTimeout(function () { flowerAll(done); }, 10);
-          return;
-        }
-        done();
+      // Illumination is attached to petals. A wave moves UP the canopy rather than radiating from its centre.
+  const litPetals=[];
+  for(let i=0;i<leaves.length;i++){
+    const l=leaves[i];if(i%4===0||l.twinkle)litPetals.push(l);
+  }
+  const glowCenters=[[315,280,185],[447,174,160],[621,248,155],[720,331,150],[505,405,175],[378,457,150]];
+  function drawCanopyLuminance(t){
+    if(t<4.65)return;
+    const develop=smoothGrow((t-4.65)/3.1);
+    const show=showEnvelope(t);
+    for(let i=0;i<glowCenters.length;i++){
+      const [x,y,size]=glowCenters[i];const phase=i*1.3;
+      const flicker=.75+.25*Math.sin(t*1.8+phase);
+      drawGlow(i%2===0?haloPink:haloGold,x,y,size,develop*(.045+show*.070)*flicker);
+    }
+  }
+  function drawPetalLuminescence(t){
+    if(t<4.8)return;
+    const show=showEnvelope(t);
+    const lift=clamp((t-climaxAt)/.25);
+    const manual=climaxAt>0&&t>=climaxAt&&t<climaxAt+2.5;
+    ctx.save();ctx.globalCompositeOperation='screen';
+    for(let li=0;li<litPetals.length;li++){
+      if(renderQuality===0&&li%3===0)continue;
+      const l=litPetals[li];
+      const reveal=smoothGrow((t-l.delay)/.5);
+      if(!reveal)continue;
+      const altitude=clamp((557-l.y)/475);
+      const bloomWave=Math.exp(-Math.pow((t-8.38-altitude*1.30)/.34,2));
+      const reprise=manual?Math.exp(-Math.pow((t-climaxAt-.12-altitude*1.08)/.29,2))*lift:0;
+      const breathe=Math.pow(.5+.5*Math.sin(t*1.35+l.phase),4);
+      const brightness=reveal*(.060+show*.075+breathe*.037+Math.max(bloomWave,reprise)*.27);
+      if(brightness<.075)continue;
+      const x=l.liveX??l.x;
+      const y=l.liveY??l.y;
+      drawSprite(sprites[l.color],x,y,l.size*1.02,l.liveRot??l.rotation,brightness,l.shape==='petal'?.67:1);
+      if(l.twinkle&&brightness>.13){
+        drawGlow(l.depth>.5?haloPink:haloGold,x,y,l.size*2.7,brightness*.19);
       }
-
-      function animateSeed(done) {
-        function shrink() {
-          if (tree.seed.canScale()) {
-            tree.seed.scale(0.95);
-            drawGround();
-            window.requestAnimationFrame(shrink);
-            return;
-          }
-          fall();
-        }
-        function fall() {
-          if (tree.seed.canMove()) {
-            tree.seed.move(0, 2);
-            drawGround();
-            window.requestAnimationFrame(fall);
-            return;
-          }
-          done();
-        }
-        shrink();
+    }
+    ctx.restore();
+  }
+  function drawTwinkles(t){if(t<5.0)return;
+    for(let i=0;i<microStars.length;i++){if(renderQuality===0&&i%2===0)continue;const f=microStars[i];const reveal=clamp((t-f.delay)/.8);if(!reveal)continue;
+      let amp=Math.pow(Math.max(0,Math.sin(t*f.speed+f.phase)),9)*reveal*(1+.64*showEnvelope(t));
+      if(amp<.028)continue;
+      const x=f.x+smoothMouseX*f.depth*5,y=f.y+smoothMouseY*f.depth*3;
+      drawGlow(f.gold?haloGold:haloPink,x,y,22+f.size*4,amp*(night?.24:.18));
+      drawStar(x,y,f.size*(.6+amp*.65),amp*(night?.72:.62),f.gold?'#fff2bb':'#fff8ff');
+    }
+  }
+  const prismClusters=[];
+  for(let i=0;i<95;i++){
+    const lf=leaves[Math.floor(r(0,leaves.length))];
+    prismClusters.push({x:lf.x,y:lf.y,color:i%3,phase:r(0,6.28),rate:r(.85,2.0),size:r(30,75),delay:lf.delay+.12});
+  }
+  function drawPrismClusters(t){
+    if(t<6.7)return;
+    const stage=showEnvelope(t),energy=(night?.095:.09)*stage;
+    if(energy<.008)return;
+    ctx.save();ctx.globalCompositeOperation='screen';
+    for(let i=0;i<prismClusters.length;i++){if(renderQuality===0&&i%2===0)continue;const p=prismClusters[i];
+      const reveal=smoothGrow((t-p.delay)/.55);if(reveal<=0)continue;
+      const shimmer=(.34+.66*Math.pow(Math.max(0,Math.sin(t*p.rate+p.phase)),5));
+      const a=energy*reveal*shimmer;
+      drawGlow(p.color===0?haloGold:p.color===1?haloPink:haloBlue,p.x,p.y,p.size,a);
+      if(shimmer>.79)drawStar(p.x,p.y,1.6+shimmer*1.6,a*2.2,'#fff7e6');
+    }
+    ctx.restore();
+  }
+  function drawGrowthMagic(t){if(t<STEM_START||t>7)return;
+    const grown=smoothGrow((t-STEM_START)/STEM_DURATION);
+    if(grown>0&&grown<1){let pt=bezierPoint(spine,grown);drawGlow(haloGold,pt[0],pt[1],88,.26);drawStar(pt[0],pt[1],6,.78,'#fff6d4');}
+    for(const b of branches){const p=smoothGrow((t-b.birth)/b.duration);if(p<=0||p>=1)continue;
+      const pt=bezierPoint(b.liveCurve||b.curve,p);drawGlow(haloPink,pt[0],pt[1],45,.18);drawStar(pt[0],pt[1],3.3,.7,'#ffe9f1');
+    }
+  }
+  // V5: zero geometric rings. A shower of micro-glints rides the rising bloom edge.
+  const bloomSparks=[];
+  for(let i=0;i<175;i++){
+    const lf=leaves[Math.floor(r(0,leaves.length))];
+    bloomSparks.push({x:lf.x+r(-10,10),y:lf.y+r(-10,10),born:lf.delay+r(.07,.38),size:r(1.5,5.2),phase:r(0,6.28),gold:rand()<.49});
+  }
+  function drawBloomSparks(t){
+    if(t<4.48||t>9.1)return;
+    for(const p of bloomSparks){
+      const age=t-p.born;if(age<0||age>1.05)continue;
+      const a=Math.sin(Math.PI*age/1.05)*(.65+.35*Math.sin(age*14+p.phase)**2);
+      const x=p.x+Math.sin(t*2+p.phase)*2,y=p.y-age*12;
+      drawGlow(p.gold?haloGold:haloPink,x,y,24+p.size*7,a*(night?.28:.23));
+      drawStar(x,y,p.size*(.8+a*.5),a*.91,p.gold?'#fff8d0':'#ffffff');
+    }
+  }
+    function drawDrifters(dt,t){if(t<6.25||motionLess)return;
+    if(drifters.length<(night?41:34)&&rand()<dt*(night?15:12)){let l=leaves[Math.floor(r(0,leaves.length))];if(l&&t>l.delay+.6)drifters.push({x:l.x,y:l.y,size:r(8,16),rot:r(-3,3),speed:r(24,53),vx:r(-20,19),sway:r(0,7),phase:r(0,7),age:0,c:l.color});}
+    for(let i=drifters.length-1;i>=0;i--){let p=drifters[i];p.age+=dt;p.y+=p.speed*dt;p.x+=(p.vx+Math.sin(t*2+p.phase)*p.sway+smoothMouseX*9)*dt;p.rot+=dt*.63;drawSprite(sprites[p.c],p.x,p.y,p.size,p.rot,.89,1);if(night&&i%3===0)drawGlow(haloPink,p.x,p.y,p.size*3,.13);
+      if(p.y>690||p.x<-40||p.x>1000)drifters.splice(i,1);
+    }
+  }
+  function drawBurst(dt){for(let i=burst.length-1;i>=0;i--){let p=burst[i];p.age+=dt;if(p.age<0)continue;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=85*dt;p.rot+=p.rv*dt;let a=clamp(p.age/.16)*clamp(1-p.age/p.life);drawSprite(sprites[p.c],p.x,p.y,p.size,p.rot,a);if(i%6===0){drawGlow(haloGold,p.x,p.y,p.size*2.6,a*.25);}if(p.age>=p.life)burst.splice(i,1);}}
+  // ------------------------------------------------------------------
+  // V5 lumina direction: light converges on the roots and crown,
+  // wanders along living branches, then erupts into a heart-shaped bloom.
+  // ------------------------------------------------------------------
+  const WORLD_END=13.3; // internal normalized story time; user sees 18 seconds
+  const CLOUDS=[];
+  for(let i=0;i<10;i++)CLOUDS.push({x:r(75,885),y:r(60,580),size:r(200,490),phase:r(0,6.28),speed:r(.07,.20),color:i%3});
+  const dust=[];
+  for(let i=0;i<95;i++)dust.push({x:r(45,915),y:r(35,660),phase:r(0,6.28),vel:r(3,13),radius:r(.6,2.15),tw:r(.5,2.8)});
+  function directionTitle(t){
+    const s=t<1.55?0:t<4.55?1:t<7.4?2:t<9.12?3:t<11.7?4:5;
+    if(s===chapterIndex)return;
+    chapterIndex=s;
+    const labels=['I · HẠT MẦM ƯỚC NGUYỆN','II · SỰ SỐNG CHẢY QUA TỪNG CÀNH','III · NGÀN TRÁI TIM THỨC GIẤC','IV · VŨ ĐIỆU ĐOM ĐÓM','V · BẢN GIAO HƯỞNG ÁNH SÁNG','VI · PHÉP MÀU CÒN Ở LẠI ♡'];
+    chapter.textContent=labels[s];
+    const subs=['một hạt tim bắt đầu hành trình','dòng nhựa sống vàng hồng vươn lên','hoa trái tim nở từ dưới lên thành nhiều lớp','ánh sáng đan xen, đom đóm tỉnh giấc','từng cánh tim là một ngôi sao bé nhỏ','giữ chuột trên tán để gửi một điều ước'];
+    sceneHint.textContent=subs[s];
+  }
+  // Bottom-up bloom is driven by each leaf's altitude-aware birth time.
+  function drawAmbient(t){
+    const level=smoothGrow((t-1.4)/4.6);
+    // Large, translucent aurora curtains that drift behind the canopy.
+    ctx.save();ctx.globalCompositeOperation='screen';
+    for(const cloud of CLOUDS){
+      const xx=cloud.x+Math.sin(t*cloud.speed+cloud.phase)*40;
+      const yy=cloud.y+Math.cos(t*cloud.speed*.7+cloud.phase)*26;
+      const sprite=cloud.color===0?haloPink:cloud.color===1?haloGold:haloBlue;
+      drawGlow(sprite,xx,yy,cloud.size,(night?.035:.025)*level);
+    }
+    ctx.restore();
+    if(t>7.0&&t<9.7){
+      const intensity=Math.sin(Math.PI*clamp((t-7)/2.7));
+      ctx.save();ctx.globalCompositeOperation='screen';
+      // A focused column of warm light precedes the moment of flowering.
+      const beam=ctx.createLinearGradient(400,0,568,0);
+      beam.addColorStop(0,'rgba(255,126,190,0)');
+      beam.addColorStop(.5,night?'rgba(255,151,223,.045)':'rgba(255,215,150,.04)');
+      beam.addColorStop(1,'rgba(255,126,190,0)');
+      ctx.globalAlpha=intensity;
+      ctx.fillStyle=beam;ctx.beginPath();ctx.moveTo(453,690);ctx.lineTo(344,20);ctx.lineTo(617,20);ctx.lineTo(513,690);ctx.closePath();ctx.fill();ctx.restore();
+      drawGlow(haloGold,480,355,280,intensity*(night?.045:.04));
+    }
+    if(t>1){
+      const alive=clamp((t-1)/2);
+      for(const mote of dust){
+        const x=mote.x+Math.sin(t*.52+mote.phase)*15;
+        const y=30+((mote.y-t*mote.vel+3500)%625);
+        const a=(.1+.25*(.5+.5*Math.sin(t*mote.tw+mote.phase)))*alive*(night?.65:.58);
+        ctx.globalAlpha=a;ctx.fillStyle=night?'#ffddf0':'#ff9b8c';
+        ctx.beginPath();ctx.arc(x,y,mote.radius,0,6.283);ctx.fill();
+      }ctx.globalAlpha=1;
+    }
+  }
+  function drawEnergyTrails(t){
+    if(t<1.75)return;
+    // Slow, silver-gold glints follow each branch after it has grown.
+    const s=smoothGrow((t-STEM_START)/STEM_DURATION);
+    const peak=clamp((t-7.5)/.9)*(1-clamp((t-11.4)/2.0));
+    const paths=[{curve:spine,birth:STEM_START,duration:STEM_DURATION},...branches];
+    ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+    for(let i=0;i<paths.length;i++){
+      const p=paths[i];const grown=i===0?s:smoothGrow((t-p.birth)/p.duration);
+      if(grown<.08)continue;
+      const alpha=(night?.21:.17)+peak*.13;
+      ctx.lineWidth=(i===0?2.4:1.35)*(.75+peak*.4);ctx.strokeStyle=night?`rgba(255,196,223,${alpha})`:`rgba(255,205,137,${alpha})`;
+      ctx.beginPath();
+      const maxT=Math.min(1,grown),steps=18;
+      for(let j=0;j<=steps;j++){
+        const u=j/steps*maxT;const pt=bezierPoint(p.liveCurve||p.curve,u);
+        if(!j)ctx.moveTo(pt[0],pt[1]);else ctx.lineTo(pt[0],pt[1]);
       }
-
-      function showCompleteTree() {
-        var image = canvas.toDataURL("image/png");
-        wrap.style.backgroundImage = "url(" + image + ")";
-        wrap.style.backgroundPosition = "center";
-        wrap.style.backgroundRepeat = "no-repeat";
-        // The live canvas is intentionally enlarged a little inside the frame.
-        // Match that scale when it becomes the static layer so the tree never
-        // compresses for one frame before the falling hearts begin.
-        wrap.style.backgroundSize = "118% 100%";
-        context.clearRect(0, 0, width, height);
-        canvas.style.background = "transparent";
-        finalised = true;
-        button.disabled = true;
-        var fallingFrame = function () {
-          context.clearRect(0, 0, width, height);
-          for (var i = tree.blooms.length - 1; i >= 0; i -= 1) tree.blooms[i].jump();
-          while (tree.blooms.length < 3) {
-            // Start inside the centered canopy, then send each heart leftward
-            // toward the same kind of off-screen destination as the old tree.
-            tree.blooms.push(tree.createBloom(width, height, 240, tree.seed.heart.figure, null, 1, null, .7 + Math.random() * .35, new Point(-90 + Math.random() * 470, height + 40 + Math.random() * 70), 170 + Math.random() * 80));
-          }
-          drawGround();
-          window.requestAnimationFrame(fallingFrame);
-        };
-        window.requestAnimationFrame(fallingFrame);
+      ctx.stroke();
+      const moving=(t*.28+i*.121)%1;
+      if(grown>moving&&t>p.birth+.3){
+        const xy=bezierPoint(p.liveCurve||p.curve,moving);
+        if(i%2===0){drawGlow(haloGold,xy[0],xy[1],26+peak*17,(night?.16:.12)+peak*.08);drawStar(xy[0],xy[1],2.2+peak*1.4,.45+peak*.37,'#fff4d9');}
       }
+    }
+    ctx.restore();
+  }
+  const fountain=[];
+  function triggerClimax(manual=false){
+    if(motionLess)return;
+    climaxAt=elapsed*STORY_SPEED;sceneFlash=.035;
+    fountain.length=0;
+    // The reveal throws light UP from the roots in delicate parabolic trails.
+    for(let j=0;j<(manual?78:60);j++){
+      const base=leaves[Math.floor(r(0,leaves.length))];
+      fountain.push({x:base.x+r(-11,11),y:base.y+r(0,15),
+        vx:r(-22,22),vy:r(-110,-45),
+        age:-r(0,.9),life:r(1.25,2.5),
+        c:Math.floor(r(0,3)),size:r(.65,1.65),tail:r(4,13)});
+    }
+    // Flower hearts lift off branches, rather than exploding radially from the center.
+    const n=manual?90:76;
+    for(let j=0;j<n;j++){
+      const lf=leaves[Math.floor(r(0,leaves.length))];
+      burst.push({x:lf.x,y:lf.y,vx:r(-106,106),vy:r(-245,-68),
+        size:r(8,23),rot:r(-3,3),rv:r(-4.7,4.7),age:-r(0,.36),
+        life:r(1.5,3.1),c:lf.color});
+    }
+    burst=burst.slice(-290);startHeartRain(manual?76:48);
+  }
+  function drawClimax(t,dt){
+    if(t>8.88&&pendingClimax&&!climaxFired){
+      pendingClimax=false;climaxFired=true;triggerClimax(true);
+      caption.textContent='Mọi cánh tim đang tỏa sáng trong khoảnh khắc diệu kỳ ✦';
+    }
+    else if(t>9.13&&!climaxFired){climaxFired=true;triggerClimax();}
+    const since=t-climaxAt;
+    if(since>0&&since<3.8){
+      const strength=Math.sin(Math.PI*clamp(since/3.8));
+      drawGlow(haloPink,488,353,340,(night?.10:.08)*strength);
+      drawGlow(haloGold,480,505,255,(night?.09:.07)*strength);
+    }
+    ctx.save();ctx.globalCompositeOperation='screen';ctx.lineCap='round';
+    for(let i=fountain.length-1;i>=0;i--){
+      const p=fountain[i];p.age+=dt;
+      if(p.age<0)continue;
+      const f=clamp(1-p.age/p.life);
+      if(f<=0){fountain.splice(i,1);continue;}
+      const px=p.x,py=p.y;
+      p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=18*dt;
+      p.vx*=1-dt*.09;
+      const hue=['#fff1bd','#ffc5e5','#eedaff'][p.c];
+      ctx.strokeStyle=hue;ctx.globalAlpha=.09*f;ctx.lineWidth=p.size*1.3;
+      ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(p.x,p.y);ctx.stroke();
+      ctx.globalAlpha=.52*f;ctx.lineWidth=p.size*.6;
+      ctx.beginPath();ctx.moveTo(p.x-p.vx*.045,p.y-p.vy*.045);ctx.lineTo(p.x,p.y);ctx.stroke();
+      if(i%2===0)drawGlow(p.c===0?haloGold:haloPink,p.x,p.y,27+p.tail,f*(night?.28:.23));
+      if(i%6===0)drawStar(p.x,p.y,p.size*1.1,.5*f,'#fffdeb');
+    }
+    ctx.restore();
+  }
+  function drawFinaleVeil(t){
+    // Intentionally no screen-filling white overlay.
+  }
 
-      function updateLabels() {
-        progressText.textContent = finalised ? copy.progress : (started ? copy.growing : (english ? "Water once" : "Tưới một lần"));
-        count.textContent = finalised ? (english ? "Done" : "Đã xong") : (started ? copy.growing : copy.ready);
-      }
+  // ===============================================================
+  // ENCHANTED HEART TREE V6.1 / Fairy Dream meets Cinematic Masterpiece
+  // ===============================================================
+  // Fireflies are not spotlights: each light is smaller than a blossom.
+  // Deterministic positions help keep the world stable between replay and modes.
+  const fairies=[];
+  const frng=mulberry32(60062026);
+  for(let i=0;i<46;i++){
+    const a=frng()*Math.PI*2, rr=Math.sqrt(frng());
+    const region=i%4===0?1:0;
+    fairies.push({x:480+Math.cos(a)*(185+rr*285),y:336+Math.sin(a)*(130+rr*240),
+      phase:frng()*6.283,rate:.65+frng()*1.4,radius:2+frng()*2.7,
+      depth:frng(),warm:frng()>.23,region});
+  }
+  function drawFireflies(t,front=false){
+    if(t<5.25)return;
+    const show=smoothGrow((t-5.25)/1.6);
+    for(let i=0;i<fairies.length;i++){
+      const f=fairies[i];if((f.depth>.48)!==front)continue;
+      if(renderQuality===0&&i%3===0)continue;
+      const x=f.x+Math.sin(t*f.rate*.38+f.phase)*11+smoothMouseX*f.depth*7;
+      const y=f.y+Math.cos(t*f.rate*.36+f.phase)*10+Math.sin(t*.4+i)*5;
+      const shimmer=Math.pow(.5+.5*Math.sin(t*f.rate*2+f.phase),3);
+      const a=show*(night?.34:.13)*(.22+.78*shimmer)*(f.region?.70:1);
+      drawGlow(f.warm?haloGold:haloPink,x,y,16+f.radius*4,a);
+      if(shimmer>.77){ctx.save();ctx.globalAlpha=a*.93;ctx.fillStyle=f.warm?'#fff3c2':'#ffd6ee';ctx.beginPath();ctx.arc(x,y,f.radius*.37,0,6.283);ctx.fill();ctx.restore();}
+    }
+  }
+  // Colorful, believable sprites drifting off the crown, like slow butterflies.
+  const dreamWishes=Array.from({length:13},(_,i)=>({
+    sx:115+i*55,sy:420+(i%5)*42,phase:i*2.72,
+    speed:.42+(i%5)*.08,size:7+(i%4)*1.9,color:(i*7)%sprites.length
+  }));
+  function drawDreamWishes(t){
+    if(t<8.4||motionLess)return;
+    const fade=smoothGrow((t-8.4)/1.3);
+    for(let i=0;i<dreamWishes.length;i++){
+      if(renderQuality===0&&i%2===0)continue;
+      const f=dreamWishes[i];const orbit=t*f.speed+f.phase;
+      const x=f.sx+Math.sin(orbit)*23+smoothMouseX*4;
+      const y=f.sy-((t-8)*3.9)%52+Math.cos(orbit*1.2)*9;
+      const a=fade*(night?.61:.43)*(.62+.38*Math.sin(t+f.phase)**2);
+      drawSprite(sprites[f.color],x,y,f.size,.28*Math.sin(orbit),a);
+    }
+  }
+  // Symphonic waves animate light on each blossom, travelling from root to crown.
+  // Instead of circular shockwaves, energy climbs upward in feather-soft phrases.
+  const sonataNotes=[];
+  for(let i=0;i<245;i++){
+    let l=leaves[Math.floor(frng()*leaves.length)];
+    sonataNotes.push({x:l.x,y:l.y,depth:l.depth,phase:frng()*6.283,
+      altitude:clamp((558-l.y)/475),size:1+frng()*2.6,gold:frng()>.43});
+  }
+  function drawSymphony(t){
+    const automatic=Math.exp(-Math.pow((t-9.5)/1.75,4));
+    const manual=climaxAt>0?Math.exp(-Math.pow((t-climaxAt-1.0)/1.65,4)):0;
+    const intensity=Math.max(automatic,manual);
+    if(intensity<.014)return;
+    for(let i=0;i<sonataNotes.length;i++){
+      if(renderQuality===0&&i%2===0)continue;
+      const p=sonataNotes[i];
+      const front=t-8.42-p.altitude*1.23;
+      const wave=Math.exp(-Math.pow(front/.36,2));
+      const replay=climaxAt>=0?Math.exp(-Math.pow((t-climaxAt-.25-p.altitude*1.05)/.33,2)):0;
+      const twinkle=Math.pow(Math.max(0,Math.sin(t*1.9+p.phase)),10);
+      const a=(.14*twinkle+Math.max(wave,replay)*.58)*intensity*(night?.82:.57);
+      if(a<.065)continue;
+      const x=p.x+Math.sin(t*.9+p.phase)*1.65,y=p.y+Math.cos(t*.8+p.phase)*1.6;
+      drawGlow(p.gold?haloGold:haloPink,x,y,20+p.size*8,a*.25);
+      drawStar(x,y,p.size*(.65+.3*a),a*.63,p.gold?'#fff4b6':'#fff4f9');
+    }
+  }
+  // Keeps the resting tree gently moving for as long as the page is open.
+  // Frame budget adapts only *nonessential* sparkles, not leaf geometry.
+  function monitorQuality(milliseconds){
+    drawTimeMean=drawTimeMean?drawTimeMean*.96+milliseconds*.04:milliseconds;
+    if(drawTimeMean>22){slowFrames++;fastFrames=0;}
+    else if(drawTimeMean<13){fastFrames++;slowFrames=0;}
+    if(slowFrames>90){renderQuality=0;slowFrames=0;}
+    if(fastFrames>230){renderQuality=1;fastFrames=0;}
+  }
 
-      button.addEventListener("click", function () {
-        if (busy || started || finalised) return;
-        started = true;
-        busy = true;
-        button.disabled = true;
-        updateLabels();
-        waterDrops();
-        setTimeout(function () {
-          animateSeed(function () {
-            growBranches(function () {
-              flowerAll(function () {
-                showCompleteTree();
-                busy = false;
-                updateLabels();
-              });
-            });
-          });
-        }, 260);
-      });
-
-      drawStarter();
-      updateLabels();
-    })();
-  </script>
+  function syncStatus(t){
+    directionTitle(t);
+    progressBar.style.width=(clamp(elapsed/V6_DURATION)*100).toFixed(2)+'%';
+    if(t>12.45&&!seeded){seeded=true;label.textContent='XEM LẠI ♡';caption.textContent='Điều kỳ diệu vẫn tiếp diễn · giữ chuột vào tán để gửi điều ước ✧';}
+  }
+  function frame(now){
+    const realDt=last?Math.max(0,(now-last)/1000):0;
+    const dt=Math.min(realDt,.045);
+    last=now;
+    if(running)elapsed+=Math.min(realDt,.075);
+    let t=elapsed*STORY_SPEED;
+    if(motionLess&&running){t=13.3;elapsed=18;running=false;}
+    wind=motionLess?0:(.36*Math.sin(t*.44)+.22*Math.sin(t*1.04+.8));
+    const pointerEase=motionLess?1:1-Math.exp(-dt*8.5);
+    smoothMouseX+=(mouseX-smoothMouseX)*pointerEase;
+    smoothMouseY+=(mouseY-smoothMouseY)*pointerEase;
+    const drawStart=performance.now();
+    ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);
+    drawAtmosphere(t);
+    drawAmbient(t);
+    drawFireflies(t,false);
+    drawLightCurtains(t);
+    drawStageBeams(t);
+    drawLightChoir(t);
+    drawCanopyLuminance(t);
+    drawSilkTrails(t);
+    drawWood(t);
+    drawEnergyTrails(t);
+    drawDepthPockets(t);
+    drawGrowthMagic(t);
+    drawSeed(t);
+    drawFoliage(t);
+    drawPetalLuminescence(t);
+    drawSymphony(t);
+    drawPrismClusters(t);
+    drawBloomSparks(t);
+    drawTwinkles(t);
+    drawMorningHighlights(t);
+    drawMagicMotes(t);
+    drawFireflies(t,true);
+    drawDreamWishes(t);
+    drawClimax(t,dt);
+    drawWater(t);
+    drawDrifters(dt,t);
+    drawHeartRain(dt,t);
+    drawBurst(dt);
+    for(let i=clickWaves.length-1;i>=0;i--){clickWaves[i].age+=dt;if(clickWaves[i].age>=clickWaves[i].life)clickWaves.splice(i,1);}
+    sceneFlash=Math.max(0,sceneFlash-dt*.73);
+    if(sceneFlash>0){ctx.save();ctx.globalCompositeOperation='screen';ctx.fillStyle=night?`rgba(255,121,215,${sceneFlash*.023})`:`rgba(255,217,170,${sceneFlash*.02})`;ctx.fillRect(0,0,W,H);ctx.restore();}
+    ctx.globalAlpha=1; // Softly grounded trunk, never a sudden hard horizon line.
+    ctx.fillStyle=night?'rgba(255,183,223,.05)':'rgba(255,214,193,.14)';ctx.fillRect(0,698,W,2);
+    syncStatus(t);
+    monitorQuality(performance.now()-drawStart);
+    raf=requestAnimationFrame(frame);
+  }
+  // The first watering gesture starts the growth sequence; changing light never resets it.
+  elapsed=0;last=performance.now();raf=requestAnimationFrame(frame);
+  // Local dev/QA interface; no dependency on network or a framework.
+  window.__heartTreeV61={seek(seconds){elapsed=Math.max(0,Number(seconds)||0);climaxFired=elapsed*STORY_SPEED>9;climaxAt=-100;burst=[];heartRain=[];comets=[];fountain.length=0;seeded=false;chapterIndex=-1;pendingClimax=false;},reset,burst(){loveButton.click();},get time(){return elapsed;},get quality(){return renderQuality;},get avgDrawMs(){return drawTimeMean;},get petalCount(){return leaves.length;}};
+})();
+</script>
 </body>
 </html>

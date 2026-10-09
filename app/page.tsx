@@ -230,6 +230,7 @@ export default function Home() {
   const [tankFullscreenClosing, setTankFullscreenClosing] = useState(false);
   const [tankGameReady, setTankGameReady] = useState(false);
   const [handsomeMode, setHandsomeMode] = useState(false);
+  const [fairyNight, setFairyNight] = useState(false);
   const [easterEgg, setEasterEgg] = useState<{ x: number; y: number; width: number; height: number; id: number } | null>(null);
   const [messageForm, setMessageForm] = useState({ name: "", contact: "", message: "" });
   const [messageState, setMessageState] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -249,6 +250,21 @@ export default function Home() {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = oldOverflow; };
   }, [tankFullscreen]);
+
+  useEffect(() => {
+    const handleTreeTheme = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin || event.data?.type !== "heart-tree-theme") return;
+      setFairyNight(Boolean(event.data.night));
+    };
+
+    window.addEventListener("message", handleTreeTheme);
+    return () => window.removeEventListener("message", handleTreeTheme);
+  }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle("fairy-night", fairyNight);
+    return () => document.body.classList.remove("fairy-night");
+  }, [fairyNight]);
 
   const launchTankFullscreen = () => {
     const bounds = tankPosterRef.current?.getBoundingClientRect();
@@ -323,8 +339,8 @@ export default function Home() {
         : "";
 
   return (
-    <div className="fun-site">
-      <ExperienceLayer />
+    <div className={`fun-site${fairyNight ? " fairy-night" : ""}`}>
+      <ExperienceLayer fairyNight={fairyNight} />
       {typeof document !== "undefined" && createPortal(
         <AnimatePresence>
         {tankFullscreen &&
@@ -402,10 +418,10 @@ export default function Home() {
         <section id="explore" className="explore-section shell section-anchor" aria-labelledby="explore-title">
           <div className="explore-heading"><motion.div className="section-kicker" initial={{ opacity: 0, x: -14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .45 }}><span>✳</span><span>{t.exploreLabel}</span></motion.div><ScrollWords id="explore-title" text={t.exploreTitle} /><motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .5, delay: .12 }}>{t.exploreHint}</motion.p></div>
           <div className="explore-links">
-            <motion.a className="portal-card portal-edit" href="/edit/" initial={{ opacity: 0, y: 24, rotate: -3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: -1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .04, ease: "easeOut" }}><span>01</span><strong>EDIT</strong><em>{t.visitWork} ↗</em><div className="portal-art" aria-hidden="true"><i /><i /><i /><b>▶</b></div></motion.a>
-            <motion.a className="portal-card portal-tank" href="/tank/index.html" initial={{ opacity: 0, y: 24, rotate: 3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: 1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .12, ease: "easeOut" }}><span>02</span><strong>TANK 2D</strong><em>{t.visitTank} ↗</em><div className="portal-art" aria-hidden="true"><i /><i /><i /><b>▰</b></div></motion.a>
-            <motion.a className="portal-card portal-bio" href="/bio/" initial={{ opacity: 0, y: 24, rotate: -3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: -1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .2, ease: "easeOut" }}><span>03</span><strong>BIO</strong><em>{t.visitContact} ↗</em><div className="portal-art" aria-hidden="true"><i /><b>☺</b></div></motion.a>
-            <motion.a className="portal-card portal-feed" href="/nuoitoi/" initial={{ opacity: 0, y: 24, rotate: 3 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -8, rotate: 1.5, scale: 1.02 }} whileTap={{ scale: .97 }} transition={{ duration: .55, delay: .28, ease: "easeOut" }}><span>04</span><strong>FEED</strong><em>{t.visitSupport} ↗</em><div className="portal-art" aria-hidden="true"><i /><b>♥</b></div></motion.a>
+            <motion.a className="portal-card portal-edit" href="/edit/" initial={{ opacity: 1, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -6 }} whileTap={{ scale: .98 }} transition={{ duration: .5, delay: .04, ease: "easeOut" }}><span>01</span><strong>EDIT</strong><em>{t.visitWork} ↗</em><div className="portal-art" aria-hidden="true"><i /><i /><i /><b>▶</b></div></motion.a>
+            <motion.a className="portal-card portal-tank" href="/tank/index.html" initial={{ opacity: 1, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -6 }} whileTap={{ scale: .98 }} transition={{ duration: .5, delay: .12, ease: "easeOut" }}><span>02</span><strong>TANK 2D</strong><em>{t.visitTank} ↗</em><div className="portal-art" aria-hidden="true"><i /><i /><i /><b>▰</b></div></motion.a>
+            <motion.a className="portal-card portal-bio" href="/bio/" initial={{ opacity: 1, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -6 }} whileTap={{ scale: .98 }} transition={{ duration: .5, delay: .2, ease: "easeOut" }}><span>03</span><strong>BIO</strong><em>{t.visitContact} ↗</em><div className="portal-art" aria-hidden="true"><i /><b>☺</b></div></motion.a>
+            <motion.a className="portal-card portal-feed" href="/nuoitoi/" initial={{ opacity: 1, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .35 }} whileHover={{ y: -6 }} whileTap={{ scale: .98 }} transition={{ duration: .5, delay: .28, ease: "easeOut" }}><span>04</span><strong>FEED</strong><em>{t.visitSupport} ↗</em><div className="portal-art" aria-hidden="true"><i /><b>♥</b></div></motion.a>
           </div>
         </section>
 
@@ -428,7 +444,7 @@ export default function Home() {
             <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }} transition={{ duration: .5, delay: .12 }}>{t.loveTreeText}</motion.p>
             <motion.span className="love-tree-side-note" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: .5, delay: .22 }}>01 / GROW SOMETHING GOOD</motion.span>
           </div>
-          <LoveTree locale={locale} />
+          <LoveTree locale={locale} fairyNight={fairyNight} />
         </section>
 
         <section className="mid-portal shell" aria-label={t.midEyebrow}>
@@ -436,7 +452,7 @@ export default function Home() {
           <motion.a className="button button-primary" href="#links" initial={{ opacity: 0, x: 16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .5, delay: .16 }}>{t.midCta} <span>↓</span></motion.a>
         </section>
 
-        <section id="playground" className="playground-section section-anchor"><div className="shell"><motion.div className="section-kicker" initial={{ opacity: 0, x: -14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .45 }}><span>02</span><span>{t.playgroundEyebrow}</span></motion.div><ScrollWords className="playground-title" text={t.playgroundTitle} /><div className="skill-grid" id="skills">{t.skills.map(([number, title, text], index) => <motion.article key={number} className={`skill-card skill-card-${index + 1}`} initial={{ opacity: 0, y: 34, rotate: index % 2 ? 2 : -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: 0.22 }} whileHover={{ y: -10, rotate: index % 2 ? 1 : -1 }} transition={{ type: "spring", stiffness: 210, damping: 18, delay: index * 0.1 }}><span className="skill-number">{number}</span><span className="skill-arrow">↗</span><h3>{title}</h3><p>{text}</p><div className="skill-blob" aria-hidden="true" /><div className="skill-ring" aria-hidden="true" /><span className="skill-glyph" aria-hidden="true">{["CUT", "MOVE", "3D", "AI"][index]}</span><span className="skill-trail" aria-hidden="true">✦ · ✦ · ✦</span></motion.article>)}</div></div></section>
+        <section id="playground" className="playground-section section-anchor"><div className="shell"><motion.div className="section-kicker" initial={{ opacity: 0, x: -14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .45 }}><span>02</span><span>{t.playgroundEyebrow}</span></motion.div><ScrollWords className="playground-title" text={t.playgroundTitle} /><div className="skill-grid" id="skills">{t.skills.map(([number, title, text], index) => <motion.article key={number} className={`skill-card skill-card-${index + 1}`} initial={{ opacity: 1, y: 34, rotate: index % 2 ? 2 : -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: 0.22 }} whileHover={{ y: -10, rotate: index % 2 ? 1 : -1 }} transition={{ type: "spring", stiffness: 210, damping: 18, delay: index * 0.1 }}><span className="skill-number">{number}</span><span className="skill-arrow">↗</span><h3>{title}</h3><p>{text}</p><div className="skill-blob" aria-hidden="true" /><div className="skill-ring" aria-hidden="true" /><span className="skill-glyph" aria-hidden="true">{["CUT", "MOVE", "3D", "AI"][index]}</span><span className="skill-trail" aria-hidden="true">✦ · ✦ · ✦</span></motion.article>)}</div></div></section>
 
         <section id="tank-preview" className="tank-preview-section shell section-anchor" aria-labelledby="tank-preview-title">
           <div className="tank-preview-copy">
@@ -472,10 +488,10 @@ export default function Home() {
             <motion.div className="section-kicker" initial={{ opacity: 0, x: -14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .45 }}><span>04</span><span>{t.linkEyebrow}</span></motion.div>
             <ScrollWords id="links-title" className="links-title" text={t.linkTitle} />
             <div className="link-grid">
-              <motion.a className="link-card link-edit" href="/edit/" initial={{ opacity: 0, y: 28, rotate: -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .04 }} whileHover={{ y: -10, rotate: -2 }}><span>01 / {t.products}</span><strong>EDIT<span>↗</span></strong><p>{t.productsText}</p></motion.a>
-              <motion.a className="link-card link-tank" href="/tank/index.html" initial={{ opacity: 0, y: 28, rotate: 2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .12 }} whileHover={{ y: -10, rotate: 2 }}><span>02 / {t.tank}</span><strong>TANK 2D<span>↗</span></strong><p>{t.tankText}</p></motion.a>
-              <motion.a className="link-card link-bio" href="/bio/" initial={{ opacity: 0, y: 28, rotate: -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .2 }} whileHover={{ y: -10, rotate: -2 }}><span>03 / {t.contact}</span><strong>BIO<span>↗</span></strong><p>{t.contactText}</p></motion.a>
-              <motion.a className="link-card link-support" href="/nuoitoi/" initial={{ opacity: 0, y: 28, rotate: 2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .28 }} whileHover={{ y: -10, rotate: 2 }}><span>04 / {t.support}</span><strong>{t.supportName}<span>↗</span></strong><p>{t.supportText}</p></motion.a>
+              <motion.a className="link-card link-edit" href="/edit/" initial={{ opacity: 1, y: 28, rotate: -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .04 }} whileHover={{ y: -10, rotate: -2 }}><span>01 / {t.products}</span><strong>EDIT<span>↗</span></strong><p>{t.productsText}</p></motion.a>
+              <motion.a className="link-card link-tank" href="/tank/index.html" initial={{ opacity: 1, y: 28, rotate: 2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .12 }} whileHover={{ y: -10, rotate: 2 }}><span>02 / {t.tank}</span><strong>TANK 2D<span>↗</span></strong><p>{t.tankText}</p></motion.a>
+              <motion.a className="link-card link-bio" href="/bio/" initial={{ opacity: 1, y: 28, rotate: -2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .2 }} whileHover={{ y: -10, rotate: -2 }}><span>03 / {t.contact}</span><strong>BIO<span>↗</span></strong><p>{t.contactText}</p></motion.a>
+              <motion.a className="link-card link-support" href="/nuoitoi/" initial={{ opacity: 1, y: 28, rotate: 2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: .55, delay: .28 }} whileHover={{ y: -10, rotate: 2 }}><span>04 / {t.support}</span><strong>{t.supportName}<span>↗</span></strong><p>{t.supportText}</p></motion.a>
             </div>
           </div>
         </section>
