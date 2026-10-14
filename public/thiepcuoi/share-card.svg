@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#fbfdfb"/>
+      <stop offset=".58" stop-color="#edf7f3"/>
+      <stop offset="1" stop-color="#f8ece5"/>
+    </linearGradient>
+    <linearGradient id="sage" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#a7cdc1"/>
+      <stop offset="1" stop-color="#6b9b8e"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#66877d" flood-opacity=".18"/>
+    </filter>
+    <clipPath id="artClip"><rect x="752" y="42" width="402" height="546" rx="190"/></clipPath>
+    <pattern id="grain" width="42" height="42" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="7" r="1" fill="#638b80" opacity=".1"/>
+      <circle cx="29" cy="31" r=".8" fill="#bc9671" opacity=".12"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#e4f0eb"/>
+  <rect x="26" y="24" width="1148" height="582" rx="34" fill="url(#paper)" filter="url(#shadow)"/>
+  <rect x="26" y="24" width="1148" height="582" rx="34" fill="url(#grain)"/>
+  <path d="M80 100 C220 32 390 40 515 105" fill="none" stroke="#c4ddd3" stroke-width="2"/>
+  <circle cx="78" cy="101" r="5" fill="#b7925f"/>
+  <circle cx="515" cy="105" r="5" fill="#b7925f"/>
+  <text x="82" y="164" fill="#789b91" font-family="Arial,sans-serif" font-size="17" font-weight="700" letter-spacing="5">TRÂN TRỌNG KÍNH MỜI</text>
+  <text x="78" y="264" fill="#514541" font-family="Georgia,serif" font-size="60" font-weight="600">Thiệp Mời</text>
+  <text x="80" y="324" fill="#514541" font-family="Georgia,serif" font-size="42" font-weight="600" letter-spacing="2">QUỐC CƯỜNG</text>
+  <text x="277" y="379" fill="#83a89d" font-family="Georgia,serif" font-size="35" font-style="italic">&amp;</text>
+  <text x="80" y="430" fill="#514541" font-family="Georgia,serif" font-size="42" font-weight="600" letter-spacing="2">KIM LIÊN</text>
+  <path d="M82 467 H585" stroke="#d8e7e1" stroke-width="2"/>
+  <text x="82" y="513" fill="#718c84" font-family="Arial,sans-serif" font-size="18" letter-spacing="3">NGÀY VUI CỦA CHÚNG MÌNH</text>
+  <text x="82" y="553" fill="#9a7656" font-family="Georgia,serif" font-size="27" font-weight="600">10 &amp; 11 THÁNG 01 · 2027</text>
+  <rect x="724" y="35" width="458" height="564" rx="218" fill="url(#sage)" opacity=".18"/>
+  <image href="anime-wedding-moment.svg" x="752" y="42" width="402" height="546" preserveAspectRatio="xMidYMid slice" clip-path="url(#artClip)"/>
+  <rect x="752" y="42" width="402" height="546" rx="190" fill="none" stroke="#fff" stroke-width="7" opacity=".82"/>
+  <path d="M1097 110c-18 21-29 44-29 69m27-77c17 3 29 12 38 27m-55 55c-20-2-35 5-47 20m53-14c13 11 18 26 18 42" fill="none" stroke="#83a99c" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+  <circle cx="1096" cy="102" r="7" fill="#83a99c"/>
+  <circle cx="1134" cy="128" r="6" fill="#bedbd2"/>
+  <circle cx="1031" cy="184" r="6" fill="#bedbd2"/>
+</svg>
