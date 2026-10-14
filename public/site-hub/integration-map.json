@@ -1,8 +1,9 @@
 {
-  "generatedAt": "2026-10-07T10:46:09.821Z",
+  "generatedAt": "2026-10-14T13:25:47.490Z",
   "routes": [
     "/edit/",
     "/bio/",
-    "/nuoitoi/"
+    "/nuoitoi/",
+    "/thiepcuoi/"
   ]
 }

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Tạo Link Thiệp Cưới Hàng Loạt | Quốc Cường & Kim Liên</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            light: '#E2CE9C',
+                            DEFAULT: '#C5A059',
+                            dark: '#9B7732',
+                        },
+                        cream: '#FAF7F2',
+                        charcoal: '#262120'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Be Vietnam Pro"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #F5EFEB; color: #262120; }
+        .toast {
+            animation: slideIn 0.3s ease-out, fadeOut 0.4s ease-in 2.2s forwards;
+        }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateY(-10px); } }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8 bg-white/80 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-sm border border-gold/30">
+            <span class="inline-block px-3 py-1 rounded-full bg-gold/15 text-gold-dark text-xs font-semibold uppercase tracking-wider mb-2">
+                Quốc Cường & Kim Liên
+            </span>
+            <h1 class="font-serif text-2xl sm:text-4xl font-bold text-charcoal mb-2">
+                Công Cụ Tạo Link Thiệp Cưới Hàng Loạt
+            </h1>
+            <p class="text-stone-500 text-xs sm:text-sm max-w-2xl mx-auto">
+                Tự động tạo link <b class="text-emerald-700">không dấu siêu gọn đẹp</b> (không bị mã hóa %20 rối mắt). Tên hiển thị trên thiệp vẫn <b>có dấu chuẩn xác 100%</b>!
+            </p>
+        </header>
+
+        <!-- Main Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left Panel: Input & Settings -->
+            <div class="lg:col-span-5 space-y-6">
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-stone-200">
+                    <h2 class="text-base font-bold text-charcoal mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-gear text-gold"></i> Thiết Lập Link
+                    </h2>
+
+                    <!-- Domain selector -->
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-stone-600 mb-1">Tên Miền Website:</label>
+                        <select id="domainSelect" onchange="generateLinks()" class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 bg-cream font-mono focus:outline-none focus:border-gold">
+                            <option value="https://lamquoccuong.com">https://lamquoccuong.com (Chính thức)</option>
+                            <option value="http://localhost:3000">http://localhost:3000 (Chạy thử nghiệm Local)</option>
+                        </select>
+                    </div>
+
+                    <!-- Side selector -->
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-stone-600 mb-2">Chọn Phía Khách Mời:</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center gap-2 p-3 rounded-2xl border border-stone-200 bg-cream cursor-pointer hover:border-gold transition-colors">
+                                <input type="radio" name="sideChoice" value="nhatrai" checked onchange="generateLinks()" class="text-gold focus:ring-gold">
+                                <div>
+                                    <span class="block text-xs font-bold text-charcoal">🎩 Nhà Trai</span>
+                                    <span class="block text-[10px] text-stone-500">Lễ Thành Hôn (11.01)</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 p-3 rounded-2xl border border-stone-200 bg-cream cursor-pointer hover:border-gold transition-colors">
+                                <input type="radio" name="sideChoice" value="nhagai" onchange="generateLinks()" class="text-gold focus:ring-gold">
+                                <div>
+                                    <span class="block text-xs font-bold text-charcoal">👰 Nhà Gái</span>
+                                    <span class="block text-[10px] text-stone-500">Lễ Vu Quy (10.01)</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- URL Style Option -->
+                    <div class="mb-4 p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+                        <label class="block text-xs font-bold text-emerald-900 mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-sparkles text-emerald-600"></i> Định Dạng Link:
+                        </label>
+                        <div class="space-y-2 mt-2">
+                            <label class="flex items-center gap-2 text-xs text-stone-700 cursor-pointer">
+                                <input type="radio" name="urlStyle" value="telex" checked onchange="generateLinks()" class="text-emerald-600 focus:ring-emerald-500">
+                                <span class="font-semibold text-emerald-900">Link Telex (Khuyên dùng - 100% chuẩn dấu, không ký tự %)</span>
+                            </label>
+                            <p class="text-[10px] text-stone-500 pl-5">Ví dụ: <code class="bg-white px-1.5 py-0.5 rounded border border-emerald-300 font-bold text-emerald-800">/thiepmoinhatrai?to=Cuowngf</code> &rarr; Thiệp hiện <b>"Cường"</b></p>
+
+                            <label class="flex items-center gap-2 text-xs text-stone-700 cursor-pointer">
+                                <input type="radio" name="urlStyle" value="slug" onchange="generateLinks()" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>Link không dấu rút gọn (Tự động phục hồi dấu)</span>
+                            </label>
+                            <p class="text-[10px] text-stone-500 pl-5">Ví dụ: <code class="bg-white px-1.5 py-0.5 rounded border text-stone-700">/thiepmoinhatrai?to=cuong</code> &rarr; Thiệp hiện <b>"Cường"</b></p>
+                            
+                            <label class="flex items-center gap-2 text-xs text-stone-700 cursor-pointer mt-1">
+                                <input type="radio" name="urlStyle" value="encoded" onchange="generateLinks()" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>Link có dấu nguyên bản</span>
+                            </label>
+                            <p class="text-[10px] text-stone-500 pl-5">Ví dụ: <code class="bg-white px-1.5 py-0.5 rounded border text-stone-700">?to=Cường</code> hoặc <code class="bg-white px-1.5 py-0.5 rounded border text-stone-700">?to=Anh%20Tu%E1%BA%A5n...</code></p>
+                        </div>
+                    </div>
+
+                    <!-- Custom Message Template -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="text-xs font-semibold text-stone-600">Mẫu Tin Nhắn Zalo:</label>
+                            <button onclick="resetTemplate()" class="text-[10px] text-gold-dark hover:underline">Mặc định</button>
+                        </div>
+                        <textarea id="msgTemplate" rows="3" oninput="generateLinks()" class="w-full p-2.5 text-xs rounded-xl border border-stone-200 bg-cream focus:outline-none focus:border-gold leading-relaxed">Trân trọng kính mời {name} đến dự {event} chung vui cùng Quốc Cường & Kim Liên! Mời bạn mở thiệp online tại: {link}</textarea>
+                        <span class="block text-[10px] text-stone-400 mt-1">Biến có sẵn: <code class="bg-stone-100 px-1 py-0.5 rounded">{name}</code>, <code class="bg-stone-100 px-1 py-0.5 rounded">{link}</code>, <code class="bg-stone-100 px-1 py-0.5 rounded">{event}</code></span>
+                    </div>
+
+                    <!-- Guest Names Input -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="text-xs font-semibold text-stone-600">Danh Sách Tên Khách Có Dấu (Mỗi dòng 1 người):</label>
+                            <button onclick="loadSampleGuests()" class="text-[10px] text-gold-dark font-medium hover:underline">Nạp danh sách mẫu</button>
+                        </div>
+                        <textarea id="guestListInput" rows="8" oninput="generateLinks()" placeholder="Ví dụ:&#10;Anh Tuấn & Chị Lan&#10;Gia Đình Bác Ba&#10;Bạn Thân Quốc Cường&#10;Chị Hoàng Mai (Công ty)" class="w-full p-3 text-xs rounded-2xl border border-stone-200 bg-cream focus:outline-none focus:border-gold leading-relaxed font-sans"></textarea>
+                    </div>
+
+                    <button onclick="generateLinks()" class="w-full mt-4 py-3 bg-stone-900 hover:bg-black text-white rounded-2xl font-semibold text-xs transition-all shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-gold"></i> Cập Nhật Danh Sách
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results & Actions -->
+            <div class="lg:col-span-7 space-y-4">
+                <!-- Action Bar -->
+                <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-stone-200 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-charcoal">Tổng cộng:</span>
+                        <span id="totalBadge" class="px-2.5 py-0.5 rounded-full bg-gold/20 text-gold-dark font-bold text-xs">0 người</span>
+                        <span id="sideBadge" class="px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-700 font-semibold text-xs">Nhà Trai</span>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="copyAllMessages()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-medium transition-colors flex items-center gap-1.5" title="Copy toàn bộ tin nhắn">
+                            <i class="fa-regular fa-copy"></i> Copy Tất Cả
+                        </button>
+                        <button onclick="exportToCsv()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium transition-colors flex items-center gap-1.5 shadow-sm" title="Tải file Excel mở được ngay">
+                            <i class="fa-solid fa-file-excel"></i> Xuất Excel (.csv)
+                        </button>
+                        <button onclick="exportGuestsJson()" class="px-3 py-2 rounded-xl bg-gold hover:bg-gold-dark text-white text-xs font-medium transition-colors flex items-center gap-1.5 shadow-sm" title="Lưu danh bạ khách để link không dấu hiển thị đúng tên có dấu">
+                            <i class="fa-solid fa-floppy-disk"></i> Tải guests.json
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Banner -->
+                <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs flex items-start gap-2.5">
+                    <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5 text-sm flex-shrink-0"></i>
+                    <div>
+                        <span class="font-bold text-emerald-900">Tính năng thông minh:</span> Link không dấu (VD: <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">?to=cuong</code> hay <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">?to=anh-tuan-va-chi-lan</code>) sẽ được thiệp cưới <b>tự động giải mã và hiển thị chuẩn dấu tiếng Việt</b> (<b>"Cường"</b>, <b>"Anh Tuấn & Chị Lan"</b>) mà bạn không cần phải tải lại danh bạ!
+                    </div>
+                </div>
+
+                <!-- Search filter -->
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-stone-400 text-xs"></i>
+                    <input type="text" id="searchFilter" oninput="filterResults()" placeholder="Tìm nhanh khách mời theo tên..." class="w-full pl-9 pr-4 py-2 text-xs bg-white rounded-xl border border-stone-200 focus:outline-none focus:border-gold shadow-sm">
+                </div>
+
+                <!-- Results List -->
+                <div id="resultsContainer" class="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+                    <!-- Cards will be rendered here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="bg-white rounded-3xl p-12 text-center border border-dashed border-stone-300">
+                    <i class="fa-regular fa-envelope-open text-4xl text-stone-300 mb-3"></i>
+                    <p class="text-sm font-semibold text-stone-600 mb-1">Chưa có khách mời nào</p>
+                    <p class="text-xs text-stone-400">Hãy nhập hoặc dán danh sách tên khách ở cột bên trái để tạo link ngay.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULT_TEMPLATE = "Trân trọng kính mời {name} đến dự {event} chung vui cùng Quốc Cường & Kim Liên! Mời bạn mở thiệp online tại: {link}";
+
+        function toSlugKey(str) {
+            return (str || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+                .replace(/&/g, 'va')
+                .replace(/[^a-zA-Z0-9\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-')
+                .toLowerCase();
+        }
+
+        function resetTemplate() {
+            document.getElementById('msgTemplate').value = DEFAULT_TEMPLATE;
+            generateLinks();
+        }
+
+        const COMMON_PHRASES = {
+            'gia-dinh': 'Gia Đình',
+            'dong-nghiep': 'Đồng Nghiệp',
+            'cong-ty': 'Công Ty',
+            'ban-than': 'Bạn Thân',
+            'quy-khach': 'Quý Khách',
+            'hai-bac': 'Hai Bác',
+            'hai-ban': 'Hai Bạn',
+            'hai-em': 'Hai Em',
+            'hai-chau': 'Hai Cháu',
+            'vo-chong': 'Vợ Chồng',
+            'bac-ba': 'Bác Ba', 'bac-nam': 'Bác Năm', 'bac-tu': 'Bác Tư', 'bac-sau': 'Bác Sáu',
+            'bac-bay': 'Bác Bảy', 'bac-tam': 'Bác Tám', 'bac-chin': 'Bác Chín', 'bac-muoi': 'Bác Mười',
+            'chu-ba': 'Chú Ba', 'chu-nam': 'Chú Năm', 'chu-tu': 'Chú Tư', 'chu-sau': 'Chú Sáu',
+            'chu-bay': 'Chú Bảy', 'chu-tam': 'Chú Tám', 'chu-chin': 'Chú Chín', 'chu-muoi': 'Chú Mười',
+            'co-ba': 'Cô Ba', 'co-nam': 'Cô Năm', 'co-tu': 'Cô Tư', 'co-sau': 'Cô Sáu',
+            'co-bay': 'Cô Bảy', 'co-tam': 'Cô Tám', 'co-chin': 'Cô Chín', 'co-muoi': 'Cô Mười',
+            'di-ba': 'Dì Ba', 'di-nam': 'Dì Năm', 'di-tu': 'Dì Tư', 'di-sau': 'Dì Sáu',
+            'di-bay': 'Dì Bảy', 'di-tam': 'Dì Tám', 'di-chin': 'Dì Chín', 'di-muoi': 'Dì Mười',
+            'cau-ba': 'Cậu Ba', 'cau-nam': 'Cậu Năm', 'cau-tu': 'Cậu Tư', 'cau-sau': 'Cậu Sáu',
+            'cau-bay': 'Cậu Bảy', 'cau-tam': 'Cậu Tám', 'cau-chin': 'Cậu Chín', 'cau-muoi': 'Cậu Mười'
+        };
+
+        const COMMON_WORDS = {
+            'anh': 'Anh', 'chi': 'Chị', 'em': 'Em', 'bac': 'Bác', 'chu': 'Chú', 'co': 'Cô',
+            'di': 'Dì', 'ong': 'Ông', 'ba': 'Ba', 'cau': 'Cậu', 'mo': 'Mợ', 'thay': 'Thầy',
+            'ban': 'Bạn', 'chau': 'Cháu', 'than': 'Thân', 'va': '&', 'cung': 'Cùng',
+            'hai': 'Hai', 'dinh': 'Đình', 'gia': 'Gia',
+            'nguyen': 'Nguyễn', 'tran': 'Trần', 'le': 'Lê', 'pham': 'Phạm', 'hoang': 'Hoàng',
+            'huynh': 'Huỳnh', 'phan': 'Phan', 'vu': 'Vũ', 'vo': 'Võ', 'dang': 'Đặng',
+            'bui': 'Bùi', 'do': 'Đỗ', 'ho': 'Hồ', 'ngo': 'Ngô', 'duong': 'Dương',
+            'ly': 'Lý', 'dao': 'Đào', 'doan': 'Đoàn', 'lam': 'Lâm',
+            'trinh': 'Trịnh', 'truong': 'Trương', 'luong': 'Lương', 'luu': 'Lưu',
+            'thai': 'Thái', 'ta': 'Tạ', 'phung': 'Phùng', 'ton': 'Tôn', 'ha': 'Hà', 'cao': 'Cao',
+            'van': 'Văn', 'thi': 'Thị', 'huu': 'Hữu', 'duc': 'Đức', 'ngoc': 'Ngọc',
+            'quoc': 'Quốc', 'minh': 'Minh', 'xuan': 'Xuân', 'thanh': 'Thành', 'kim': 'Kim',
+            'quang': 'Quang', 'trung': 'Trung', 'phuoc': 'Phước', 'cuong': 'Cường',
+            'lien': 'Liên', 'tuan': 'Tuấn', 'lan': 'Lan', 'hung': 'Hùng', 'dung': 'Dũng',
+            'nam': 'Nam', 'hoa': 'Hoa', 'mai': 'Mai', 'huong': 'Hương', 'thao': 'Thảo',
+            'phuong': 'Phương', 'long': 'Long', 'huyen': 'Huyền', 'trang': 'Trang',
+            'linh': 'Linh', 'viet': 'Việt', 'tien': 'Tiến', 'son': 'Sơn', 'tam': 'Tâm',
+            'phuc': 'Phúc', 'dat': 'Đạt', 'hieu': 'Hiếu', 'tai': 'Tài', 'thang': 'Thắng',
+            'khoa': 'Khoa', 'loc': 'Lộc', 'phat': 'Phát', 'binh': 'Bình', 'an': 'An',
+            'trieu': 'Triệu', 'nhung': 'Nhung', 'yen': 'Yến', 'oanh': 'Oanh', 'quyen': 'Quyên',
+            'quynh': 'Quỳnh', 'nga': 'Nga', 'hang': 'Hằng', 'loan': 'Loan', 'thuy': 'Thủy',
+            'nhan': 'Nhân', 'tri': 'Trí', 'huy': 'Huy', 'bach': 'Bạch', 'tan': 'Tấn',
+            'bao': 'Bảo', 'trong': 'Trọng', 'kha': 'Kha', 'khang': 'Khang', 'khanh': 'Khánh',
+            'kien': 'Kiên', 'kiet': 'Kiệt', 'vinh': 'Vinh', 'thuan': 'Thuận', 'nhu': 'Như',
+            'chau': 'Châu', 'phong': 'Phong', 'tung': 'Tùng', 'giang': 'Giang', 'diep': 'Diệp',
+            'duy': 'Duy', 'toan': 'Toàn', 'hau': 'Hậu', 'my': 'Mỹ', 'tram': 'Trâm',
+            'ngan': 'Ngân', 'khoi': 'Khôi', 'nghia': 'Nghĩa', 'luc': 'Lực', 'khai': 'Khải',
+            'thien': 'Thiện', 'triet': 'Triết', 'vuong': 'Vương', 'canh': 'Cảnh', 'dien': 'Điền',
+            'sau': 'Sáu', 'bay': 'Bảy', 'tam': 'Tám', 'chin': 'Chín', 'muoi': 'Mười', 'tu': 'Tư',
+            'mot': 'Một', 'bap': 'Bắp', 'bong': 'Bống', 'tit': 'Tít', 'tin': 'Tin', 'kem': 'Kem'
+        };
+
+        function vietnameseToTelexWord(word) {
+            let w = word;
+            w = w.replace(/ươ/g, 'uow').replace(/Ươ|ƯƠ/g, 'Uow').replace(/Ưo/g, 'Uow')
+                 .replace(/ườ/g, 'uow#f').replace(/Ườ/g, 'Uow#f')
+                 .replace(/ướ/g, 'uow#s').replace(/Ướ/g, 'Uow#s')
+                 .replace(/ưở/g, 'uow#r').replace(/Ưở/g, 'Uow#r')
+                 .replace(/ưỡ/g, 'uow#x').replace(/Ưỡ/g, 'Uow#x')
+                 .replace(/ượ/g, 'uow#j').replace(/Ượ/g, 'Uow#j');
+
+            const CHAR_MAP = {
+                'à': 'a#f', 'á': 'a#s', 'ả': 'a#r', 'ã': 'a#x', 'ạ': 'a#j',
+                'ằ': 'aw#f', 'ắ': 'aw#s', 'ẳ': 'aw#r', 'ẵ': 'aw#x', 'ặ': 'aw#j', 'ă': 'aw',
+                'ầ': 'aa#f', 'ấ': 'aa#s', 'ẩ': 'aa#r', 'ẫ': 'aa#x', 'ậ': 'aa#j', 'â': 'aa',
+                'è': 'e#f', 'é': 'e#s', 'ẻ': 'e#r', 'ẽ': 'e#x', 'ẹ': 'e#j',
+                'ề': 'ee#f', 'ế': 'ee#s', 'ể': 'ee#r', 'ễ': 'ee#x', 'ệ': 'ee#j', 'ê': 'ee',
+                'ì': 'i#f', 'í': 'i#s', 'ỉ': 'i#r', 'ĩ': 'i#x', 'ị': 'i#j',
+                'ò': 'o#f', 'ó': 'o#s', 'ỏ': 'o#r', 'õ': 'o#x', 'ọ': 'o#j',
+                'ồ': 'oo#f', 'ố': 'oo#s', 'ổ': 'oo#r', 'ỗ': 'oo#x', 'ộ': 'oo#j', 'ô': 'oo',
+                'ờ': 'ow#f', 'ớ': 'ow#s', 'ở': 'ow#r', 'ỡ': 'ow#x', 'ợ': 'ow#j', 'ơ': 'ow',
+                'ù': 'u#f', 'ú': 'u#s', 'ủ': 'u#r', 'ũ': 'u#x', 'ụ': 'u#j',
+                'ừ': 'uw#f', 'ứ': 'uw#s', 'ử': 'uw#r', 'ữ': 'uw#x', 'ự': 'uw#j', 'ư': 'uw',
+                'ỳ': 'y#f', 'ý': 'y#s', 'ỷ': 'y#r', 'ỹ': 'y#x', 'ỵ': 'y#j',
+                'đ': 'dd', 'Đ': 'Dd'
+            };
+
+            let tone = '';
+            let res = '';
+            for (let i = 0; i < w.length; i++) {
+                const ch = w[i];
+                const isUpper = (ch === ch.toUpperCase() && ch !== ch.toLowerCase());
+                const lower = ch.toLowerCase();
+                if (CHAR_MAP[lower]) {
+                    let mapped = CHAR_MAP[lower];
+                    if (mapped.includes('#')) {
+                        const parts = mapped.split('#');
+                        let base = parts[0];
+                        if (isUpper) base = base.charAt(0).toUpperCase() + base.slice(1);
+                        res += base;
+                        if (!tone) tone = parts[1];
+                    } else {
+                        let base = mapped;
+                        if (isUpper) base = base.charAt(0).toUpperCase() + base.slice(1);
+                        res += base;
+                    }
+                } else if (ch === '#') {
+                    tone = w[i+1];
+                    i++;
+                } else {
+                    res += ch;
+                }
+            }
+            return res + tone;
+        }
+
+        function vietnameseToTelexSlug(text) {
+            return (text || '')
+                .replace(/&/g, 'va')
+                .replace(/[^a-zA-Z0-9àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđĐ\s-]/g, '')
+                .split(/\s+/)
+                .filter(Boolean)
+                .map(vietnameseToTelexWord)
+                .join('-');
+        }
+
+        function getToneTargetVowel(w) {
+            const lower = w.toLowerCase();
+            if (lower.includes('ươ')) return 'ơ';
+            if (lower.includes('iê')) return 'ê';
+            if (lower.includes('uô')) return 'ô';
+            if (lower.includes('uê')) return 'ê';
+            if (lower.includes('ê')) return 'ê';
+            if (lower.includes('ơ')) return 'ơ';
+            if (lower.includes('ô')) return 'ô';
+            if (lower.includes('â')) return 'â';
+            if (lower.includes('ă')) return 'ă';
+            if (lower.includes('ư')) return 'ư';
+            if (/a[uiyo]/.test(lower)) return 'a';
+            if (/o[ie]/.test(lower)) return 'o';
+            if (/e[ou]/.test(lower)) return 'e';
+            const priority = ['ơ', 'ê', 'ô', 'â', 'ă', 'ư', 'a', 'o', 'e', 'u', 'i', 'y'];
+            for (const v of priority) {
+                if (lower.includes(v)) return v;
+            }
+            return null;
+        }
+
+        function decodeSingleTelex(raw) {
+            if (!raw) return '';
+            const isCap = (raw[0] === raw[0].toUpperCase());
+            let s = raw.toLowerCase();
+            
+            const hasTelex = /(aa|aw|ee|oo|ow|uw|uow|dd)/i.test(s) || (/[sfrxj]$/i.test(s) && /[aeiouy]/i.test(s.slice(0, -1)) && !['is','as','us'].includes(s));
+            if (!hasTelex) return null;
+
+            let tone = '';
+            const last = s.slice(-1);
+            if (['s', 'f', 'r', 'x', 'j'].includes(last)) {
+                if (/[aeiouy]/.test(s.slice(0, -1))) {
+                    tone = last;
+                    s = s.slice(0, -1);
+                }
+            }
+
+            s = s.replace(/dd/g, 'đ')
+                 .replace(/uow/g, 'ươ')
+                 .replace(/aw/g, 'ă')
+                 .replace(/aa/g, 'â')
+                 .replace(/ee/g, 'ê')
+                 .replace(/oo/g, 'ô')
+                 .replace(/ow/g, 'ơ')
+                 .replace(/uw/g, 'ư');
+
+            if (tone) {
+                const toneMap = {
+                    's': { 'a':'á', 'ă':'ắ', 'â':'ấ', 'e':'é', 'ê':'ế', 'i':'í', 'o':'ó', 'ô':'ố', 'ơ':'ớ', 'u':'ú', 'ư':'ứ', 'y':'ý' },
+                    'f': { 'a':'à', 'ă':'ằ', 'â':'ầ', 'e':'è', 'ê':'ề', 'i':'ì', 'o':'ò', 'ô':'ồ', 'ơ':'ờ', 'u':'ù', 'ư':'ừ', 'y':'ỳ' },
+                    'r': { 'a':'ả', 'ă':'ẳ', 'â':'ẩ', 'e':'ẻ', 'ê':'ể', 'i':'ỉ', 'o':'ỏ', 'ô':'ồ', 'ơ':'ở', 'u':'ủ', 'ư':'ử', 'y':'ỷ' },
+                    'x': { 'a':'ã', 'ă':'ẵ', 'â':'ẫ', 'e':'ẽ', 'ê':'ễ', 'i':'ĩ', 'o':'õ', 'ô':'ỗ', 'ơ':'ỡ', 'u':'ũ', 'ư':'ữ', 'y':'ỹ' },
+                    'j': { 'a':'ạ', 'ă':'ặ', 'â':'ậ', 'e':'ẹ', 'ê':'ệ', 'i':'ị', 'o':'ọ', 'ô':'ộ', 'ơ':'ợ', 'u':'ụ', 'ư':'ự', 'y':'ỵ' }
+                };
+                const tObj = toneMap[tone];
+                const targetV = getToneTargetVowel(s);
+                if (targetV && tObj[targetV]) {
+                    s = s.replace(targetV, tObj[targetV]);
+                }
+            }
+
+            if (isCap) {
+                s = s.charAt(0).toUpperCase() + s.slice(1);
+            }
+            return s;
+        }
+
+        function resolveGuestName(rawParam) {
+            if (!rawParam) return 'Quý khách';
+            const clean = rawParam.trim();
+            if (/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(clean)) return clean;
+            const slugKey = toSlugKey(clean);
+            if (COMMON_PHRASES[slugKey]) return COMMON_PHRASES[slugKey];
+            if (COMMON_WORDS[slugKey]) return COMMON_WORDS[slugKey];
+
+            const parts = clean.split(/[-_+ ]+/).filter(Boolean);
+            const result = [];
+            let i = 0;
+            while (i < parts.length) {
+                if (i < parts.length - 1) {
+                    const pairKey = (parts[i] + '-' + parts[i+1]).toLowerCase();
+                    if (COMMON_PHRASES[pairKey]) {
+                        result.push(COMMON_PHRASES[pairKey]);
+                        i += 2;
+                        continue;
+                    }
+                }
+                const lowerW = parts[i].toLowerCase();
+                if (lowerW === 'va') {
+                    result.push('&');
+                    i++;
+                    continue;
+                }
+                const telexDecoded = decodeSingleTelex(parts[i]);
+                if (telexDecoded && /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(telexDecoded)) {
+                    result.push(telexDecoded);
+                } else if (COMMON_WORDS[lowerW]) {
+                    result.push(COMMON_WORDS[lowerW]);
+                } else if (telexDecoded) {
+                    result.push(telexDecoded);
+                } else {
+                    result.push(parts[i].charAt(0).toUpperCase() + parts[i].slice(1));
+                }
+                i++;
+            }
+            return result.join(' ').replace(/\s+&\s+/g, ' & ').replace(/\s+Va\s+/gi, ' & ');
+        }
+
+        function loadSampleGuests() {
+            const sample = [
+                "Cường",
+                "Anh Tuấn & Chị Lan",
+                "Gia Đình Bác Ba",
+                "Bạn Thân Quốc Cường",
+                "Chị Hoàng Mai (Công ty)",
+                "Em Minh Đức",
+                "Gia Đình Chú Sáu",
+                "Bác Năm & Hai Bác"
+            ];
+            document.getElementById('guestListInput').value = sample.join('\n');
+            generateLinks();
+            showToast('Đã nạp danh sách mẫu!');
+        }
+
+        let currentList = [];
+        let guestDirectoryMap = {};
+
+        function generateLinks() {
+            const rawText = document.getElementById('guestListInput').value;
+            const domain = document.getElementById('domainSelect').value.replace(/\/+$/, '');
+            const sideChoice = document.querySelector('input[name="sideChoice"]:checked').value;
+            const urlStyle = document.querySelector('input[name="urlStyle"]:checked').value;
+            const template = document.getElementById('msgTemplate').value.trim() || DEFAULT_TEMPLATE;
+
+            const isGroom = (sideChoice === 'nhatrai');
+            const basePath = isGroom ? '/thiepmoinhatrai' : '/thiepmoinhagai';
+            const eventName = isGroom ? 'Lễ Thành Hôn (Nhà Trai)' : 'Lễ Vu Quy (Nhà Gái)';
+            const sideLabel = isGroom ? 'Nhà Trai' : 'Nhà Gái';
+
+            document.getElementById('sideBadge').textContent = sideLabel;
+            document.getElementById('sideBadge').className = isGroom 
+                ? 'px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold text-xs border border-blue-200'
+                : 'px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 font-semibold text-xs border border-rose-200';
+
+            const lines = rawText.split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0);
+
+            guestDirectoryMap = {};
+
+            currentList = lines.map((name, index) => {
+                const slug = toSlugKey(name);
+                const telexSlug = vietnameseToTelexSlug(name);
+                guestDirectoryMap[slug] = name;
+                guestDirectoryMap[telexSlug.toLowerCase()] = name;
+
+                let toParam = telexSlug;
+                if (urlStyle === 'slug') {
+                    toParam = slug;
+                } else if (urlStyle === 'encoded') {
+                    toParam = encodeURIComponent(name);
+                }
+
+                const fullUrl = `${domain}${basePath}?to=${toParam}`;
+                const previewDisplayName = (urlStyle === 'encoded') ? name : resolveGuestName(toParam);
+                const message = template
+                    .replaceAll('{name}', name)
+                    .replaceAll('{link}', fullUrl)
+                    .replaceAll('{event}', eventName)
+                    .replaceAll('{side}', sideLabel);
+
+                return {
+                    id: index + 1,
+                    name,
+                    slug: toParam,
+                    previewDisplayName,
+                    side: sideLabel,
+                    event: eventName,
+                    url: fullUrl,
+                    message
+                };
+            });
+
+            document.getElementById('totalBadge').textContent = `${currentList.length} người`;
+            renderCards(currentList);
+        }
+
+        function renderCards(list) {
+            const container = document.getElementById('resultsContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (!list.length) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            container.innerHTML = list.map(item => `
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200 hover:border-gold/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2 mb-1 flex-wrap">
+                            <span class="w-6 h-6 rounded-full bg-cream text-gold-dark text-[11px] font-bold flex items-center justify-center border border-gold/30 flex-shrink-0">${item.id}</span>
+                            <h3 class="font-bold text-xs sm:text-sm text-charcoal">${escapeHtml(item.name)}</h3>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full ${item.side === 'Nhà Trai' ? 'bg-blue-50 text-blue-700 border border-blue-100' : 'bg-rose-50 text-rose-700 border border-rose-100'} font-medium flex-shrink-0">${item.side}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium flex items-center gap-1">
+                                <i class="fa-solid fa-check text-[9px]"></i> Hiện trên thiệp: <b>${escapeHtml(item.previewDisplayName)}</b>
+                            </span>
+                        </div>
+                        <a href="${item.url}" target="_blank" class="text-[11px] text-stone-500 hover:text-gold-dark truncate block font-mono hover:underline" title="Bấm để mở xem thử thiệp">
+                            ${escapeHtml(item.url)} <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <button onclick="copyText('${escapeAttr(item.url)}', 'Đã copy link của ${escapeAttr(item.name)}!')" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold transition-colors flex items-center gap-1.5 active:scale-95">
+                            <i class="fa-solid fa-link text-stone-500"></i> Copy Link
+                        </button>
+                        <button onclick="copyText('${escapeAttr(item.message)}', 'Đã copy lời mời Zalo cho ${escapeAttr(item.name)}!')" class="px-3 py-1.5 rounded-xl bg-gold hover:bg-gold-dark text-white text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm active:scale-95">
+                            <i class="fa-regular fa-comment-dots"></i> Copy Tin Nhắn
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterResults() {
+            const query = document.getElementById('searchFilter').value.toLowerCase().trim();
+            if (!query) {
+                renderCards(currentList);
+                return;
+            }
+            const filtered = currentList.filter(item => item.name.toLowerCase().includes(query) || item.slug.includes(query));
+            renderCards(filtered);
+        }
+
+        function copyText(text, successMsg = 'Đã sao chép vào bộ nhớ tạm!') {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => showToast(successMsg));
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(successMsg);
+            }
+        }
+
+        function copyAllMessages() {
+            if (!currentList.length) {
+                showToast('Chưa có danh sách để copy!', 'error');
+                return;
+            }
+            const allText = currentList.map(item => `[${item.name} - ${item.side}]\n${item.message}\n`).join('\n------------------------\n\n');
+            copyText(allText, `Đã copy toàn bộ lời mời của ${currentList.length} khách!`);
+        }
+
+        function exportToCsv() {
+            if (!currentList.length) {
+                showToast('Chưa có khách mời nào để xuất file!', 'error');
+                return;
+            }
+
+            let csvContent = '\uFEFF';
+            csvContent += 'STT,Tên Khách Mời,Mã Slug,Phía,Sự Kiện,Đường Link Thiệp Cưới,Tin Nhắn Mẫu Gửi Zalo\n';
+
+            currentList.forEach(item => {
+                const row = [
+                    item.id,
+                    `"${item.name.replace(/"/g, '""')}"`,
+                    `"${item.slug}"`,
+                    `"${item.side}"`,
+                    `"${item.event}"`,
+                    `"${item.url}"`,
+                    `"${item.message.replace(/"/g, '""')}"`
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const sideCode = document.querySelector('input[name="sideChoice"]:checked').value;
+            link.setAttribute('href', url);
+            link.setAttribute('download', `Danh_Sach_Link_Thiep_Cuoi_${sideCode}_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('Đã tải xuống file Excel (.csv)!');
+        }
+
+        function exportGuestsJson() {
+            if (!Object.keys(guestDirectoryMap).length) {
+                showToast('Chưa có danh sách khách!', 'error');
+                return;
+            }
+
+            const jsonStr = JSON.stringify(guestDirectoryMap, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'guests.json');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('Đã tải file guests.json! Hãy lưu vào thư mục thiepcuoi');
+        }
+
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast px-4 py-2.5 rounded-2xl text-xs font-semibold shadow-lg border flex items-center gap-2 pointer-events-auto ${type === 'error' ? 'bg-rose-800 text-white border-rose-900' : 'bg-stone-900 text-white border-gold/40'}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-triangle-exclamation text-rose-300' : 'fa-circle-check text-gold'}"></i> ${escapeHtml(msg)}`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 2700);
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+        }
+
+        function escapeAttr(str) {
+            return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+        }
+
+        window.onload = function() {
+            loadSampleGuests();
+        };
+    </script>
+</body>
+</html>

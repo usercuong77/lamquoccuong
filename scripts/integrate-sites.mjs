@@ -9,7 +9,8 @@ const publicRoot = path.join(repoRoot, "public");
 const sites = [
   { source: "edit.lamquoccuong", target: "edit", entry: "index.html", base: "/edit/" },
   { source: "bio.lamquoccuong", target: "bio", entry: "index.html", base: "/bio/" },
-  { source: "nuoitoi.lamquoccuong", target: "nuoitoi", entry: "index.html", base: "/nuoitoi/" }
+  { source: "nuoitoi.lamquoccuong", target: "nuoitoi", entry: "index.html", base: "/nuoitoi/" },
+  { source: "thiepcuoi", target: "thiepcuoi", entry: "thiepcuoi.html", targetEntry: "index.html", base: "/thiepcuoi/", standalone: true }
 ];
 
 const pathFor = (site, relativePath = "") => path.join(publicRoot, site.target, relativePath);
@@ -19,6 +20,7 @@ function rewriteInternalUrls(html) {
     .replaceAll("https://edit.lamquoccuong.com", "/edit")
     .replaceAll("https://bio.lamquoccuong.com", "/bio")
     .replaceAll("https://nuoitoi.lamquoccuong.com", "/nuoitoi")
+    .replaceAll("https://thiepcuoi.lamquoccuong.com", "/thiepcuoi")
     .replaceAll("https://lamquoccuong.io.vn", "/")
     .replaceAll("https://lamquoccuong.com", "/");
 }
@@ -35,11 +37,17 @@ function addHubNavigation(html, base) {
 
 async function writePage(site, sourceFile, targetFile, base) {
   let html = await fs.readFile(sourceFile, "utf8");
-  html = rewriteInternalUrls(html);
-  html = html.replace(/href="\.\.\/index\.html(#[^"]*)?"/g, (_, hash = "") => `href="/${hash}"`);
-  html = addHubNavigation(html, base);
+  if (!site.standalone) {
+    html = rewriteInternalUrls(html);
+    html = html.replace(/href="\.\.\/index\.html(#[^"]*)?"/g, (_, hash = "") => `href="/${hash}"`);
+    html = addHubNavigation(html, base);
+  }
   await fs.mkdir(path.dirname(targetFile), { recursive: true });
   await fs.writeFile(targetFile, html);
+
+  if (site.targetEntry && site.targetEntry !== site.entry) {
+    await fs.writeFile(path.join(path.dirname(targetFile), site.entry), html);
+  }
 }
 
 async function copyIfPresent(source, target) {
@@ -56,17 +64,17 @@ async function integrate() {
 
   for (const site of sites) {
     const sourceDir = path.join(sourceRoot, site.source);
-    await writePage(site, path.join(sourceDir, site.entry), pathFor(site, site.entry), site.base);
+    const targetEntry = site.targetEntry || site.entry;
+    await writePage(site, path.join(sourceDir, site.entry), pathFor(site, targetEntry), site.base);
 
     for (const asset of ["favicon.png", "photo-public.jpg", "photo-public.webp"]) {
       await copyIfPresent(path.join(sourceDir, asset), pathFor(site, asset));
     }
-
   }
 
   await fs.writeFile(path.join(publicRoot, "site-hub", "integration-map.json"), `${JSON.stringify({
     generatedAt: new Date().toISOString(),
-    routes: ["/edit/", "/bio/", "/nuoitoi/"]
+    routes: ["/edit/", "/bio/", "/nuoitoi/", "/thiepcuoi/"]
   }, null, 2)}\n`);
 }
 

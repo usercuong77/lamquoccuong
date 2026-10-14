@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thiệp Mời Cưới | Quốc Cường & Kim Liên</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts tuyển chọn nghệ thuật: Playfair Display, Cormorant Garamond, Alex Brush, Great Vibes, Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        blush: '#D8ECE8',
+                        'blush-soft': '#EEF7F5',
+                        'blush-dark': '#789B94',
+                        dusty: '#6F918A',
+                        paper: '#FBFDFB',
+                        sand: '#F0F5F2',
+                        charcoal: '#26211F',
+                        gold: '#B89358',
+                        'gold-soft': '#E6D7B8'
+                    },
+                    fontFamily: {
+                        calligraphy: ['"Great Vibes"', 'cursive'],
+                        script: ['"Alex Brush"', 'cursive'],
+                        editorial: ['"Playfair Display"', 'serif'],
+                        garamond: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            overflow-y: scroll;
+            scrollbar-gutter: stable;
+        }
+        body {
+            background-color: #E8F0EE;
+            color: #26211F;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* Container mô phỏng màn hình smartphone cao cấp */
+        .phone-wrapper {
+            max-width: 440px;
+            margin: 0 auto;
+            background-color: #FBFDFB;
+            min-height: 100vh;
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.1);
+            position: relative;
+            isolation: isolate;
+        }
+        .phone-wrapper::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background: url('/thiepcuoi/lotus-watermark.png') left 80px / 205px auto repeat-y;
+            opacity: 0.32;
+        }
+
+        /* Hiệu ứng trôi bồng bềnh rất chậm cho chữ "Nhấp để mở!!!" */
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+        .animate-float {
+            animation: gentle-float 7.5s ease-in-out infinite;
+        }
+
+        /* Envelope Container: Loại bỏ preserve-3d để Chrome/Android tuân thủ tuyệt đối thứ tự z-index */
+        .envelope-container {
+            perspective: 1200px;
+            position: relative;
+            width: 320px;
+            height: 220px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        /* Thân phong bì xanh ngọc nhạt */
+        .envelope-back {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, #D9ECE7 0%, #B8D8D0 100%);
+            border-radius: 12px;
+            box-shadow: 0 16px 36px rgba(83, 127, 117, 0.26);
+            z-index: 1;
+        }
+
+        /* Nắp tam giác lật ra sau các tấm thiệp khi mở */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 138px;
+            transform-origin: top center;
+            transform: rotateX(0deg);
+            transition: transform 1.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            z-index: 20;
+            will-change: transform;
+            backface-visibility: visible;
+            -webkit-backface-visibility: visible;
+            pointer-events: none;
+        }
+        .envelope-flap svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 8px 7px rgba(58, 104, 95, 0.3));
+        }
+
+        .envelope-container.opened .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 2;
+        }
+
+        /* Mặt túi có miệng chữ V đồng hướng với nắp; hoa sen nằm trên lớp nền để không bị xén */
+        .envelope-pocket {
+            position: absolute;
+            inset: 6% 0 0;
+            background: transparent;
+            border-radius: 0 0 12px 12px;
+            z-index: 15;
+            pointer-events: none;
+        }
+        .envelope-pocket::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 0 0 12px 12px;
+            background: linear-gradient(195deg, #E5F1ED 0%, #C5E0D8 100%);
+            clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+            box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.45);
+        }
+        .envelope-pocket::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 132px;
+            height: 132px;
+            background: url('/thiepcuoi/lotus-corner.png') right bottom / 100% 100% no-repeat;
+            opacity: 0.72;
+            z-index: 1;
+        }
+
+        /* Con dấu sáp tròn mở thiệp */
+        .wax-seal-btn {
+            position: absolute;
+            left: 50%;
+            top: 60%;
+            transform: translate(-50%, -50%);
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #F5FCF9 0%, #A7CEC3 52%, #71998F 100%);
+            box-shadow: 0 8px 22px rgba(83, 127, 117, 0.38), inset 0 2px 3px rgba(255, 255, 255, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.75);
+            z-index: 25;
+            cursor: pointer;
+            transition: opacity 1.6s ease, transform 1.6s cubic-bezier(0.2, 0.8, 0.25, 1);
+        }
+        .wax-seal-btn:active {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+        .envelope-container.opened .wax-seal-btn {
+            opacity: 0;
+            transform: translate(-50%, -40%) scale(0.6);
+            pointer-events: none;
+        }
+
+        /* Ảnh và thẻ bung khỏi phong bì, luôn nằm trên mặt túi và nắp */
+        .inside-card {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            z-index: 8;
+            transition: transform 2.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 2.2s ease;
+            transform-origin: bottom center;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+            will-change: transform, opacity;
+        }
+
+        .card-save-date {
+            width: 145px;
+            height: 100px;
+            background: #FFFFFF;
+            border-radius: 6px;
+            transform: translate3d(-50%, 30px, 0) scale(0.75);
+            opacity: 0;
+            padding: 10px;
+        }
+        .envelope-container.opened .card-save-date {
+            transform: translate3d(-95px, -112px, 0) rotate(-6deg) scale(1);
+            opacity: 1;
+            transition-delay: 0.65s;
+        }
+
+        .card-polaroid-left {
+            width: 120px;
+            background: #FFFFFF;
+            padding: 5px 5px 16px 5px;
+            border-radius: 4px;
+            transform: translate3d(-50%, 35px, 0) scale(0.7);
+            opacity: 0;
+        }
+        .envelope-container.opened .card-polaroid-left {
+            transform: translate3d(-120px, -130px, 0) rotate(-10deg) scale(1);
+            opacity: 1;
+            transition-delay: 0.5s;
+        }
+
+        .card-polaroid-right {
+            width: 130px;
+            background: #FFFFFF;
+            padding: 6px 6px 20px 6px;
+            border-radius: 4px;
+            transform: translate3d(-50%, 35px, 0) scale(0.7);
+            opacity: 0;
+        }
+        .envelope-container.opened .card-polaroid-right {
+            transform: translate3d(5px, -150px, 0) rotate(8deg) scale(1.03);
+            opacity: 1;
+            transition-delay: 0.8s;
+        }
+
+        /* Vòng quay đĩa nhạc */
+        @keyframes vinyl-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spin-vinyl {
+            animation: vinyl-spin 11s linear infinite;
+        }
+
+        /* Trái tim phác họa nhịp đập êm ái */
+        @keyframes heart-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.75; }
+            50% { transform: scale(1.09); opacity: 1; }
+        }
+        .animate-pulse-heart {
+            animation: heart-pulse 6.5s ease-in-out infinite;
+        }
+
+        /* HỆ THỐNG ANIMATION CUỘN CHẬM RÃI, THI VỊ */
+        .reveal-slow-up {
+            opacity: 0;
+            transform: translateY(18px);
+            filter: blur(5px);
+            transition: opacity 3.4s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 3.4s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 3.4s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform, filter;
+        }
+        .reveal-slow-up.revealed {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        .reveal-slow-scale {
+            opacity: 0;
+            transform: scale(0.97) translateY(14px);
+            filter: blur(5px);
+            transition: opacity 3.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 3.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 3.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform, filter;
+        }
+        .reveal-slow-scale.revealed {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+        }
+
+        .reveal-slow-left {
+            opacity: 0;
+            transform: translateX(-22px);
+            filter: blur(4px);
+            transition: opacity 3.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 3.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 3.6s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform, filter;
+        }
+        .reveal-slow-left.revealed {
+            opacity: 1;
+            transform: translateX(0);
+            filter: blur(0);
+        }
+
+        .reveal-slow-right {
+            opacity: 0;
+            transform: translateX(22px);
+            filter: blur(4px);
+            transition: opacity 3.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 3.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 3.6s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform, filter;
+        }
+        .reveal-slow-right.revealed {
+            opacity: 1;
+            transform: translateX(0);
+            filter: blur(0);
+        }
+
+        .reveal-slow-line {
+            width: 0%;
+            transition: width 3.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-slow-line.revealed {
+            width: 100%;
+        }
+
+        .img-editorial-zoom {
+            transform: scale(1.08);
+            transition: transform 6.0s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .revealed .img-editorial-zoom,
+        .img-editorial-zoom.revealed {
+            transform: scale(1);
+        }
+
+        .stagger-1 { transition-delay: 350ms; }
+        .stagger-2 { transition-delay: 700ms; }
+        .stagger-3 { transition-delay: 1050ms; }
+        .stagger-4 { transition-delay: 1400ms; }
+        .stagger-5 { transition-delay: 1750ms; }
+        .stagger-6 { transition-delay: 2100ms; }
+
+        .attendance-choice {
+            transition: color 900ms ease, background-color 900ms ease, border-color 900ms ease, box-shadow 900ms ease, transform 900ms ease;
+        }
+        #btnAttendYes.is-selected {
+            color: #fff;
+            background: #059669;
+            border-color: #047857;
+            box-shadow: 0 5px 18px rgba(5, 150, 105, 0.18);
+        }
+        #btnAttendNo.is-selected {
+            color: #fff;
+            background: #e11d48;
+            border-color: #be123c;
+            box-shadow: 0 5px 18px rgba(225, 29, 72, 0.16);
+        }
+        .attendance-choice.is-selected i { color: #fff; }
+
+        .text-stagger .text-char {
+            display: inline;
+            opacity: 0;
+            filter: blur(3px);
+            transition: opacity 2s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: var(--char-delay, 0ms);
+            will-change: opacity, filter;
+        }
+        .text-stagger.revealed .text-char {
+            opacity: 1;
+            filter: blur(0);
+        }
+        .text-word {
+            display: inline;
+            white-space: nowrap;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal-slow-up, .reveal-slow-scale, .reveal-slow-left,
+            .reveal-slow-right, .reveal-slow-line, .text-stagger .text-char {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+                transition-delay: 0ms !important;
+            }
+            .reveal-slow-line { width: 100% !important; }
+            .stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5, .stagger-6 {
+                transition-delay: 0ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-blush selection:text-charcoal antialiased">
+
+    <!-- Toast thông báo nhỏ trên cùng -->
+    <div id="toast" class="fixed top-4 inset-x-4 max-w-xs mx-auto z-[999] transform -translate-y-16 opacity-0 transition-all duration-500 bg-charcoal/95 backdrop-blur-md text-white px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 text-xs">
+        <i id="toastIcon" class="fa-solid fa-check text-blush"></i>
+        <span id="toastMessage" class="leading-tight"></span>
+    </div>
+
+    <!-- MAIN CONTAINER CHO ĐIỆN THOẠI -->
+    <div class="phone-wrapper pb-24">
+
+        <!-- Header thanh nhã trên đỉnh màn hình -->
+        <header class="sticky top-0 z-40 bg-[#F5FAF8]/90 backdrop-blur-md px-5 py-3 flex items-center justify-between border-b border-blush/30">
+            <div class="flex items-center gap-2 text-stone-600 text-xs tracking-wider">
+                <i class="fa-solid fa-chevron-left text-[10px] text-stone-400"></i>
+                <span class="font-editorial uppercase text-[11px] font-semibold tracking-[0.2em] text-stone-700">THƯ MỜI THIỆP CƯỚI</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="openCustomizeModal()" class="w-7 h-7 rounded-full bg-sand hover:bg-blush text-stone-600 flex items-center justify-center text-xs transition-colors" title="Đổi thông tin thiệp">
+                    <i class="fa-solid fa-pen-nib text-[10px]"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- KHU VỰC PHONG BÌ THƯ HOÀNG GIA (HERO) -->
+        <section id="envelopeHeroSection" class="relative pt-6 pb-12 px-4 text-center">
+            
+            <!-- Cành hoa trang trí góc trên trái phong bì -->
+            <div class="absolute left-4 top-14 w-20 z-30 pointer-events-none drop-shadow-xs">
+                <svg viewBox="0 0 120 120" fill="none" class="w-full h-auto text-[#789B94]">
+                    <path d="M20 100 C 35 70, 50 50, 80 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M40 75 C 25 65, 30 45, 50 60" fill="#B7D8D0" opacity="0.85"/>
+                    <path d="M60 50 C 50 35, 75 25, 70 45" fill="#8FB6AA" opacity="0.9"/>
+                    <circle cx="85" cy="18" r="7" fill="#789B94"/>
+                    <circle cx="78" cy="12" r="5" fill="#D8ECE8"/>
+                    <circle cx="92" cy="24" r="5" fill="#D8ECE8"/>
+                    <path d="M28 85 C 15 90, 20 75, 32 80" fill="#91AA9D"/>
+                    <path d="M48 62 C 38 60, 45 48, 52 55" fill="#91AA9D"/>
+                </svg>
+            </div>
+
+            <!-- Cành hoa trang trí góc dưới phải phong bì -->
+            <div class="absolute right-4 bottom-28 w-20 z-30 pointer-events-none drop-shadow-xs">
+                <svg viewBox="0 0 120 120" fill="none" class="w-full h-auto text-[#789B94]">
+                    <path d="M100 100 C 85 70, 70 50, 40 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M80 75 C 95 65, 90 45, 70 60" fill="#B7D8D0" opacity="0.85"/>
+                    <path d="M60 50 C 70 35, 45 25, 50 45" fill="#8FB6AA" opacity="0.9"/>
+                    <circle cx="35" cy="18" r="7" fill="#789B94"/>
+                    <path d="M92 85 C 105 90, 100 75, 88 80" fill="#91AA9D"/>
+                </svg>
+            </div>
+
+            <!-- Dòng chữ bay bổng "Nhấp để mở!!!" kiểu thư pháp Alex Brush -->
+            <div id="tapPrompt" class="animate-float mb-4 transition-opacity duration-700">
+                <p class="font-script text-3xl sm:text-4xl text-stone-600 tracking-wide">Nhấp để mở!!!</p>
+            </div>
+
+            <!-- HỘP PHONG BÌ TƯƠNG TÁC (THỨ TỰ DOM CHUẨN ĐỂ NẮP PHONG BÌ NẰM PHÍA SAU ẢNH KHI MỞ) -->
+            <div class="relative pt-36 pb-6 flex justify-center">
+                
+                <div id="envelopeContainer" class="envelope-container" onclick="handleEnvelopeClick(event)">
+                    
+                    <!-- 1. Lưng phong bì -->
+                    <div class="envelope-back"></div>
+
+                    <!-- 2. Nắp tam giác lật ra sau các thẻ ảnh khi mở -->
+                    <div id="envelopeFlap" class="envelope-flap" aria-hidden="true">
+                        <svg viewBox="0 0 320 138" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="envelopeFlapGradient" x1="160" y1="0" x2="160" y2="138" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#E2F0EC"/>
+                                    <stop offset="1" stop-color="#C8E1DA"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M12 0H308Q320 0 320 12L160 138 0 12Q0 0 12 0Z" fill="url(#envelopeFlapGradient)"/>
+                        </svg>
+                    </div>
+
+                    <!-- 3. THẺ SAVE THE DATE BÊN TRONG -->
+                    <div class="inside-card card-save-date text-left flex flex-col justify-between border border-stone-100">
+                        <div>
+                            <span class="block text-[8px] tracking-[0.25em] uppercase font-bold text-stone-400 font-sans">Save Our Date</span>
+                            <span class="block font-editorial text-xs font-bold text-stone-800 tracking-wider mt-0.5" id="ticketDate">11.01.2027</span>
+                        </div>
+                        <div class="border-t border-dashed border-stone-200 pt-1">
+                            <p class="font-calligraphy text-base text-blush-dark leading-tight">We're getting married!</p>
+                        </div>
+                    </div>
+
+                    <!-- 4. ẢNH POLAROID 1 (TRÁI) -->
+                    <div class="inside-card card-polaroid-left text-center">
+                        <div class="w-full aspect-[4/5] bg-stone-100 overflow-hidden rounded-[2px] mb-1.5">
+                            <img src="/thiepcuoi/anime-wedding-moment.svg" 
+                                 alt="Minh hoạ anime cô dâu chú rể trong ngày cưới" 
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <p class="font-script text-sm text-stone-500">Happy Day</p>
+                    </div>
+
+                    <!-- 5. ẢNH POLAROID 2 (PHẢI) -->
+                    <div class="inside-card card-polaroid-right text-center">
+                        <div class="w-full aspect-[4/5] bg-stone-100 overflow-hidden rounded-[2px] mb-1.5">
+                            <img src="/thiepcuoi/anime-wedding-lotus.svg" 
+                                 alt="Minh hoạ anime đôi uyên ương bên hoa sen" 
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <p class="font-script text-sm text-stone-500">Forever with you</p>
+                    </div>
+
+                    <!-- 6. Túi phong bì có miệng tam giác đồng hướng với nắp -->
+                    <div class="envelope-pocket"></div>
+
+                    <!-- 7. Con dấu sáp bấm mở thiệp -->
+                    <button type="button" class="wax-seal-btn flex items-center justify-center" aria-label="Mở phong bì">
+                        <div class="w-8 h-8 rounded-full border-2 border-dashed border-white/70 flex items-center justify-center">
+                            <div class="w-3 h-3 rounded-full bg-white/80"></div>
+                        </div>
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- Tiêu đề thiệp mời với phông chữ cao cấp -->
+            <div class="mt-4 px-2">
+                <span class="block font-calligraphy text-3xl sm:text-4xl text-stone-500 mb-0.5 leading-none">Thiệp Mời</span>
+                <h1 class="font-editorial text-sm sm:text-base tracking-[0.22em] font-semibold text-charcoal uppercase flex items-center justify-center gap-2 whitespace-nowrap">
+                    <span class="groom-name-txt">QUỐC CƯỜNG</span>
+                    <span class="font-script lowercase text-xl text-blush-dark font-normal">&amp;</span>
+                    <span class="bride-name-txt">KIM LIÊN</span>
+                </h1>
+                <div class="mt-2 mb-1 text-center">
+                    <span class="block text-[9px] uppercase tracking-[0.2em] text-stone-400 font-sans">Trân trọng kính mời</span>
+                    <span id="guestNameDisplay" class="block font-editorial text-sm font-semibold text-stone-700 mt-0.5">Quý khách</span>
+                </div>
+                <p class="text-xs text-stone-400 font-garamond tracking-[0.25em] mt-1" id="subDate">11.01.2027</p>
+            </div>
+
+            <!-- Gợi ý vuốt cuộn xuống: Chỉ hiện sau khi mở thiệp -->
+            <div id="scrollCue" class="mt-8 flex flex-col items-center justify-center cursor-pointer opacity-0 pointer-events-none transition-all duration-1000" onclick="scrollToMainContent()">
+                <svg viewBox="0 0 100 80" class="w-10 h-8 text-stone-700 animate-pulse-heart">
+                    <path d="M50,75 C20,50 5,30 15,15 C25,0 45,10 50,25 C55,10 75,0 85,15 C95,30 80,50 50,75 Z" 
+                          fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="text-[10px] tracking-[0.25em] text-stone-400 uppercase mt-1 flex items-center gap-1 font-sans font-medium">
+                    Cuộn xuống <i class="fa-solid fa-chevron-down text-[9px] animate-bounce"></i>
+                </span>
+            </div>
+
+        </section>
+
+        <!-- KHỐI NỘI DUNG CHÍNH: KHÓA ẨN CHO ĐẾN KHI BẤM MỞ PHONG BÌ -->
+        <div id="invitationBodyContent" class="hidden opacity-0 transition-opacity duration-1000">
+
+        <!-- PHẦN 1: TÊN ĐÔI UYÊN ƯƠNG, SỐ NGÀY CƯỚI NGHỆ THUẬT & ẢNH CHÂN DÙNG LỚN -->
+        <section id="mainContentSection" class="px-5 py-8 bg-[#F5FAF8] border-t border-blush/30 text-center">
+            
+            <div class="mb-6">
+                <!-- Tên cặp đôi lướt chậm rãi -->
+                <h2 class="reveal-slow-up font-editorial text-sm sm:text-base tracking-[0.25em] font-semibold text-charcoal uppercase flex items-center justify-center gap-2 whitespace-nowrap">
+                    <span class="groom-name-txt">QUỐC CƯỜNG</span>
+                    <span class="font-script lowercase text-xl text-blush-dark font-normal">&amp;</span>
+                    <span class="bride-name-txt">KIM LIÊN</span>
+                </h2>
+                
+                <!-- Trái tim nhỏ phác họa lướt chậm -->
+                <div class="reveal-slow-scale stagger-1 w-8 h-8 mx-auto my-3 text-stone-600">
+                    <svg viewBox="0 0 100 80" class="w-full h-full">
+                        <path d="M50,70 C20,45 8,28 18,14 C28,0 46,9 50,22 C54,9 72,0 82,14 C92,28 80,45 50,70 Z" 
+                              fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <!-- Số ngày cưới nghệ thuật to bản phóng khoáng -->
+                <div class="reveal-slow-scale stagger-2 font-editorial italic text-7xl text-stone-800 leading-none my-1 select-none font-medium">
+                    <span id="weddingDay">11</span>
+                </div>
+                <span id="weddingMonth" class="reveal-slow-up stagger-3 font-script text-2xl text-stone-500 block -mt-1">Tháng Một</span>
+                
+                <!-- Câu trích dẫn tình yêu tinh tế -->
+                <p class="reveal-slow-up stagger-4 font-garamond italic text-stone-600 text-sm sm:text-base mt-4 px-3 leading-relaxed">
+                    “Tình yêu không cần hoàn hảo,<br>chỉ cần chân thật và cùng nhau đi hết con đường.”
+                </p>
+                <div class="h-px bg-blush/60 mx-auto mt-4 reveal-slow-line stagger-5 max-w-[120px]"></div>
+            </div>
+
+            <!-- Ảnh cưới chân dung lớn với hiệu ứng zoom chậm kiểu tạp chí -->
+            <div class="reveal-slow-scale stagger-2 rounded-3xl overflow-hidden shadow-xl border-4 border-white mb-6 aspect-[4/5] bg-sand relative">
+                <img src="/thiepcuoi/anime-wedding-moment.svg" 
+                     alt="Minh hoạ anime chân dung ngày cưới của Quốc Cường và Kim Liên" 
+                     class="w-full h-full object-cover img-editorial-zoom">
+            </div>
+
+            <!-- Khối lựa chọn nhanh xác nhận tham dự (2 nút trực quan) -->
+            <div class="bg-white rounded-3xl p-5 shadow-xs border border-blush/60 mb-6 text-left">
+                <span class="reveal-slow-up text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold block mb-1 font-sans">Xác nhận sự hiện diện</span>
+                <p class="reveal-slow-up stagger-1 font-editorial text-stone-800 text-sm mb-3">Bạn sẽ đến chung vui cùng chúng mình chứ?</p>
+                
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button type="button" onclick="quickSelectAttendance('Sẽ tham dự')" id="btnAttendYes" aria-pressed="false" class="attendance-choice reveal-slow-left stagger-2 py-3 px-3 rounded-2xl bg-white border-2 border-emerald-500/70 hover:bg-emerald-50 text-charcoal text-xs font-semibold flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 transition-all">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+                        <span>Tôi sẽ tham dự</span>
+                    </button>
+                    <button type="button" onclick="quickSelectAttendance('Bận việc tiếc quá')" id="btnAttendNo" aria-pressed="false" class="attendance-choice reveal-slow-right stagger-3 py-3 px-3 rounded-2xl bg-white border-2 border-stone-200 hover:bg-rose-50 text-stone-600 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 transition-all">
+                        <i class="fa-solid fa-circle-xmark text-rose-500 text-sm"></i>
+                        <span>Xin phép vắng mặt</span>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- PHẦN 2: CÔ DÂU & CHÚ RỂ DẠNG KHUNG POLAROID CHIA 2 BÊN -->
+        <section class="px-5 py-6 text-center">
+            
+            <p class="reveal-slow-up text-[10px] uppercase tracking-[0.25em] text-stone-400 font-bold mb-1 font-sans">
+                Trân trọng kính mời quý khách
+            </p>
+            <p class="reveal-slow-up stagger-1 text-sm text-stone-600 mb-6 font-garamond italic">
+                Dành thời gian quý giá tham dự lễ cưới của
+            </p>
+
+            <!-- 2 Khung Ảnh Polaroid Chú Rể (trái) & Cô Dâu (phải) trượt vào rất chậm -->
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                
+                <!-- Polaroid Chú Rể trượt vào chậm rãi từ bên trái -->
+                <div class="reveal-slow-left stagger-1 bg-white p-2.5 pb-4 rounded-2xl shadow-xs border border-stone-100 flex flex-col items-center">
+                    <div class="w-full aspect-[4/5] rounded-xl overflow-hidden bg-sand mb-2.5">
+                        <img src="/thiepcuoi/anime-groom.svg" 
+                             alt="Chân dung chú rể Quốc Cường phong cách anime" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-script text-xl text-stone-400 leading-none">Chú rể</span>
+                        <h3 class="font-editorial font-bold text-xs sm:text-sm text-charcoal groom-name-txt uppercase tracking-wider mt-1">Quốc Cường</h3>
+                </div>
+
+                <!-- Polaroid Cô Dâu trượt vào chậm rãi từ bên phải -->
+                <div class="reveal-slow-right stagger-2 bg-white p-2.5 pb-4 rounded-2xl shadow-xs border border-stone-100 flex flex-col items-center">
+                    <div class="w-full aspect-[4/5] rounded-xl overflow-hidden bg-sand mb-2.5">
+                        <img src="/thiepcuoi/anime-bride.svg" 
+                             alt="Chân dung cô dâu Kim Liên phong cách anime" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-script text-xl text-stone-400 leading-none">Cô dâu</span>
+                        <h3 class="font-editorial font-bold text-xs sm:text-sm text-charcoal bride-name-txt uppercase tracking-wider mt-1">Kim Liên</h3>
+                </div>
+
+            </div>
+
+            <!-- Thông tin Hai Bên Gia Đình (Nhà Trai & Nhà Gái) -->
+            <div class="reveal-slow-up stagger-3 bg-white rounded-3xl p-5 shadow-xs border border-blush/40 text-xs">
+                <div class="grid grid-cols-2 gap-3 text-center divide-x divide-blush/40">
+                    <div class="pr-2">
+                        <span class="font-bold text-blush-dark uppercase text-[10px] tracking-[0.2em] block mb-1 font-sans">Nhà Trai</span>
+                        <p class="font-medium text-stone-800 font-editorial text-sm">Ông Lâm Trưng</p>
+                        <p class="font-medium text-stone-800 font-editorial text-sm">Bà Nguyễn Thị Phượng</p>
+                        <p class="text-stone-400 text-[10px] mt-1 font-sans">Quận 3, TP.HCM</p>
+                    </div>
+                    <div class="pl-2">
+                        <span class="font-bold text-blush-dark uppercase text-[10px] tracking-[0.2em] block mb-1 font-sans">Nhà Gái</span>
+                        <p class="font-medium text-stone-800 font-editorial text-sm">Ông Nguyễn Văn Thọ</p>
+                        <p class="font-medium text-stone-800 font-editorial text-sm">Bà Nguyễn Thị Thuý</p>
+                        <p class="text-stone-400 text-[10px] mt-1 font-sans">Phú Nhuận, TP.HCM</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- PHẦN 3: CÁC SỰ KIỆN CƯỚI (LỄ THÀNH HÔN & LỄ VU QUY) -->
+        <section class="px-5 py-4">
+            
+            <div class="space-y-4">
+                
+                <!-- Sự kiện 1: Lễ Thành Hôn -->
+                <div class="reveal-slow-up bg-white rounded-3xl p-5 shadow-xs border border-blush/40 text-center">
+                    <span id="groomEventTime" class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold font-sans">Vào lúc 09:30 - Thứ Hai</span>
+                    <h4 class="font-editorial font-bold text-xl text-charcoal mt-1 mb-2 tracking-wide">LỄ THÀNH HÔN</h4>
+                    
+                    <div class="inline-block px-4 py-1.5 bg-sand rounded-xl text-xs font-semibold text-stone-700 mb-2.5 font-editorial">
+                        <span id="groomEventDate">11.01.2027</span>
+                    </div>
+                    <p class="text-xs text-stone-500 mb-4 px-2 leading-relaxed">Tư Gia Nhà Trai - Khu 3, Thôn 1, Xã Kon Gang, Gia Lai</p>
+                    
+                    <button onclick="openMapModal('Lễ Thành Hôn - Tư Gia Nhà Trai', 'Tư Gia Nhà Trai - Khu 3, Thôn 1, Xã Kon Gang, Gia Lai', 'https://maps.app.goo.gl/W1VhwzjWxrqUDEW2A')" class="w-full py-2.5 rounded-2xl bg-sand hover:bg-blush text-stone-700 text-xs font-semibold flex items-center justify-center gap-2 transition-colors">
+                        <i class="fa-solid fa-map-location-dot text-blush-dark"></i> XEM BẢN ĐỒ
+                    </button>
+                </div>
+
+                <!-- Sự kiện 2: Lễ Vu Quy -->
+                <div class="reveal-slow-up stagger-2 bg-white rounded-3xl p-5 shadow-xs border border-blush/40 text-center">
+                    <span id="brideEventTime" class="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold font-sans">Vào lúc 08:00 - Chủ Nhật</span>
+                    <h4 class="font-editorial font-bold text-xl text-charcoal mt-1 mb-2 tracking-wide">LỄ VU QUY</h4>
+                    
+                    <div class="inline-block px-4 py-1.5 bg-sand rounded-xl text-xs font-semibold text-stone-700 mb-2.5 font-editorial">
+                        <span id="brideEventDate">10.01.2027</span>
+                    </div>
+                    <p class="text-xs text-stone-500 mb-4 px-2 leading-relaxed">Tư Gia Nhà Gái - Thôn 4, Xã Bầu Cạn, Gia Lai</p>
+                    
+                    <button onclick="openMapModal('Lễ Vu Quy - Tư Gia Nhà Gái', 'Tư Gia Nhà Gái - Thôn 4, Xã Bầu Cạn, Gia Lai', 'https://maps.app.goo.gl/qRbdxLsna2Fh9C7u6?g_st=az')" class="w-full py-2.5 rounded-2xl bg-sand hover:bg-blush text-stone-700 text-xs font-semibold flex items-center justify-center gap-2 transition-colors">
+                        <i class="fa-solid fa-map-location-dot text-blush-dark"></i> XEM BẢN ĐỒ
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- PHẦN 4: ĐỒNG HỒ ĐẾM NGƯỢC (COUNTDOWN) -->
+        <section class="px-5 py-4 text-center">
+            <div class="reveal-slow-scale bg-white rounded-3xl p-5 shadow-xs border border-blush/40">
+                <span id="countdownTitle" class="font-calligraphy text-3xl text-stone-500 block mb-1">Đếm ngược ngày cưới nhà trai</span>
+                
+                <div class="grid grid-cols-4 gap-2 my-3">
+                    <div class="p-2.5 bg-sand rounded-2xl">
+                        <span id="cdDays" class="font-editorial font-bold text-2xl text-charcoal block">00</span>
+                        <span class="text-[9px] uppercase tracking-wider text-stone-400 font-sans">Ngày</span>
+                    </div>
+                    <div class="p-2.5 bg-sand rounded-2xl">
+                        <span id="cdHours" class="font-editorial font-bold text-2xl text-charcoal block">00</span>
+                        <span class="text-[9px] uppercase tracking-wider text-stone-400 font-sans">Giờ</span>
+                    </div>
+                    <div class="p-2.5 bg-sand rounded-2xl">
+                        <span id="cdMinutes" class="font-editorial font-bold text-2xl text-charcoal block">00</span>
+                        <span class="text-[9px] uppercase tracking-wider text-stone-400 font-sans">Phút</span>
+                    </div>
+                    <div class="p-2.5 bg-sand rounded-2xl">
+                        <span id="cdSeconds" class="font-editorial font-bold text-2xl text-charcoal block">00</span>
+                        <span class="text-[9px] uppercase tracking-wider text-stone-400 font-sans">Giây</span>
+                    </div>
+                </div>
+
+                <p class="font-script text-2xl text-stone-400 mt-1">...to our big day!</p>
+            </div>
+        </section>
+
+        <!-- PHẦN 5: SỔ LƯU BÚT & LỜI CHÚC CƯỚI -->
+        <section id="rsvpSection" class="px-5 py-4">
+            <div class="bg-white rounded-3xl p-5 shadow-xs border border-blush/40">
+                <div class="text-center mb-4">
+                    <h3 class="reveal-slow-up stagger-1 font-editorial font-bold text-2xl text-charcoal mt-0.5">Gửi lời chúc mừng</h3>
+                </div>
+
+                <form onsubmit="submitRSVP(event)" class="space-y-3">
+                    <div>
+                        <input type="text" id="rsvpName" required placeholder="Tên của bạn là gì? *" class="reveal-slow-left stagger-1 w-full px-3.5 py-2.5 rounded-2xl bg-sand/60 border border-blush/50 text-xs focus:outline-none focus:border-blush-dark font-sans">
+                    </div>
+                    <input type="hidden" id="rsvpSide">
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="reveal-slow-up stagger-3 text-[10px] text-stone-400 font-sans">Gửi lời chúc đến đôi uyên ương</span>
+                            <button type="button" onclick="insertRandomWish()" class="reveal-slow-right stagger-4 text-[10px] text-blush-dark hover:underline flex items-center gap-1 font-medium font-sans">
+                                <i class="fa-solid fa-wand-sparkles"></i> Gợi ý lời chúc
+                            </button>
+                        </div>
+                        <textarea id="rsvpWish" rows="2" maxlength="1000" required placeholder="Viết lời chúc của bạn ở đây... *" class="reveal-slow-up stagger-4 w-full px-3.5 py-2.5 rounded-2xl bg-sand/60 border border-blush/50 text-xs focus:outline-none focus:border-blush-dark font-sans"></textarea>
+                    </div>
+
+                    <button type="submit" class="reveal-slow-scale stagger-5 w-full py-3 rounded-2xl bg-stone-800 hover:bg-stone-900 text-white font-semibold text-xs shadow-md transition-colors flex items-center justify-center gap-2 active:scale-95 font-sans">
+                        <i class="fa-regular fa-paper-plane"></i> GỬI LỜI CHÚC
+                    </button>
+                </form>
+
+                <!-- Danh sách lời chúc gần đây -->
+                <div class="mt-4 pt-3 border-t border-stone-100">
+                    <div id="wishesList" class="space-y-2.5 max-h-48 overflow-y-auto pr-1 text-xs">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 6: MỪNG CƯỚI ONLINE (2 MÃ VIETQR TRỰC TIẾP) -->
+        <section id="giftSection" class="px-5 py-4">
+            <div class="reveal-slow-up bg-white rounded-3xl p-5 border border-blush/50 text-center shadow-xs">
+                
+                <div class="w-9 h-9 rounded-full bg-sand text-stone-600 flex items-center justify-center mx-auto mb-1 text-sm">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+                <h4 class="font-editorial font-bold text-xl text-charcoal">Mừng Cưới Online</h4>
+                <p class="text-xs text-stone-500 mb-4 px-2 leading-relaxed">
+                    Vợ chồng chúng mình xin gửi lời cảm ơn chân thành đến tình cảm của bạn!
+                </p>
+
+                <!-- 2 Mã VietQR Hiển Thị Trực Tiếp: Chú Rể trượt từ trái, Cô Dâu trượt từ phải -->
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    
+                    <!-- QR Chú Rể -->
+                    <div class="reveal-slow-left stagger-1 bg-[#F2F8F5] rounded-2xl p-3 border border-blush/40 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[9px] font-bold text-stone-600 bg-sand px-2.5 py-0.5 rounded-full inline-block mb-2 uppercase font-sans">Chú Rể</span>
+                            <div class="w-full aspect-square max-w-[125px] mx-auto p-1.5 bg-white rounded-xl border border-stone-200 shadow-2xs mb-2 flex items-center justify-center">
+                                <img id="groomQr" src="https://api.vietqr.io/image/970436-1029384756-compact2.png?accountName=NGUYEN%20MINH%20KHANG" 
+                                     onerror="this.src='https://placehold.co/200x200/FAF7F2/9B7732?text=QR+Minh+Khang'" 
+                                     alt="QR Chú Rể" 
+                                     class="w-full h-full object-contain">
+                            </div>
+                    <p class="text-[11px] font-bold text-charcoal truncate font-editorial">QUỐC CƯỜNG</p>
+                            <p class="text-[10px] text-stone-500 font-sans">Vietcombank</p>
+                            <p class="text-[11px] font-mono font-semibold text-stone-700">1029384756</p>
+                        </div>
+                        <button type="button" onclick="downloadQr('groomQr', 'ma-qr-chu-re.png')" class="mt-2.5 w-full py-1.5 rounded-xl bg-white hover:bg-sand text-stone-700 text-[10px] font-semibold border border-blush/50 transition-colors flex items-center justify-center gap-1 active:scale-95 font-sans">
+                            <i class="fa-solid fa-download"></i> Tải mã QR
+                        </button>
+                        <button type="button" onclick="copyContent('1029384756', 'Đã sao chép STK Chú Rể')" class="mt-2 w-full py-1.5 rounded-xl bg-white hover:bg-sand text-stone-700 text-[10px] font-semibold border border-blush/50 transition-colors flex items-center justify-center gap-1 active:scale-95 font-sans">
+                            <i class="fa-regular fa-copy"></i> Sao chép STK
+                        </button>
+                    </div>
+
+                    <!-- QR Cô Dâu -->
+                    <div class="reveal-slow-right stagger-2 bg-[#F2F8F5] rounded-2xl p-3 border border-blush/40 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[9px] font-bold text-stone-600 bg-blush px-2.5 py-0.5 rounded-full inline-block mb-2 uppercase font-sans">Cô Dâu</span>
+                            <div class="w-full aspect-square max-w-[125px] mx-auto p-1.5 bg-white rounded-xl border border-stone-200 shadow-2xs mb-2 flex items-center justify-center">
+                                <img id="brideQr" src="https://api.vietqr.io/image/970407-19038475612-compact2.png?accountName=LE%20NGOC%20ANH" 
+                                     onerror="this.src='https://placehold.co/200x200/FAF7F2/9B7732?text=QR+Ngoc+Anh'" 
+                                     alt="QR Cô Dâu" 
+                                     class="w-full h-full object-contain">
+                            </div>
+                    <p class="text-[11px] font-bold text-charcoal truncate font-editorial">KIM LIÊN</p>
+                            <p class="text-[10px] text-stone-500 font-sans">Techcombank</p>
+                            <p class="text-[11px] font-mono font-semibold text-stone-700">19038475612</p>
+                        </div>
+                        <button type="button" onclick="downloadQr('brideQr', 'ma-qr-co-dau.png')" class="mt-2.5 w-full py-1.5 rounded-xl bg-white hover:bg-sand text-stone-700 text-[10px] font-semibold border border-blush/50 transition-colors flex items-center justify-center gap-1 active:scale-95 font-sans">
+                            <i class="fa-solid fa-download"></i> Tải mã QR
+                        </button>
+                        <button type="button" onclick="copyContent('19038475612', 'Đã sao chép STK Cô Dâu')" class="mt-2 w-full py-1.5 rounded-xl bg-white hover:bg-sand text-stone-700 text-[10px] font-semibold border border-blush/50 transition-colors flex items-center justify-center gap-1 active:scale-95 font-sans">
+                            <i class="fa-regular fa-copy"></i> Sao chép STK
+                        </button>
+                    </div>
+
+                </div>
+
+                <p class="reveal-slow-up stagger-3 text-[10px] text-stone-400 mt-3 pt-2.5 border-t border-stone-100 font-sans">
+                    Cú pháp gợi ý: <span class="text-stone-700 font-medium bg-sand px-2 py-0.5 rounded">[Tên bạn] mừng cưới</span>
+                </p>
+
+            </div>
+        </section>
+
+        <!-- FOOTER KẾT THÚC THIỆP -->
+        <footer class="reveal-slow-up py-8 px-5 text-center">
+            <span class="font-calligraphy text-4xl text-stone-500 block mb-1">Thank you!</span>
+            <p class="text-xs text-stone-400 font-garamond italic">Hân hạnh được đón tiếp Quý khách trong ngày vui của chúng mình!</p>
+        </footer>
+
+        </div> <!-- ĐÓNG THẺ #invitationBodyContent -->
+
+    </div>
+
+    <audio id="weddingAudio" src="/thiepcuoi/Music/0929.MP3" preload="metadata" loop></audio>
+
+    <!-- Nút nghe nhạc nền nổi ở góc phải bên dưới -->
+    <div class="fixed bottom-5 right-5 z-50">
+        <button onclick="toggleMusic()" id="floatingMusicBtn" class="w-12 h-12 rounded-full bg-white/95 backdrop-blur-md text-stone-700 flex items-center justify-center shadow-lg border border-blush/60 active:scale-95 transition-transform" title="Bật/Tắt nhạc nền">
+            <i id="musicIcon" class="fa-solid fa-music text-sm"></i>
+        </button>
+    </div>
+
+    <!-- Modal Bản Đồ -->
+    <div id="mapModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-paper w-full max-w-sm rounded-3xl p-5 shadow-2xl border border-blush text-center relative">
+            <button onclick="closeMapModal()" class="absolute top-3.5 right-3.5 w-7 h-7 rounded-full bg-sand text-stone-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-sand text-stone-700 mx-auto flex items-center justify-center mb-2">
+                <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <h3 id="mapTitle" class="font-editorial font-bold text-lg text-charcoal mb-1">Địa Điểm</h3>
+            <p id="mapAddress" class="text-xs text-stone-600 mb-4 px-2"></p>
+            <div class="flex gap-2 font-sans">
+                <button id="copyMapBtn" class="flex-1 py-2.5 rounded-xl bg-sand text-stone-700 text-xs font-semibold">
+                    <i class="fa-regular fa-copy"></i> Chép địa chỉ
+                </button>
+                <a id="openGoogleMaps" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 rounded-xl bg-stone-800 text-white text-xs font-semibold flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-diamond-turn-right"></i> Mở Google Maps
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sửa Thông Tin -->
+    <div id="customizeModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-paper w-full max-w-sm rounded-3xl p-5 shadow-2xl border border-blush relative font-sans">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-editorial font-bold text-lg text-charcoal">Tùy Chỉnh Thiệp Cưới</h3>
+                <button onclick="closeCustomizeModal()" class="w-7 h-7 rounded-full bg-sand text-stone-600 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="handleSaveInfo(event)" class="space-y-2.5 text-xs">
+                <div>
+                    <label class="block font-semibold text-stone-600 mb-0.5">Tên Chú Rể</label>
+                    <input type="text" id="editGroom" value="Quốc Cường" required class="w-full px-3 py-2 rounded-xl bg-white border border-blush/60">
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-600 mb-0.5">Tên Cô Dâu</label>
+                    <input type="text" id="editBride" value="Kim Liên" required class="w-full px-3 py-2 rounded-xl bg-white border border-blush/60">
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-600 mb-0.5">Ngày Tổ Chức</label>
+                    <input type="date" id="editDate" value="2027-01-11" required class="w-full px-3 py-2 rounded-xl bg-white border border-blush/60">
+                </div>
+                <button type="submit" class="w-full mt-2 py-2.5 rounded-xl bg-stone-800 text-white font-semibold shadow">
+                    Lưu Thông Tin
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://wabvabtlsfnrwuygdyls.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable__P6rhX4muzIWmP_aALbwWA_9TxQzqFf';
+        const GUESTBOOK_API = `${SUPABASE_URL}/rest/v1/wedding_guestbook`;
+
+        const weddingEvents = {
+            groom: { date: '2027-01-11', time: '09:30', side: 'Nhà Trai', title: 'Lễ Thành Hôn' },
+            bride: { date: '2027-01-10', time: '08:00', side: 'Nhà Gái', title: 'Lễ Vu Quy' }
+        };
+        const urlParams = new URLSearchParams(window.location.search);
+        const sideQuery = (urlParams.get('side') || urlParams.get('nha') || '').toLowerCase();
+        const isBrideSide = window.location.pathname.toLowerCase().includes('nhagai')
+                         || sideQuery === 'nhagai'
+                         || sideQuery === 'gai'
+                         || sideQuery === 'bride';
+        const invitationSide = isBrideSide ? 'bride' : 'groom';
+        const guestNameFromLink = (urlParams.get('to') || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+        let weddingTargetDate = new Date(`${weddingEvents[invitationSide].date}T${weddingEvents[invitationSide].time}:00`);
+        let isEnvelopeOpened = false;
+
+        let guestWishes = [];
+
+        const wishSuggestions = [
+            "Chúc hai bạn trăm năm tình viên mãn, bạc đầu nghĩa phu thê!",
+            "Chúc mừng hạnh phúc Quốc Cường & Kim Liên! Mãi yêu thương và thấu hiểu nhau nhé!",
+            "Chúc hai bạn một hành trình mới ngập tràn niềm vui, tiếng cười và sự an yên!"
+        ];
+
+        function formatWeddingDate(dateValue) {
+            const [year, month, day] = dateValue.split('-');
+            return `${day}.${month}.${year}`;
+        }
+
+        function getWeekday(dateValue) {
+            const [year, month, day] = dateValue.split('-').map(Number);
+            return ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'][new Date(year, month - 1, day).getDay()];
+        }
+
+        function updateWeddingDateDisplays() {
+            for (const [side, event] of Object.entries(weddingEvents)) {
+                const sidePrefix = side === 'groom' ? 'groom' : 'bride';
+                document.getElementById(`${sidePrefix}EventDate`).textContent = formatWeddingDate(event.date);
+                document.getElementById(`${sidePrefix}EventTime`).textContent = `Vào lúc ${event.time} - ${getWeekday(event.date)}`;
+            }
+
+            const activeEvent = weddingEvents[invitationSide];
+            const [year, month, day] = activeEvent.date.split('-');
+            const monthNames = ['', 'Một', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy', 'Tám', 'Chín', 'Mười', 'Mười Một', 'Mười Hai'];
+            weddingTargetDate = new Date(`${activeEvent.date}T${activeEvent.time}:00`);
+            document.getElementById('ticketDate').textContent = formatWeddingDate(activeEvent.date);
+            document.getElementById('subDate').textContent = formatWeddingDate(activeEvent.date);
+            document.getElementById('weddingDay').textContent = day;
+            document.getElementById('weddingMonth').textContent = `Tháng ${monthNames[Number(month)]}`;
+            document.getElementById('countdownTitle').textContent = `Đếm ngược ngày cưới ${activeEvent.side.toLowerCase()}`;
+            document.getElementById('editDate').value = activeEvent.date;
+            document.getElementById('rsvpSide').value = activeEvent.side;
+        }
+
+        let guestDirectory = {
+            "cuong": "Cường",
+            "quoc-cuong": "Quốc Cường",
+            "kim-lien": "Kim Liên",
+            "anh-tuan-va-chi-lan": "Anh Tuấn & Chị Lan",
+            "gia-dinh-bac-ba": "Gia Đình Bác Ba",
+            "ban-than-quoc-cuong": "Bạn Thân Quốc Cường",
+            "chi-hoang-mai": "Chị Hoàng Mai (Công ty)",
+            "em-minh-duc": "Em Minh Đức",
+            "gia-dinh-chu-sau": "Gia Đình Chú Sáu",
+            "bac-nam-va-hai-bac": "Bác Năm & Hai Bác"
+        };
+
+        const COMMON_PHRASES = {
+            'gia-dinh': 'Gia Đình',
+            'dong-nghiep': 'Đồng Nghiệp',
+            'cong-ty': 'Công Ty',
+            'ban-than': 'Bạn Thân',
+            'quy-khach': 'Quý Khách',
+            'hai-bac': 'Hai Bác',
+            'hai-ban': 'Hai Bạn',
+            'hai-em': 'Hai Em',
+            'hai-chau': 'Hai Cháu',
+            'vo-chong': 'Vợ Chồng',
+            'bac-ba': 'Bác Ba', 'bac-nam': 'Bác Năm', 'bac-tu': 'Bác Tư', 'bac-sau': 'Bác Sáu',
+            'bac-bay': 'Bác Bảy', 'bac-tam': 'Bác Tám', 'bac-chin': 'Bác Chín', 'bac-muoi': 'Bác Mười',
+            'chu-ba': 'Chú Ba', 'chu-nam': 'Chú Năm', 'chu-tu': 'Chú Tư', 'chu-sau': 'Chú Sáu',
+            'chu-bay': 'Chú Bảy', 'chu-tam': 'Chú Tám', 'chu-chin': 'Chú Chín', 'chu-muoi': 'Chú Mười',
+            'co-ba': 'Cô Ba', 'co-nam': 'Cô Năm', 'co-tu': 'Cô Tư', 'co-sau': 'Cô Sáu',
+            'co-bay': 'Cô Bảy', 'co-tam': 'Cô Tám', 'co-chin': 'Cô Chín', 'co-muoi': 'Cô Mười',
+            'di-ba': 'Dì Ba', 'di-nam': 'Dì Năm', 'di-tu': 'Dì Tư', 'di-sau': 'Dì Sáu',
+            'di-bay': 'Dì Bảy', 'di-tam': 'Dì Tám', 'di-chin': 'Dì Chín', 'di-muoi': 'Dì Mười',
+            'cau-ba': 'Cậu Ba', 'cau-nam': 'Cậu Năm', 'cau-tu': 'Cậu Tư', 'cau-sau': 'Cậu Sáu',
+            'cau-bay': 'Cậu Bảy', 'cau-tam': 'Cậu Tám', 'cau-chin': 'Cậu Chín', 'cau-muoi': 'Cậu Mười'
+        };
+
+        const COMMON_WORDS = {
+            // Danh xưng & Quan hệ
+            'anh': 'Anh', 'chi': 'Chị', 'em': 'Em', 'bac': 'Bác', 'chu': 'Chú', 'co': 'Cô',
+            'di': 'Dì', 'ong': 'Ông', 'ba': 'Ba', 'cau': 'Cậu', 'mo': 'Mợ', 'thay': 'Thầy',
+            'ban': 'Bạn', 'chau': 'Cháu', 'than': 'Thân', 'va': '&', 'cung': 'Cùng',
+            'hai': 'Hai', 'dinh': 'Đình', 'gia': 'Gia',
+            // Họ phổ biến
+            'nguyen': 'Nguyễn', 'tran': 'Trần', 'le': 'Lê', 'pham': 'Phạm', 'hoang': 'Hoàng',
+            'huynh': 'Huỳnh', 'phan': 'Phan', 'vu': 'Vũ', 'vo': 'Võ', 'dang': 'Đặng',
+            'bui': 'Bùi', 'do': 'Đỗ', 'ho': 'Hồ', 'ngo': 'Ngô', 'duong': 'Dương',
+            'ly': 'Lý', 'dao': 'Đào', 'doan': 'Đoàn', 'lam': 'Lâm',
+            'trinh': 'Trịnh', 'truong': 'Trương', 'luong': 'Lương', 'luu': 'Lưu',
+            'thai': 'Thái', 'ta': 'Tạ', 'phung': 'Phùng', 'ton': 'Tôn', 'ha': 'Hà', 'cao': 'Cao',
+            // Tên đệm & Tên chính phổ biến
+            'van': 'Văn', 'thi': 'Thị', 'huu': 'Hữu', 'duc': 'Đức', 'ngoc': 'Ngọc',
+            'quoc': 'Quốc', 'minh': 'Minh', 'xuan': 'Xuân', 'thanh': 'Thành', 'kim': 'Kim',
+            'quang': 'Quang', 'trung': 'Trung', 'phuoc': 'Phước', 'cuong': 'Cường',
+            'lien': 'Liên', 'tuan': 'Tuấn', 'lan': 'Lan', 'hung': 'Hùng', 'dung': 'Dũng',
+            'nam': 'Nam', 'hoa': 'Hoa', 'mai': 'Mai', 'huong': 'Hương', 'thao': 'Thảo',
+            'phuong': 'Phương', 'long': 'Long', 'huyen': 'Huyền', 'trang': 'Trang',
+            'linh': 'Linh', 'viet': 'Việt', 'tien': 'Tiến', 'son': 'Sơn', 'tam': 'Tâm',
+            'phuc': 'Phúc', 'dat': 'Đạt', 'hieu': 'Hiếu', 'tai': 'Tài', 'thang': 'Thắng',
+            'khoa': 'Khoa', 'loc': 'Lộc', 'phat': 'Phát', 'binh': 'Bình', 'an': 'An',
+            'trieu': 'Triệu', 'nhung': 'Nhung', 'yen': 'Yến', 'oanh': 'Oanh', 'quyen': 'Quyên',
+            'quynh': 'Quỳnh', 'nga': 'Nga', 'hang': 'Hằng', 'loan': 'Loan', 'thuy': 'Thủy',
+            'nhan': 'Nhân', 'tri': 'Trí', 'huy': 'Huy', 'bach': 'Bạch', 'tan': 'Tấn',
+            'bao': 'Bảo', 'trong': 'Trọng', 'kha': 'Kha', 'khang': 'Khang', 'khanh': 'Khánh',
+            'kien': 'Kiên', 'kiet': 'Kiệt', 'vinh': 'Vinh', 'thuan': 'Thuận', 'nhu': 'Như',
+            'chau': 'Châu', 'phong': 'Phong', 'tung': 'Tùng', 'giang': 'Giang', 'diep': 'Diệp',
+            'duy': 'Duy', 'toan': 'Toàn', 'hau': 'Hậu', 'my': 'Mỹ', 'tram': 'Trâm',
+            'ngan': 'Ngân', 'khoi': 'Khôi', 'nghia': 'Nghĩa', 'luc': 'Lực', 'khai': 'Khải',
+            'thien': 'Thiện', 'triet': 'Triết', 'vuong': 'Vương', 'canh': 'Cảnh', 'dien': 'Điền',
+            'sau': 'Sáu', 'bay': 'Bảy', 'tam': 'Tám', 'chin': 'Chín', 'muoi': 'Mười', 'tu': 'Tư',
+            'mot': 'Một', 'bap': 'Bắp', 'bong': 'Bống', 'tit': 'Tít', 'tin': 'Tin', 'kem': 'Kem'
+        };
+
+        function getToneTargetVowel(w) {
+            const lower = w.toLowerCase();
+            if (lower.includes('ươ')) return 'ơ';
+            if (lower.includes('iê')) return 'ê';
+            if (lower.includes('uô')) return 'ô';
+            if (lower.includes('uê')) return 'ê';
+            if (lower.includes('ê')) return 'ê';
+            if (lower.includes('ơ')) return 'ơ';
+            if (lower.includes('ô')) return 'ô';
+            if (lower.includes('â')) return 'â';
+            if (lower.includes('ă')) return 'ă';
+            if (lower.includes('ư')) return 'ư';
+            if (/a[uiyo]/.test(lower)) return 'a';
+            if (/o[ie]/.test(lower)) return 'o';
+            if (/e[ou]/.test(lower)) return 'e';
+            const priority = ['ơ', 'ê', 'ô', 'â', 'ă', 'ư', 'a', 'o', 'e', 'u', 'i', 'y'];
+            for (const v of priority) {
+                if (lower.includes(v)) return v;
+            }
+            return null;
+        }
+
+        function decodeSingleTelex(raw) {
+            if (!raw) return '';
+            const isCap = (raw[0] === raw[0].toUpperCase());
+            let s = raw.toLowerCase();
+            
+            const hasTelex = /(aa|aw|ee|oo|ow|uw|uow|dd)/i.test(s) || (/[sfrxj]$/i.test(s) && /[aeiouy]/i.test(s.slice(0, -1)) && !['is','as','us'].includes(s));
+            if (!hasTelex) return null;
+
+            let tone = '';
+            const last = s.slice(-1);
+            if (['s', 'f', 'r', 'x', 'j'].includes(last)) {
+                if (/[aeiouy]/.test(s.slice(0, -1))) {
+                    tone = last;
+                    s = s.slice(0, -1);
+                }
+            }
+
+            s = s.replace(/dd/g, 'đ')
+                 .replace(/uow/g, 'ươ')
+                 .replace(/aw/g, 'ă')
+                 .replace(/aa/g, 'â')
+                 .replace(/ee/g, 'ê')
+                 .replace(/oo/g, 'ô')
+                 .replace(/ow/g, 'ơ')
+                 .replace(/uw/g, 'ư');
+
+            if (tone) {
+                const toneMap = {
+                    's': { 'a':'á', 'ă':'ắ', 'â':'ấ', 'e':'é', 'ê':'ế', 'i':'í', 'o':'ó', 'ô':'ố', 'ơ':'ớ', 'u':'ú', 'ư':'ứ', 'y':'ý' },
+                    'f': { 'a':'à', 'ă':'ằ', 'â':'ầ', 'e':'è', 'ê':'ề', 'i':'ì', 'o':'ò', 'ô':'ồ', 'ơ':'ờ', 'u':'ù', 'ư':'ừ', 'y':'ỳ' },
+                    'r': { 'a':'ả', 'ă':'ẳ', 'â':'ẩ', 'e':'ẻ', 'ê':'ể', 'i':'ỉ', 'o':'ỏ', 'ô':'ồ', 'ơ':'ở', 'u':'ủ', 'ư':'ử', 'y':'ỷ' },
+                    'x': { 'a':'ã', 'ă':'ẵ', 'â':'ẫ', 'e':'ẽ', 'ê':'ễ', 'i':'ĩ', 'o':'õ', 'ô':'ỗ', 'ơ':'ỡ', 'u':'ũ', 'ư':'ữ', 'y':'ỹ' },
+                    'j': { 'a':'ạ', 'ă':'ặ', 'â':'ậ', 'e':'ẹ', 'ê':'ệ', 'i':'ị', 'o':'ọ', 'ô':'ộ', 'ơ':'ợ', 'u':'ụ', 'ư':'ự', 'y':'ỵ' }
+                };
+                const tObj = toneMap[tone];
+                const targetV = getToneTargetVowel(s);
+                if (targetV && tObj[targetV]) {
+                    s = s.replace(targetV, tObj[targetV]);
+                }
+            }
+
+            if (isCap) {
+                s = s.charAt(0).toUpperCase() + s.slice(1);
+            }
+            return s;
+        }
+
+        function toSlugKey(str) {
+            return (str || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+                .replace(/&/g, 'va')
+                .replace(/[^a-zA-Z0-9\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-')
+                .toLowerCase();
+        }
+
+        function resolveGuestName(rawParam) {
+            if (!rawParam) return 'Quý khách';
+            const clean = rawParam.trim();
+
+            // 1. Nếu link đã có dấu tiếng Việt trực tiếp (VD: ?to=Cường hoặc ?to=Anh Tuấn) thì giữ nguyên
+            if (/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(clean)) {
+                return clean;
+            }
+
+            const slugKey = toSlugKey(clean);
+
+            // 2. Tra cứu trong danh bạ khách đã nạp (guestDirectory / guests.json)
+            if (guestDirectory[slugKey]) return guestDirectory[slugKey];
+            if (guestDirectory[clean.toLowerCase()]) return guestDirectory[clean.toLowerCase()];
+
+            // 3. Khớp chính xác cụm danh xưng hoặc từ phổ biến
+            if (COMMON_PHRASES[slugKey]) return COMMON_PHRASES[slugKey];
+            if (COMMON_WORDS[slugKey]) return COMMON_WORDS[slugKey];
+
+            // 4. Phân tích từng từ và tự động phục hồi dấu chuẩn tiếng Việt
+            const parts = clean.split(/[-_+ ]+/).filter(Boolean);
+            const result = [];
+            let i = 0;
+            while (i < parts.length) {
+                // Ưu tiên ghép cụm 2 từ (như gia-dinh, bac-ba, chu-sau, dong-nghiep...)
+                if (i < parts.length - 1) {
+                    const pairKey = (parts[i] + '-' + parts[i+1]).toLowerCase();
+                    if (COMMON_PHRASES[pairKey]) {
+                        result.push(COMMON_PHRASES[pairKey]);
+                        i += 2;
+                        continue;
+                    }
+                }
+
+                const w = parts[i];
+                const lowerW = w.toLowerCase();
+
+                if (lowerW === 'va') {
+                    result.push('&');
+                    i++;
+                    continue;
+                }
+
+                // Thử giải mã nếu là ký hiệu Telex
+                const telexDecoded = decodeSingleTelex(w);
+                if (telexDecoded && /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(telexDecoded)) {
+                    result.push(telexDecoded);
+                } else if (COMMON_WORDS[lowerW]) {
+                    result.push(COMMON_WORDS[lowerW]);
+                } else {
+                    // Viết hoa chữ cái đầu cho từ khác
+                    result.push(w.charAt(0).toUpperCase() + w.slice(1));
+                }
+                i++;
+            }
+
+            return result.join(' ')
+                .replace(/\s+&\s+/g, ' & ')
+                .replace(/\s+Va\s+/gi, ' & ');
+        }
+
+        async function loadGuestDirectory() {
+            try {
+                const res = await fetch('/thiepcuoi/guests.json');
+                if (res.ok) {
+                    const remoteData = await res.json();
+                    guestDirectory = { ...guestDirectory, ...remoteData };
+                    const finalName = resolveGuestName(guestNameFromLink);
+                    document.getElementById('guestNameDisplay').textContent = finalName;
+                    if (guestNameFromLink) document.getElementById('rsvpName').value = finalName;
+                }
+            } catch (e) {}
+        }
+
+        function applyInvitationPersonalization() {
+            document.title = 'Thiệp Mời Cưới | Quốc Cường & Kim Liên';
+            document.querySelectorAll('.groom-name-txt').forEach(el => el.textContent = 'QUỐC CƯỜNG');
+            document.querySelectorAll('.bride-name-txt').forEach(el => el.textContent = 'KIM LIÊN');
+
+            const guestName = resolveGuestName(guestNameFromLink);
+            document.getElementById('guestNameDisplay').textContent = guestName;
+            if (guestNameFromLink) document.getElementById('rsvpName').value = guestName;
+            updateWeddingDateDisplays();
+            loadGuestDirectory();
+        }
+
+        let isMusicActive = false;
+        async function startMelody() {
+            const audio = document.getElementById('weddingAudio');
+            if (!audio || isMusicActive) return isMusicActive;
+
+            try {
+                await audio.play();
+                isMusicActive = true;
+                const icon = document.getElementById('musicIcon');
+                if (icon) {
+                    icon.classList.remove('fa-music');
+                    icon.classList.add('fa-compact-disc', 'spin-vinyl');
+                }
+                return true;
+            } catch (err) {
+                isMusicActive = false;
+                console.warn('Không thể phát nhạc cho đến khi có thao tác của người dùng.', err);
+                return false;
+            }
+        }
+
+        function stopMelody() {
+            isMusicActive = false;
+            document.getElementById('weddingAudio')?.pause();
+            const icon = document.getElementById('musicIcon');
+            if (icon) {
+                icon.classList.remove('fa-compact-disc', 'spin-vinyl');
+                icon.classList.add('fa-music');
+            }
+        }
+
+        async function toggleMusic() {
+            if (isMusicActive) {
+                stopMelody();
+                notifyToast('Đã tạm dừng phát nhạc', 'fa-volume-xmark');
+            } else {
+                const started = await startMelody();
+                if (started) notifyToast('Đang phát nhạc 0929', 'fa-music');
+                else notifyToast('Chạm lại để phát nhạc', 'fa-volume-xmark');
+            }
+        }
+
+        // Hạ nắp xuống sau lớp ảnh ngay khi bắt đầu lật để nó không che hình.
+        function handleEnvelopeClick(event) {
+            const container = document.getElementById('envelopeContainer');
+            const prompt = document.getElementById('tapPrompt');
+
+            if (!isEnvelopeOpened) {
+                isEnvelopeOpened = true;
+                container.classList.add('opened');
+                if (prompt) prompt.classList.add('opacity-0');
+
+                startMelody();
+                notifyToast('Đã mở thiệp cưới!', 'fa-heart');
+
+                // Mở khóa phần nội dung thiệp bên dưới với độ trễ thư thả 1.4s
+                setTimeout(() => {
+                    const bodyContent = document.getElementById('invitationBodyContent');
+                    const scrollCue = document.getElementById('scrollCue');
+
+                    if (bodyContent) {
+                        bodyContent.classList.remove('hidden');
+                        requestAnimationFrame(() => {
+                            bodyContent.classList.remove('opacity-0');
+                            initScrollAnimations();
+                        });
+                    }
+
+                    if (scrollCue) {
+                        scrollCue.classList.remove('opacity-0', 'pointer-events-none');
+                    }
+                }, 1400);
+            }
+        }
+
+        // CƠ CHẾ CUỘN ĐẾN ĐÂU MỚI BẮT ĐẦU CHẠY ANIMATION CHẬM RÃI (INTERSECTION OBSERVER)
+        function prepareLetterAnimations(root) {
+            if (!root) return;
+
+            const excluded = 'script, style, svg, i, input, textarea, select, option, button[aria-label], [id^="cd"], #ticketDate, #subDate, .text-char, .text-word, .text-sentence';
+            const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+                acceptNode(node) {
+                    if (!node.nodeValue.trim() || node.parentElement.closest(excluded)) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+            });
+            const textNodes = [];
+            while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+            const sentenceSegmenter = typeof Intl.Segmenter === 'function'
+                ? new Intl.Segmenter('vi', { granularity: 'sentence' })
+                : null;
+            const graphemeSegmenter = typeof Intl.Segmenter === 'function'
+                ? new Intl.Segmenter('vi', { granularity: 'grapheme' })
+                : null;
+
+            textNodes.forEach(node => {
+                const fragment = document.createDocumentFragment();
+                const sentences = sentenceSegmenter
+                    ? Array.from(sentenceSegmenter.segment(node.nodeValue), item => item.segment)
+                    : [node.nodeValue];
+                let charIndex = 0;
+
+                sentences.forEach(sentence => {
+                    const sentenceGroup = document.createElement('span');
+                    sentenceGroup.className = 'text-sentence';
+                    sentence.split(/(\s+)/u).forEach(token => {
+                        if (!token || /^\s+$/u.test(token)) {
+                            sentenceGroup.append(document.createTextNode(token));
+                            return;
+                        }
+
+                        const word = document.createElement('span');
+                        word.className = 'text-word';
+                        const chars = graphemeSegmenter
+                            ? Array.from(graphemeSegmenter.segment(token), item => item.segment)
+                            : Array.from(token);
+                        chars.forEach(char => {
+                            const letter = document.createElement('span');
+                            letter.className = 'text-char';
+                            letter.style.setProperty('--char-delay', `${charIndex * 16}ms`);
+                            letter.textContent = char;
+                            word.append(letter);
+                            charIndex += 1;
+                        });
+                        sentenceGroup.append(word);
+                    });
+                    fragment.append(sentenceGroup);
+                });
+
+                node.parentElement.classList.add('text-stagger');
+                node.replaceWith(fragment);
+            });
+
+            root.dataset.textStaggerPrepared = 'true';
+        }
+
+        function initScrollAnimations() {
+            prepareLetterAnimations(document.getElementById('invitationBodyContent'));
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -12% 0px',
+                threshold: 0.15
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        const zoomImg = entry.target.querySelector('.img-editorial-zoom');
+                        if (zoomImg) {
+                            zoomImg.classList.add('revealed');
+                        }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const animatableElements = document.querySelectorAll(
+                '.reveal-slow-up, .reveal-slow-scale, .reveal-slow-left, .reveal-slow-right, .reveal-slow-line, .text-stagger'
+            );
+            animatableElements.forEach(el => revealObserver.observe(el));
+        }
+
+        function scrollToMainContent() {
+            const target = document.getElementById('mainContentSection');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        let quickRsvpInProgress = false;
+        async function quickSelectAttendance(status) {
+            const rsvpSelect = document.getElementById('rsvpStatus');
+            if (rsvpSelect) rsvpSelect.value = status;
+            updateAttendanceButtons(status);
+
+            if (quickRsvpInProgress) return;
+            let name = document.getElementById('rsvpName').value.trim();
+            if (!name) {
+                name = window.prompt('Nhập tên để xác nhận tham dự:')?.trim() || '';
+                if (!name) return;
+                document.getElementById('rsvpName').value = name;
+            }
+
+            const side = document.getElementById('rsvpSide').value;
+            const existing = guestWishes.find(item => item.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+                && item.side === side && !item.wish);
+            if (existing?.status === status) {
+                notifyToast('Xác nhận của bạn đã được lưu rồi.', 'fa-circle-check');
+                return;
+            }
+
+            quickRsvpInProgress = true;
+            document.querySelectorAll('#btnAttendYes, #btnAttendNo').forEach(button => button.disabled = true);
+            try {
+                await saveGuestbookEntry({ name, side, status, wish: null });
+                notifyToast(status === 'Sẽ tham dự' ? 'Đã lưu xác nhận: Sẽ tham dự.' : 'Đã lưu xác nhận: Xin phép vắng mặt.', 'fa-circle-check');
+            } catch (error) {
+                console.error('RSVP save failed:', error);
+                notifyToast('Chưa lưu được xác nhận. Vui lòng thử lại.', 'fa-circle-exclamation');
+            } finally {
+                quickRsvpInProgress = false;
+                document.querySelectorAll('#btnAttendYes, #btnAttendNo').forEach(button => button.disabled = false);
+            }
+        }
+
+        function updateAttendanceButtons(status) {
+            const btnYes = document.getElementById('btnAttendYes');
+            const btnNo = document.getElementById('btnAttendNo');
+            if (!btnYes || !btnNo) return;
+
+            const attending = status === 'Sẽ tham dự';
+            btnYes.setAttribute('aria-pressed', String(attending));
+            btnNo.setAttribute('aria-pressed', String(!attending));
+            btnYes.classList.toggle('is-selected', attending);
+            btnNo.classList.toggle('is-selected', !attending);
+        }
+
+        document.getElementById('rsvpStatus')?.addEventListener('change', event => {
+            updateAttendanceButtons(event.target.value);
+        });
+
+        function notifyToast(message, iconClass = 'fa-check') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.textContent = message;
+            toastIcon.className = `fa-solid ${iconClass} text-blush`;
+
+            toast.classList.remove('-translate-y-16', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('-translate-y-16', 'opacity-0');
+            }, 3000);
+        }
+
+        function copyContent(text, msg) {
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            try {
+                document.execCommand('copy');
+                notifyToast(msg || 'Đã sao chép vào bộ nhớ!', 'fa-check');
+            } catch (e) {
+                notifyToast('Không thể sao chép tự động', 'fa-circle-exclamation');
+            }
+            document.body.removeChild(temp);
+        }
+
+        async function downloadQr(imageId, filename) {
+            const image = document.getElementById(imageId);
+            if (!image) return;
+
+            try {
+                const response = await fetch(image.currentSrc || image.src);
+                if (!response.ok) throw new Error('QR image request failed');
+                const blob = await response.blob();
+                const objectUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = objectUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+                notifyToast('Đã tải mã QR về máy', 'fa-download');
+            } catch (error) {
+                notifyToast('Chưa thể tải mã QR. Vui lòng thử lại.', 'fa-circle-exclamation');
+            }
+        }
+
+        function openMapModal(title, address, mapUrl) {
+            document.getElementById('mapTitle').textContent = title;
+            document.getElementById('mapAddress').textContent = address;
+            document.getElementById('openGoogleMaps').href = mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+            document.getElementById('copyMapBtn').onclick = () => copyContent(address, 'Đã sao chép địa chỉ!');
+            document.getElementById('mapModal').classList.remove('hidden');
+        }
+        function closeMapModal() {
+            document.getElementById('mapModal').classList.add('hidden');
+        }
+
+        function openCustomizeModal() {
+            document.getElementById('customizeModal').classList.remove('hidden');
+        }
+        function closeCustomizeModal() {
+            document.getElementById('customizeModal').classList.add('hidden');
+        }
+
+        function handleSaveInfo(e) {
+            e.preventDefault();
+            const groom = document.getElementById('editGroom').value.trim();
+            const bride = document.getElementById('editBride').value.trim();
+            const dateVal = document.getElementById('editDate').value;
+
+            document.querySelectorAll('.groom-name-txt').forEach(el => {
+                el.textContent = groom.toUpperCase();
+                prepareLetterAnimations(el);
+                el.classList.add('revealed');
+            });
+            document.querySelectorAll('.bride-name-txt').forEach(el => {
+                el.textContent = bride.toUpperCase();
+                prepareLetterAnimations(el);
+                el.classList.add('revealed');
+            });
+
+            if (dateVal) {
+                weddingEvents[invitationSide].date = dateVal;
+                updateWeddingDateDisplays();
+                runCountdown();
+            }
+
+            closeCustomizeModal();
+            notifyToast('Đã lưu thông tin thiệp!', 'fa-circle-check');
+        }
+
+        function insertRandomWish() {
+            const rnd = wishSuggestions[Math.floor(Math.random() * wishSuggestions.length)];
+            document.getElementById('rsvpWish').value = rnd;
+        }
+
+        async function submitRSVP(e) {
+            e.preventDefault();
+            const name = document.getElementById('rsvpName').value.trim();
+            const side = document.getElementById('rsvpSide').value;
+            const wish = document.getElementById('rsvpWish').value.trim();
+
+            if (!name || !wish) {
+                notifyToast('Vui lòng nhập tên và viết lời chúc trước khi gửi.', 'fa-circle-exclamation');
+                if (!wish) document.getElementById('rsvpWish').focus();
+                return;
+            }
+            const submitButton = e.currentTarget.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.classList.add('opacity-60', 'cursor-wait');
+
+            try {
+                await saveGuestbookEntry({ name, side, status: null, wish });
+                renderWishesFeed();
+                document.getElementById('rsvpWish').value = '';
+                notifyToast('Cảm ơn bạn đã gửi lời chúc mừng!', 'fa-heart');
+            } catch (error) {
+                console.error('Guestbook submission failed:', error);
+                notifyToast('Chưa gửi được. Vui lòng thử lại sau.', 'fa-circle-exclamation');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.classList.remove('opacity-60', 'cursor-wait');
+            }
+        }
+
+        async function saveGuestbookEntry(entry) {
+            const response = await fetch(GUESTBOOK_API, {
+                method: 'POST',
+                headers: {
+                    apikey: SUPABASE_PUBLISHABLE_KEY,
+                    Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+                    'Content-Type': 'application/json',
+                    Prefer: 'return=representation'
+                },
+                body: JSON.stringify(entry)
+            });
+            if (!response.ok) throw new Error(await response.text());
+            const [savedEntry] = await response.json();
+            guestWishes.unshift(savedEntry);
+            renderWishesFeed();
+            return savedEntry;
+        }
+
+        function renderWishesFeed() {
+            const list = document.getElementById('wishesList');
+            const wishes = guestWishes.filter(item => item.wish?.trim());
+            if (!wishes.length) {
+                list.innerHTML = '<p class="py-3 text-center text-stone-400">Chưa có lời chúc. Hãy là người đầu tiên gửi lời chúc nhé!</p>';
+                return;
+            }
+            list.innerHTML = wishes.map(item => `
+                <div class="bg-sand/60 rounded-2xl p-3 border border-blush/30">
+                    <div class="flex justify-between items-center mb-0.5">
+                        <span class="font-bold text-stone-800 font-editorial text-xs">${escapeStr(item.name)}</span>
+                        <span class="text-[9px] text-stone-400 font-sans">${escapeStr(formatWishTime(item.created_at))}</span>
+                    </div>
+                    <p class="text-xs text-stone-600 leading-snug font-garamond italic">"${escapeStr(item.wish)}"</p>
+                </div>
+            `).join('');
+
+            if (document.querySelector('.phone-wrapper')?.dataset.textStaggerPrepared === 'true') {
+                prepareLetterAnimations(list);
+                list.querySelectorAll('.text-stagger').forEach(el => el.classList.add('revealed'));
+            }
+        }
+
+        function escapeStr(str) {
+            return String(str).replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
+        }
+
+        function formatWishTime(value) {
+            if (!value) return '';
+            const seconds = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 1000));
+            if (seconds < 60) return 'Vừa xong';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)} phút trước`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)} giờ trước`;
+            return `${Math.floor(seconds / 86400)} ngày trước`;
+        }
+
+        async function loadGuestWishes() {
+            const list = document.getElementById('wishesList');
+            list.innerHTML = '<p class="py-3 text-center text-stone-400">Đang tải lời chúc...</p>';
+            try {
+                const response = await fetch(`${GUESTBOOK_API}?select=id,name,side,status,wish,created_at&is_visible=eq.true&order=created_at.desc&limit=30`, {
+                    headers: {
+                        apikey: SUPABASE_PUBLISHABLE_KEY,
+                        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+                    }
+                });
+                if (!response.ok) throw new Error(await response.text());
+                guestWishes = await response.json();
+                renderWishesFeed();
+            } catch (error) {
+                console.error('Guestbook loading failed:', error);
+                list.innerHTML = '<p class="py-3 text-center text-stone-400">Sổ lời chúc tạm thời chưa tải được.</p>';
+            }
+        }
+
+        function runCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingTargetDate.getTime() - now;
+
+            if (distance < 0) {
+                document.getElementById('cdDays').textContent = '00';
+                document.getElementById('cdHours').textContent = '00';
+                document.getElementById('cdMinutes').textContent = '00';
+                document.getElementById('cdSeconds').textContent = '00';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('cdDays').textContent = String(days).padStart(2, '0');
+            document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        window.onload = function() {
+            applyInvitationPersonalization();
+            loadGuestWishes();
+            runCountdown();
+            setInterval(runCountdown, 1000);
+        };
+    </script>
+</body>
+</html>

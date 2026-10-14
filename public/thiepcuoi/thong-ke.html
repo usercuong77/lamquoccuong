@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Thống kê xác nhận | Quốc Cường & Kim Liên</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#233a35;--muted:#758680;--line:#dce9e4;--paper:#f4f8f5;--white:#fff;--sage:#688d82;--sage-deep:#3f7063;--green:#14805e;--green-bg:#e8f5ef;--rose:#b65e68;--rose-bg:#fff0f0;--gold:#c39c5a;--shadow:0 20px 60px rgba(46,76,66,.08)}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#e7f1ec 0,transparent 36%),var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh}
+    .shell{width:min(1120px,calc(100% - 36px));margin:0 auto;padding:32px 0 56px}.topline{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 2px 20px;border-bottom:1px solid var(--line)}
+    .brand{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--sage-deep)}.brand span{color:var(--gold);margin-right:8px}.top-actions{display:flex;gap:9px;align-items:center}
+    button,select,input{font:inherit}.button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:10px 15px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s ease}.button:hover{border-color:var(--sage);transform:translateY(-1px)}.button.primary{background:var(--ink);border-color:var(--ink);color:#fff}.button:disabled{opacity:.55;cursor:wait;transform:none}
+    .hero{padding:35px 0 27px;display:flex;justify-content:space-between;align-items:end;gap:20px}.eyebrow{color:var(--sage);font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase}.hero h1{font:600 clamp(32px,5vw,48px)/1.05 'Playfair Display',serif;margin:9px 0 8px;letter-spacing:-.03em}.hero p{color:var(--muted);font-size:13px;margin:0}.updated{font-size:11px;color:var(--muted);white-space:nowrap;padding-bottom:4px}
+    .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.metric,.side-card,.panel{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}.metric{padding:20px 22px;position:relative;overflow:hidden}.metric:after{content:'';position:absolute;width:90px;height:90px;border:1px solid #e7efeb;border-radius:50%;right:-26px;top:-34px}.metric-label{font-size:11px;color:var(--muted);font-weight:600}.metric-value{font-size:34px;line-height:1.1;font-weight:700;letter-spacing:-.05em;margin-top:10px}.metric.attend .metric-value{color:var(--green)}.metric.absent .metric-value{color:var(--rose)}
+    .side-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.side-card{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}.side-name{font:600 19px 'Playfair Display',serif}.side-detail{font-size:11px;color:var(--muted);margin-top:5px}.side-count{font-size:22px;font-weight:700;color:var(--sage-deep);white-space:nowrap}.side-count small{font-size:11px;color:var(--muted);font-weight:500}
+    .panel{margin-top:24px;overflow:hidden}.panel-head{padding:19px 20px 14px;display:flex;align-items:center;justify-content:space-between;gap:16px}.panel-title{font:600 21px 'Playfair Display',serif}.panel-note{color:var(--muted);font-size:11px;margin-top:4px}.filters{padding:0 20px 16px;display:flex;gap:10px;flex-wrap:wrap}.field{border:1px solid var(--line);border-radius:12px;background:#fbfdfb;color:var(--ink);padding:10px 12px;font-size:12px;outline:none}.field:focus{border-color:var(--sage)}.search{flex:1;min-width:210px}.select{min-width:150px}.table-wrap{overflow:auto;border-top:1px solid var(--line)}table{width:100%;border-collapse:collapse;min-width:690px}th{text-align:left;background:#f8fbf9;padding:12px 20px;color:#82918b;font-size:9px;letter-spacing:.13em;text-transform:uppercase;font-weight:700}td{padding:14px 20px;border-top:1px solid #edf2ef;font-size:12px}tbody tr:hover{background:#fbfdfb}.guest-name{font-size:13px;font-weight:700}.guest-link{font-size:10px;color:#99a6a0;margin-top:4px;max-width:330px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 9px;font-size:10px;font-weight:700;white-space:nowrap}.badge.yes{background:var(--green-bg);color:var(--green)}.badge.no{background:var(--rose-bg);color:var(--rose)}.badge.side{background:#f0f5f2;color:#587269}.copy{border:0;background:transparent;color:var(--sage-deep);font-size:11px;font-weight:700;cursor:pointer;padding:6px}.copy:hover{text-decoration:underline}.empty,.state{padding:36px 20px;text-align:center;color:var(--muted);font-size:13px}.state.error{color:#a53e48}.hidden{display:none!important}.footnote{padding:12px 20px;border-top:1px solid var(--line);font-size:10px;color:#87948e}.statusline{font-size:11px;color:var(--muted);padding:0 20px 14px;min-height:19px}
+    @media(max-width:700px){.shell{width:min(100% - 24px,560px);padding-top:18px}.topline{align-items:flex-start}.brand{font-size:9px;letter-spacing:.13em}.top-actions .button{padding:9px 11px}.hero{padding:28px 0 20px;display:block}.updated{padding-top:12px}.summary{gap:8px}.metric{padding:15px 13px;border-radius:17px}.metric-label{font-size:10px}.metric-value{font-size:28px}.side-summary{grid-template-columns:1fr;gap:8px;margin-top:8px}.side-card{padding:14px;border-radius:17px;align-items:flex-start;display:flex}.side-name{font-size:16px}.side-count{margin-top:0;font-size:19px}.panel{margin-top:18px;border-radius:18px}.panel-head{align-items:flex-start;padding:16px 14px 12px}.panel-title{font-size:18px}.filters{padding:0 14px 13px}.search{flex-basis:100%}.select{flex:1;min-width:0}th,td{padding-left:13px;padding-right:13px}.side-detail{line-height:1.45}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topline">
+      <div class="brand"><span>+</span> Quoc Cuong & Kim Lien <span style="margin-left:8px">/ RSVP</span></div>
+      <div class="top-actions">
+        <button class="button" id="exportButton" type="button">Tải CSV</button>
+        <button class="button primary" id="refreshButton" type="button">Làm mới</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div><div class="eyebrow">Danh sách phản hồi khách mời</div><h1>Thống kê xác nhận</h1><p>Chỉ tính lựa chọn tham dự hoặc vắng mặt, không tính nội dung lời chúc.</p></div>
+      <div class="updated" id="updatedAt">Đang tải dữ liệu...</div>
+    </section>
+
+    <section class="summary" aria-label="Tổng quan">
+      <article class="metric attend"><div class="metric-label">Sẽ tham dự</div><div class="metric-value" id="attendingCount">--</div></article>
+      <article class="metric absent"><div class="metric-label">Xin phép vắng mặt</div><div class="metric-value" id="absentCount">--</div></article>
+      <article class="metric"><div class="metric-label">Tổng khách đã phản hồi</div><div class="metric-value" id="totalCount">--</div></article>
+    </section>
+    <section class="side-summary" aria-label="Theo phía gia đình">
+      <article class="side-card"><div><div class="side-name">Nhà Trai</div><div class="side-detail" id="groomDetail">Đang tổng hợp...</div></div><div class="side-count" id="groomCount">-- <small>khách</small></div></article>
+      <article class="side-card"><div><div class="side-name">Nhà Gái</div><div class="side-detail" id="brideDetail">Đang tổng hợp...</div></div><div class="side-count" id="brideCount">-- <small>khách</small></div></article>
+      <article class="side-card"><div><div class="side-name">Cả Hai</div><div class="side-detail" id="bothDetail">Đang tổng hợp...</div></div><div class="side-count" id="bothCount">-- <small>khách</small></div></article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><div class="panel-title">Khách đã xác nhận</div><div class="panel-note">Mỗi tên ở mỗi phía chỉ lấy phản hồi mới nhất.</div></div></div>
+      <div class="filters">
+        <input class="field search" id="searchInput" type="search" placeholder="Tìm theo tên khách..." autocomplete="off">
+        <select class="field select" id="sideFilter" aria-label="Lọc phía gia đình"><option value="">Tất cả hai nhà</option><option>Nhà Trai</option><option>Nhà Gái</option><option>Cả Hai</option></select>
+        <select class="field select" id="statusFilter" aria-label="Lọc trạng thái"><option value="">Tất cả trạng thái</option><option value="Sẽ tham dự">Sẽ tham dự</option><option value="Bận việc tiếc quá">Xin phép vắng</option></select>
+      </div>
+      <div class="statusline" id="statusLine" role="status"></div>
+      <div class="table-wrap" id="tableWrap">
+        <table><thead><tr><th>Tên khách / link mời</th><th>Phía</th><th>Phản hồi</th><th>Thời gian</th><th></th></tr></thead><tbody id="responsesBody"></tbody></table>
+      </div>
+      <div class="state hidden" id="emptyState">Chưa có lượt bấm xác nhận nào.</div>
+      <div class="footnote">Nguồn: Supabase RSVP. Các dòng có lời chúc được loại khỏi thống kê.</div>
+    </section>
+  </main>
+
+  <script>
+    const SUPABASE_URL = 'https://wabvabtlsfnrwuygdyls.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable__P6rhX4muzIWmP_aALbwWA_9TxQzqFf';
+    const API = `${SUPABASE_URL}/rest/v1/wedding_guestbook`;
+    const PAGE_SIZE = 1000;
+    let responses = [];
+
+    const byId = id => document.getElementById(id);
+    const normalizeName = name => String(name || '').trim().replace(/\s+/g, ' ').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('vi');
+    const sideLink = item => {
+      const path = item.side === 'Nhà Gái' ? '/thiepmoinhagai' : '/thiepmoinhatrai';
+      return `https://lamquoccuong.com${path}?to=${encodeURIComponent(item.invite_name || item.name)}`;
+    };
+    const formatDate = value => {
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? 'Không rõ' : new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(date);
+    };
+
+    async function loadAllResponses() {
+      byId('refreshButton').disabled = true;
+      byId('statusLine').textContent = 'Đang đồng bộ dữ liệu từ Supabase...';
+      byId('statusLine').className = 'statusline';
+      try {
+        let offset = 0;
+        const allRows = [];
+        while (true) {
+          const url = new URL(API);
+          url.search = new URLSearchParams({
+            select: 'id,name,side,status,created_at',
+            is_visible: 'eq.true',
+            wish: 'is.null',
+            order: 'created_at.desc',
+            limit: String(PAGE_SIZE),
+            offset: String(offset)
+          }).toString();
+          const response = await fetch(url, {
+            headers: {
+              apikey: SUPABASE_PUBLISHABLE_KEY,
+              Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+            },
+            cache: 'no-store'
+          });
+          if (!response.ok) throw new Error(`Supabase trả mã ${response.status}: ${await response.text()}`);
+          const batch = await response.json();
+          allRows.push(...batch);
+          if (batch.length < PAGE_SIZE) break;
+          offset += PAGE_SIZE;
+        }
+
+        const latestByGuest = new Map();
+        for (const row of allRows) {
+          if (!row.name || !row.status) continue;
+          const key = `${row.side || ''}|${normalizeName(row.name)}`;
+          const previous = latestByGuest.get(key);
+          if (!previous || new Date(row.created_at) > new Date(previous.created_at)) latestByGuest.set(key, row);
+        }
+        responses = [...latestByGuest.values()].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        updateSummary();
+        renderTable();
+        byId('updatedAt').textContent = `Cập nhật lúc ${new Intl.DateTimeFormat('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date())}`;
+        byId('statusLine').textContent = `${allRows.length} lượt bấm được tải, gộp thành ${responses.length} khách/phía.`;
+      } catch (error) {
+        console.error('Không tải được RSVP:', error);
+        byId('statusLine').textContent = `Không tải được dữ liệu: ${error.message}`;
+        byId('statusLine').className = 'statusline state error';
+        byId('updatedAt').textContent = 'Lỗi kết nối Supabase';
+      } finally {
+        byId('refreshButton').disabled = false;
+      }
+    }
+
+    function updateSummary() {
+      const attending = responses.filter(row => row.status === 'Sẽ tham dự');
+      const absent = responses.filter(row => row.status !== 'Sẽ tham dự');
+      byId('attendingCount').textContent = attending.length;
+      byId('absentCount').textContent = absent.length;
+      byId('totalCount').textContent = responses.length;
+      for (const [side, key] of [['Nhà Trai', 'groom'], ['Nhà Gái', 'bride'], ['Cả Hai', 'both']]) {
+        const group = responses.filter(row => row.side === side);
+        const yes = group.filter(row => row.status === 'Sẽ tham dự').length;
+        byId(`${key}Count`).innerHTML = `${group.length} <small>khách</small>`;
+        byId(`${key}Detail`).textContent = `${yes} tham dự · ${group.length - yes} vắng mặt`;
+      }
+    }
+
+    function renderTable() {
+      const query = normalizeName(byId('searchInput').value);
+      const side = byId('sideFilter').value;
+      const status = byId('statusFilter').value;
+      const filtered = responses.filter(row => (!query || normalizeName(row.name).includes(query))
+        && (!side || row.side === side) && (!status || row.status === status));
+      const body = byId('responsesBody');
+      body.replaceChildren();
+      const isEmpty = filtered.length === 0;
+      byId('tableWrap').classList.toggle('hidden', isEmpty);
+      byId('emptyState').classList.toggle('hidden', !isEmpty);
+      byId('emptyState').textContent = responses.length === 0
+        ? 'Chưa có lượt bấm xác nhận nào.'
+        : 'Không tìm thấy khách phù hợp.';
+      for (const row of filtered) {
+        const tr = document.createElement('tr');
+        const nameCell = document.createElement('td');
+        const name = document.createElement('div');
+        name.className = 'guest-name';
+        name.textContent = row.name;
+        const url = sideLink(row);
+        const linkText = document.createElement('div');
+        linkText.className = 'guest-link';
+        linkText.textContent = url;
+        nameCell.append(name, linkText);
+
+        const sideCell = document.createElement('td');
+        const sideBadge = document.createElement('span');
+        sideBadge.className = 'badge side';
+        sideBadge.textContent = row.side || 'Chưa chọn';
+        sideCell.append(sideBadge);
+
+        const statusCell = document.createElement('td');
+        const statusBadge = document.createElement('span');
+        const isAttending = row.status === 'Sẽ tham dự';
+        statusBadge.className = `badge ${isAttending ? 'yes' : 'no'}`;
+        statusBadge.textContent = isAttending ? 'Sẽ tham dự' : 'Xin phép vắng';
+        statusCell.append(statusBadge);
+
+        const timeCell = document.createElement('td');
+        timeCell.textContent = formatDate(row.created_at);
+        const copyCell = document.createElement('td');
+        const copyButton = document.createElement('button');
+        copyButton.type = 'button';
+        copyButton.className = 'copy';
+        copyButton.textContent = 'Sao chép link';
+        copyButton.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(url);
+            copyButton.textContent = 'Đã chép';
+            setTimeout(() => copyButton.textContent = 'Sao chép link', 1400);
+          } catch {
+            window.prompt('Sao chép link khách mời:', url);
+          }
+        });
+        copyCell.append(copyButton);
+        tr.append(nameCell, sideCell, statusCell, timeCell, copyCell);
+        body.append(tr);
+      }
+      byId('statusLine').textContent = `${filtered.length} / ${responses.length} khách đang hiển thị.`;
+    }
+
+    function exportCsv() {
+      const header = ['Ten khach', 'Phia', 'Trang thai', 'Thoi gian', 'Link moi'];
+      const rows = responses.map(row => [row.name, row.side, row.status, formatDate(row.created_at), sideLink(row)]);
+      const csv = [header, ...rows].map(row => row.map(value => `"${String(value ?? '').replaceAll('"', '""')}"`).join(',')).join('\r\n');
+      const blob = new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'thong-ke-xac-nhan-cuoi.csv';
+      anchor.click();
+      URL.revokeObjectURL(url);
+    }
+
+    byId('refreshButton').addEventListener('click', loadAllResponses);
+    byId('exportButton').addEventListener('click', exportCsv);
+    byId('searchInput').addEventListener('input', renderTable);
+    byId('sideFilter').addEventListener('change', renderTable);
+    byId('statusFilter').addEventListener('change', renderTable);
+    loadAllResponses();
+  </script>
+</body>
+</html>
