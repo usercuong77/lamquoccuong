@@ -127,6 +127,7 @@ Kiểm tra thêm `git status` để chắc `.env.local` không xuất hiện tro
 ## 10. Deploy và xử lý sự cố
 
 - Deploy thông thường: commit và push lên `main`; Netlify tự nhận commit và build. Không chạy `netlify deploy` thủ công song song.
+- Thay đổi biến môi trường trên Netlify không có hiệu lực với deploy đang chạy; cần một build/deploy mới. Với dự án này, hãy tạo commit cần thiết và push lên `main` để Git tự kích hoạt deploy.
 - Nếu deploy báo thiếu đăng nhập: xác nhận `private/admin-credentials.txt` đã được commit và Netlify có đủ biến môi trường server.
 - Nếu API báo lỗi Supabase hoặc trang thống kê không tải dữ liệu: kiểm tra URL/secret key trong môi trường tương ứng và chạy migration mới nhất trong Supabase SQL Editor.
 - Nếu không tạo được link: kiểm tra migration invitation-codes đã chạy, key là secret/service-role chứ không phải publishable key, và phiên đăng nhập chưa hết hạn.
