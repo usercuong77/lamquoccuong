@@ -13,6 +13,7 @@ create table if not exists public.wedding_invitations (
 alter table public.wedding_invitations add column if not exists code_ciphertext text;
 alter table public.wedding_invitations add column if not exists base_url text;
 alter table public.wedding_invitations add column if not exists link_format text;
+alter table public.wedding_invitations add column if not exists to_value text;
 
 alter table public.wedding_invitations enable row level security;
 revoke all on table public.wedding_invitations from public, anon, authenticated;

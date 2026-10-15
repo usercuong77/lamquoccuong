@@ -11,6 +11,8 @@ export type WeddingInvitation = {
   display_name: string;
   side: WeddingSide;
   is_active: boolean;
+  to_value?: string | null;
+  link_format?: string | null;
 };
 
 export function getSupabaseServerConfig() {
@@ -118,12 +120,29 @@ export function toTelexInvitationName(value: string) {
     .split(/\s+/).filter(Boolean).map(toTelexWord).join('-');
 }
 
+export function toSlugInvitationName(value: string) {
+  return value.normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+    .replace(/&/g, 'va')
+    .replace(/[^a-zA-Z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .toLowerCase();
+}
+
+export function getInvitationToValue(name: string, format: string | null | undefined) {
+  if (format === 'telex') return toTelexInvitationName(name).toLowerCase();
+  if (format === 'slug') return toSlugInvitationName(name);
+  return name;
+}
+
 export async function lookupWeddingInvitation(code: string, name: string, side: string) {
   if (!/^[A-Za-z0-9_-]{12}$/.test(code)) return null;
   if (name.length < 1 || name.length > 120) return null;
 
   const query = new URLSearchParams({
-    select: 'id,invite_key,code_hash,display_name,side,is_active',
+    select: 'id,invite_key,code_hash,display_name,side,is_active,to_value,link_format',
     code_hash: `eq.${hashInvitationCode(code)}`,
     is_active: 'eq.true',
     limit: '1'
@@ -132,9 +151,7 @@ export async function lookupWeddingInvitation(code: string, name: string, side: 
   if (!response.ok) throw new Error(`Invitation lookup failed (${response.status})`);
   const [invitation] = await response.json() as WeddingInvitation[];
   if (!invitation || invitation.side !== side) return null;
-  const normalizedName = normalizeInvitationName(name);
-  const expectedName = normalizeInvitationName(invitation.display_name);
-  const telexName = normalizeInvitationName(toTelexInvitationName(invitation.display_name));
-  if (normalizedName !== expectedName && normalizedName !== telexName) return null;
+  const expectedToValue = invitation.to_value || getInvitationToValue(invitation.display_name, invitation.link_format);
+  if (name !== expectedToValue) return null;
   return invitation;
 }

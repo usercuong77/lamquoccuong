@@ -1745,7 +1745,7 @@
         const invitationSide = isBrideSide ? 'bride' : 'groom';
         const invitationCode = urlParams.get('k') || '';
         const invitationSideLabel = weddingEvents[invitationSide].side;
-        const guestNameFromLink = (urlParams.get('to') || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+        const guestNameFromLink = (urlParams.get('to') || '').slice(0, 120);
         let invitationDisplayName = '';
         let invitationAuthorized = false;
         let albumInviteKey = '';

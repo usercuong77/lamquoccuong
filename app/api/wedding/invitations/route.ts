@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
-import { createInvitationCode, createInviteKey, decryptInvitationCode, encryptInvitationCode, hashInvitationCode, supabaseServiceRequest, type WeddingSide } from '@/lib/wedding-invitations';
+import { createInvitationCode, createInviteKey, decryptInvitationCode, encryptInvitationCode, getInvitationToValue, hashInvitationCode, supabaseServiceRequest, toTelexInvitationName, type WeddingSide } from '@/lib/wedding-invitations';
 import { isSameOriginRequest, verifyAdminSession } from '@/lib/wedding-admin';
 
 export const runtime = 'nodejs';
 
-type GuestInput = { name?: unknown };
+type GuestInput = { name?: unknown; toValue?: unknown };
 
 export async function GET(request: Request) {
   if (!verifyAdminSession(request)) return NextResponse.json({ error: 'Vui lòng đăng nhập để xem link đã phát hành.' }, { status: 401 });
 
   try {
     const query = new URLSearchParams({
-      select: 'id,invite_key,code_ciphertext,display_name,side,is_active,created_at,base_url,link_format',
+      select: 'id,invite_key,code_ciphertext,display_name,side,is_active,created_at,base_url,link_format,to_value',
       order: 'created_at.desc',
       limit: '1000'
     });
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     }
     const rows = await response.json() as Array<{
       id: string; invite_key: string; code_ciphertext: string | null; display_name: string;
-      side: WeddingSide; is_active: boolean; created_at: string; base_url: string | null; link_format: string | null;
+      side: WeddingSide; is_active: boolean; created_at: string; base_url: string | null; link_format: string | null; to_value: string | null;
     }>;
     const unlockResponse = await supabaseServiceRequest('wedding_album_unlocks?select=invite_key');
     if (!unlockResponse.ok) {
@@ -35,7 +35,7 @@ export async function GET(request: Request) {
       try { if (row.code_ciphertext) code = decryptInvitationCode(row.code_ciphertext); } catch (error) {
         console.error('Could not decrypt an issued wedding link:', row.id, error);
       }
-      return { id: row.id, inviteKey: row.invite_key, name: row.display_name, side: row.side, isActive: row.is_active, albumUnlocked: unlockedKeys.has(row.invite_key), createdAt: row.created_at, code, baseUrl: row.base_url, linkFormat: row.link_format };
+      return { id: row.id, inviteKey: row.invite_key, name: row.display_name, side: row.side, isActive: row.is_active, albumUnlocked: unlockedKeys.has(row.invite_key), createdAt: row.created_at, baseUrl: row.base_url, linkFormat: row.link_format, toValue: row.to_value || getInvitationToValue(row.display_name, row.link_format), code };
     });
     return NextResponse.json({ invitations }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
@@ -84,16 +84,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Danh sách phải có từ 1 đến 200 khách.' }, { status: 400 });
     }
     const baseUrl = body.baseUrl === 'http://localhost:3000' ? body.baseUrl : 'https://lamquoccuong.com';
-    const linkFormat = body.linkFormat === 'telex' || body.linkFormat === 'slug' || body.linkFormat === 'original' ? body.linkFormat : 'telex';
+    const linkFormat = body.linkFormat === 'original' ? 'original' : 'telex';
 
-    const guests = (body.guests as GuestInput[]).map(guest => typeof guest.name === 'string' ? guest.name.trim() : '');
-    if (guests.some(name => name.length < 1 || name.length > 120)) {
+    const guests = (body.guests as GuestInput[]).map(guest => ({
+      name: typeof guest.name === 'string' ? guest.name.trim() : '',
+      toValue: typeof guest.toValue === 'string' ? guest.toValue : ''
+    }));
+    if (guests.some(guest => guest.name.length < 1 || guest.name.length > 120 || guest.toValue.length < 1 || guest.toValue.length > 120)) {
       return NextResponse.json({ error: 'Tên khách phải dài từ 1 đến 120 ký tự.' }, { status: 400 });
     }
+    if (guests.some(guest => guest.toValue !== (linkFormat === 'original' ? guest.name : toTelexInvitationName(guest.name).toLowerCase()))) {
+      return NextResponse.json({ error: 'Tên trên link không khớp với định dạng đã chọn.' }, { status: 400 });
+    }
 
-    const issued = guests.map(name => {
+    const issued = guests.map(guest => {
       const code = createInvitationCode();
-      return { name, code, invite_key: createInviteKey() };
+      return { ...guest, code, invite_key: createInviteKey() };
     });
     const rows = issued.map(invitation => ({
       invite_key: invitation.invite_key,
@@ -102,6 +108,7 @@ export async function POST(request: Request) {
       base_url: baseUrl,
       link_format: linkFormat,
       display_name: invitation.name,
+      to_value: invitation.toValue,
       side,
       is_active: true
     }));
@@ -122,6 +129,7 @@ export async function POST(request: Request) {
     const issuedByKey = new Map<string, (typeof issued)[number]>(issued.map(item => [item.invite_key, item]));
     const invitations = saved.map(row => ({
       name: row.display_name,
+      toValue: issuedByKey.get(row.invite_key)?.toValue,
       side: row.side,
       inviteKey: row.invite_key,
       id: row.id,

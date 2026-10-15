@@ -125,10 +125,6 @@
                             <span class="text-xs text-emerald-950"><b>Link Telex (Khuyên dùng)</b> - ngắn gọn, không ký tự %<small class="mt-1 block text-stone-600">Ví dụ: <code class="rounded bg-white px-1.5 py-0.5">?to=Cuowngf</code> → thiệp hiện “Cường”</small></span>
                         </label>
                         <label class="flex items-start gap-2 py-1.5 cursor-pointer">
-                            <input type="radio" name="linkFormatChoice" value="slug" onchange="generateLinks()" class="mt-0.5 text-emerald-700 focus:ring-emerald-600">
-                            <span class="text-xs text-emerald-950">Link không dấu rút gọn (tự phục hồi dấu)<small class="mt-1 block text-stone-600">Ví dụ: <code class="rounded bg-white px-1.5 py-0.5">?to=cuong</code> → thiệp hiện “Cường”</small></span>
-                        </label>
-                        <label class="flex items-start gap-2 py-1.5 cursor-pointer">
                             <input type="radio" name="linkFormatChoice" value="original" onchange="generateLinks()" class="mt-0.5 text-emerald-700 focus:ring-emerald-600">
                             <span class="text-xs text-emerald-950">Link có dấu nguyên bản<small class="mt-1 block text-stone-600">Ví dụ: <code class="rounded bg-white px-1.5 py-0.5">?to=C%C6%B0%E1%BB%9Dng</code> → thiệp hiện “Cường”</small></span>
                         </label>
@@ -192,7 +188,7 @@
                 <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs flex items-start gap-2.5">
                     <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5 text-sm flex-shrink-0"></i>
                     <div>
-                        <span class="font-bold text-emerald-900">Tính năng thông minh:</span> Link không dấu (VD: <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">?to=cuong</code> hay <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">?to=anh-tuan-va-chi-lan</code>) sẽ được thiệp cưới <b>tự động giải mã và hiển thị chuẩn dấu tiếng Việt</b> (<b>"Cường"</b>, <b>"Anh Tuấn & Chị Lan"</b>) mà bạn không cần phải tải lại danh bạ!
+                        <span class="font-bold text-emerald-900">Link mời được ràng buộc với đúng tên đã phát hành:</span> Không sửa phần <code class="font-mono bg-white px-1.5 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">to=</code> trên URL; thay đổi tên sẽ làm mã mời không còn hợp lệ.
                     </div>
                 </div>
 
@@ -556,9 +552,8 @@
             showToast('Đã đăng xuất.');
         }
 
-        function makeGuestUrl(domain, side, name, code, format) {
+        function makeGuestUrl(domain, side, toValue, code) {
             const basePath = side === 'Nhà Gái' ? '/thiepmoinhagai' : '/thiepmoinhatrai';
-            const toValue = format === 'original' ? name : format === 'slug' ? toSlugKey(name) : vietnameseToTelexSlug(name).toLowerCase();
             return `${domain}${basePath}?to=${encodeURIComponent(toValue)}&k=${encodeURIComponent(code)}`;
         }
 
@@ -591,7 +586,7 @@
                 guestDirectoryMap[slug] = name;
                 guestDirectoryMap[telexSlug.toLowerCase()] = name;
 
-                const toValue = linkFormat === 'original' ? name : linkFormat === 'slug' ? slug : telexSlug.toLowerCase();
+                const toValue = linkFormat === 'original' ? name : telexSlug.toLowerCase();
                 const toParam = encodeURIComponent(toValue);
 
                 const fullUrl = `${domain}${basePath}?to=${toParam}`;
@@ -605,6 +600,7 @@
                 return {
                     id: index + 1,
                     name,
+                    toValue,
                     slug: toParam,
                     previewDisplayName,
                     side: sideLabel,
@@ -648,7 +644,7 @@
                 const response = await fetch('/api/wedding/invitations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ side, linkFormat, baseUrl: domain, guests: currentList.map(item => ({ name: item.name })) })
+                    body: JSON.stringify({ side, linkFormat, baseUrl: domain, guests: currentList.map(item => ({ name: item.name, toValue: item.toValue })) })
                 });
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.error || 'Không tạo được link.');
@@ -656,7 +652,7 @@
                 const template = document.getElementById('msgTemplate').value.trim() || DEFAULT_TEMPLATE;
                 currentList = result.invitations.map((issued, index) => {
                     const previous = currentList[index];
-                    const url = makeGuestUrl(domain, side, issued.name, issued.code, linkFormat);
+                    const url = makeGuestUrl(domain, side, issued.toValue, issued.code);
                     const message = template
                         .replaceAll('{name}', issued.name)
                         .replaceAll('{link}', url)
@@ -689,8 +685,7 @@
                 issuedInvitationsCache = invitations;
                 status.textContent = invitations.length ? `${invitations.length} link đã phát hành.` : 'Chưa có link nào được phát hành.';
                 container.innerHTML = invitations.map(item => {
-                    const format = ['telex', 'slug', 'original'].includes(item.linkFormat) ? item.linkFormat : 'original';
-                    const url = item.code ? makeGuestUrl(item.baseUrl || domainOverride, item.side, item.name, item.code, format) : '';
+                    const url = item.code ? makeGuestUrl(item.baseUrl || domainOverride, item.side, item.toValue || item.name, item.code) : '';
                     const date = item.createdAt ? new Date(item.createdAt).toLocaleString('vi-VN') : '';
                     return `<article class="rounded-2xl border border-stone-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div class="min-w-0 flex-1">
