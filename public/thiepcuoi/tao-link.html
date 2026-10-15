@@ -38,6 +38,8 @@
         .toast {
             animation: slideIn 0.3s ease-out, fadeOut 0.4s ease-in 2.2s forwards;
         }
+        .login-screen { min-height: calc(100vh - 4rem); display: grid; place-items: center; }
+        .login-card { width: min(420px, 100%); }
         @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes fadeOut { to { opacity: 0; transform: translateY(-10px); } }
     </style>
@@ -45,7 +47,21 @@
 <body class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
     <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <div class="max-w-5xl mx-auto">
+    <section id="adminLoginPanel" class="login-screen max-w-5xl mx-auto" aria-labelledby="adminLoginTitle">
+        <form class="login-card bg-white rounded-3xl p-7 sm:p-9 shadow-lg border border-gold/30" onsubmit="loginAdmin(event)">
+            <span class="inline-block px-3 py-1 rounded-full bg-gold/15 text-gold-dark text-xs font-semibold uppercase tracking-wider mb-4">Quốc Cường & Kim Liên</span>
+            <h1 id="adminLoginTitle" class="font-serif text-3xl font-bold text-charcoal mb-2">Đăng nhập quản trị</h1>
+            <p class="text-sm text-stone-500 mb-6">Đăng nhập để tạo link mời. Tài khoản này cũng dùng cho trang thống kê.</p>
+            <label for="adminUsername" class="block text-xs font-semibold text-stone-700 mb-1">Tên đăng nhập</label>
+            <input id="adminUsername" type="text" autocomplete="username" required class="w-full px-3 py-3 text-sm rounded-xl border border-stone-200 bg-cream focus:outline-none focus:border-gold" placeholder="Tên đăng nhập">
+            <label for="adminPassword" class="block text-xs font-semibold text-stone-700 mt-4 mb-1">Mật khẩu</label>
+            <input id="adminPassword" type="password" autocomplete="current-password" required class="w-full px-3 py-3 text-sm rounded-xl border border-stone-200 bg-cream focus:outline-none focus:border-gold" placeholder="Mật khẩu">
+            <p id="adminLoginError" class="min-h-5 mt-3 text-xs text-rose-700" role="alert"></p>
+            <button id="adminLoginButton" type="submit" class="w-full mt-1 py-3 bg-stone-900 hover:bg-black text-white rounded-xl font-semibold text-sm transition-colors">Đăng nhập</button>
+        </form>
+    </section>
+
+    <div id="adminWorkspace" class="hidden max-w-5xl mx-auto">
         <!-- Header -->
         <header class="text-center mb-8 bg-white/80 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-sm border border-gold/30">
             <span class="inline-block px-3 py-1 rounded-full bg-gold/15 text-gold-dark text-xs font-semibold uppercase tracking-wider mb-2">
@@ -58,6 +74,10 @@
                 Tự động tạo link <b class="text-emerald-700">không dấu siêu gọn đẹp</b> (không bị mã hóa %20 rối mắt). Tên hiển thị trên thiệp vẫn <b>có dấu chuẩn xác 100%</b>!
             </p>
         </header>
+        <div id="adminLoggedInPanel" class="mb-5 p-3 rounded-2xl border border-emerald-200 bg-emerald-50 text-xs text-emerald-950 flex items-center justify-between gap-3">
+            <span>Đã đăng nhập: <b id="adminLoggedInName"></b></span>
+            <button type="button" onclick="logoutAdmin()" class="px-3 py-1.5 rounded-lg bg-white border border-emerald-200 hover:bg-emerald-100 font-semibold">Đăng xuất</button>
+        </div>
 
         <!-- Main Workspace -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -98,30 +118,24 @@
                         </div>
                     </div>
 
-                    <!-- URL Style Option -->
-                    <div class="mb-4 p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200">
-                        <label class="block text-xs font-bold text-emerald-900 mb-1 flex items-center gap-1.5">
-                            <i class="fa-solid fa-sparkles text-emerald-600"></i> Định Dạng Link:
+                    <fieldset class="mb-4 p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+                        <legend class="px-1 text-xs font-bold text-emerald-950">Định Dạng Link</legend>
+                        <label class="flex items-start gap-2 py-1.5 cursor-pointer">
+                            <input type="radio" name="linkFormatChoice" value="telex" checked onchange="generateLinks()" class="mt-0.5 text-emerald-700 focus:ring-emerald-600">
+                            <span class="text-xs text-emerald-950"><b>Link Telex (Khuyên dùng)</b> - ngắn gọn, không ký tự %<small class="mt-1 block text-stone-600">Ví dụ: <code class="rounded bg-white px-1.5 py-0.5">?to=Cuowngf</code> → thiệp hiện “Cường”</small></span>
                         </label>
-                        <div class="space-y-2 mt-2">
-                            <label class="flex items-center gap-2 text-xs text-stone-700 cursor-pointer">
-                                <input type="radio" name="urlStyle" value="telex" checked onchange="generateLinks()" class="text-emerald-600 focus:ring-emerald-500">
-                                <span class="font-semibold text-emerald-900">Link Telex (Khuyên dùng - 100% chuẩn dấu, không ký tự %)</span>
-                            </label>
-                            <p class="text-[10px] text-stone-500 pl-5">Ví dụ: <code class="bg-white px-1.5 py-0.5 rounded border border-emerald-300 font-bold text-emerald-800">/thiepmoinhatrai?to=Cuowngf</code> &rarr; Thiệp hiện <b>"Cường"</b></p>
+                        <label class="flex items-start gap-2 py-1.5 cursor-pointer">
+                            <input type="radio" name="linkFormatChoice" value="slug" onchange="generateLinks()" class="mt-0.5 text-emerald-700 focus:ring-emerald-600">
+                            <span class="text-xs text-emerald-950">Link không dấu rút gọn (tự phục hồi dấu)<small class="mt-1 block text-stone-600">Ví dụ: <code class="rounded bg-white px-1.5 py-0.5">?to=cuong</code> → thiệp hiện “Cường”</small></span>
+                        </label>
+                        <label class="flex items-start gap-2 py-1.5 cursor-pointer">
+                            <input type="radio" name="linkFormatChoice" value="original" onchange="generateLinks()" class="mt-0.5 text-emerald-700 focus:ring-emerald-600">
+                            <span class="text-xs text-emerald-950">Link có dấu nguyên bản<small class="mt-1 block text-stone-600">Ví dụ: <code class="rounded bg-white px-1.5 py-0.5">?to=C%C6%B0%E1%BB%9Dng</code> → thiệp hiện “Cường”</small></span>
+                        </label>
+                    </fieldset>
 
-                            <label class="flex items-center gap-2 text-xs text-stone-700 cursor-pointer">
-                                <input type="radio" name="urlStyle" value="slug" onchange="generateLinks()" class="text-emerald-600 focus:ring-emerald-500">
-                                <span>Link không dấu rút gọn (Tự động phục hồi dấu)</span>
-                            </label>
-                            <p class="text-[10px] text-stone-500 pl-5">Ví dụ: <code class="bg-white px-1.5 py-0.5 rounded border text-stone-700">/thiepmoinhatrai?to=cuong</code> &rarr; Thiệp hiện <b>"Cường"</b></p>
-                            
-                            <label class="flex items-center gap-2 text-xs text-stone-700 cursor-pointer mt-1">
-                                <input type="radio" name="urlStyle" value="encoded" onchange="generateLinks()" class="text-emerald-600 focus:ring-emerald-500">
-                                <span>Link có dấu nguyên bản</span>
-                            </label>
-                            <p class="text-[10px] text-stone-500 pl-5">Ví dụ: <code class="bg-white px-1.5 py-0.5 rounded border text-stone-700">?to=Cường</code> hoặc <code class="bg-white px-1.5 py-0.5 rounded border text-stone-700">?to=Anh%20Tu%E1%BA%A5n...</code></p>
-                        </div>
+                    <div class="mb-4 p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs text-emerald-950">
+                        <b>Link mời có bảo vệ:</b> mỗi khách được cấp một mã riêng. Tên trên link phải khớp mã; link không có mã chỉ xem được thiệp.
                     </div>
 
                     <!-- Custom Message Template -->
@@ -143,8 +157,11 @@
                         <textarea id="guestListInput" rows="8" oninput="generateLinks()" placeholder="Ví dụ:&#10;Anh Tuấn & Chị Lan&#10;Gia Đình Bác Ba&#10;Bạn Thân Quốc Cường&#10;Chị Hoàng Mai (Công ty)" class="w-full p-3 text-xs rounded-2xl border border-stone-200 bg-cream focus:outline-none focus:border-gold leading-relaxed font-sans"></textarea>
                     </div>
 
-                    <button onclick="generateLinks()" class="w-full mt-4 py-3 bg-stone-900 hover:bg-black text-white rounded-2xl font-semibold text-xs transition-all shadow-md flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-wand-magic-sparkles text-gold"></i> Cập Nhật Danh Sách
+                    <button onclick="generateLinks()" class="w-full mt-4 py-3 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-2xl font-semibold text-xs transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-eye text-gold-dark"></i> Xem Trước Danh Sách
+                    </button>
+                    <button id="issueInvitationsButton" onclick="issueInvitations()" class="w-full mt-3 py-3 bg-stone-900 hover:bg-black text-white rounded-2xl font-semibold text-xs transition-all shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-shield-heart text-gold"></i> Phát Hành Link Có Mã
                     </button>
                 </div>
             </div>
@@ -196,6 +213,18 @@
                     <p class="text-sm font-semibold text-stone-600 mb-1">Chưa có khách mời nào</p>
                     <p class="text-xs text-stone-400">Hãy nhập hoặc dán danh sách tên khách ở cột bên trái để tạo link ngay.</p>
                 </div>
+
+                <section class="mt-8 bg-white rounded-3xl p-5 shadow-sm border border-stone-200" aria-labelledby="issuedInvitationsTitle">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div>
+                            <h2 id="issuedInvitationsTitle" class="text-base font-bold text-charcoal">Link đã phát hành</h2>
+                            <p class="text-xs text-stone-500 mt-1">Danh sách được lưu trên Supabase. Có thể thu hồi riêng quyền xem album hoặc xoá link; RSVP và lời chúc cũ vẫn được giữ.</p>
+                        </div>
+                        <button onclick="loadIssuedInvitations()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold"><i class="fa-solid fa-rotate-right mr-1"></i> Tải lại</button>
+                    </div>
+                    <p id="issuedInvitationsStatus" class="py-4 text-center text-xs text-stone-400">Đăng nhập để tải danh sách link đã phát hành.</p>
+                    <div id="issuedInvitationsList" class="space-y-3"></div>
+                </section>
             </div>
         </div>
     </div>
@@ -467,13 +496,77 @@
         }
 
         let currentList = [];
+        let issuedInvitationsCache = [];
         let guestDirectoryMap = {};
+        let adminAuthenticated = false;
+
+        function setAdminAuthenticated(authenticated, username = '') {
+            adminAuthenticated = authenticated;
+            document.getElementById('adminLoginPanel').classList.toggle('hidden', authenticated);
+            document.getElementById('adminWorkspace').classList.toggle('hidden', !authenticated);
+            document.getElementById('adminLoggedInName').textContent = username;
+            if (!authenticated) document.getElementById('adminLoginError').textContent = '';
+        }
+
+        async function refreshAdminSession() {
+            try {
+                const response = await fetch('/api/wedding/admin-session', { cache: 'no-store' });
+                const result = await response.json();
+                const authenticated = response.ok && result.authenticated;
+                setAdminAuthenticated(authenticated, result.username || '');
+                if (authenticated) loadIssuedInvitations();
+            } catch {
+                setAdminAuthenticated(false);
+            }
+        }
+
+        async function loginAdmin(event) {
+            event.preventDefault();
+            const usernameInput = document.getElementById('adminUsername');
+            const passwordInput = document.getElementById('adminPassword');
+            const button = document.getElementById('adminLoginButton');
+            const errorMessage = document.getElementById('adminLoginError');
+            button.disabled = true;
+            errorMessage.textContent = '';
+            try {
+                const response = await fetch('/api/wedding/admin-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: usernameInput.value, password: passwordInput.value })
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Đăng nhập không thành công.');
+                passwordInput.value = '';
+                setAdminAuthenticated(true, result.username);
+                loadIssuedInvitations();
+                if (!currentList.length) loadSampleGuests();
+                showToast('Đăng nhập quản trị thành công.');
+            } catch (error) {
+                errorMessage.textContent = error.message || 'Không thể đăng nhập.';
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        async function logoutAdmin() {
+            await fetch('/api/wedding/admin-session', { method: 'DELETE' });
+            setAdminAuthenticated(false);
+            document.getElementById('issuedInvitationsList').innerHTML = '';
+            document.getElementById('issuedInvitationsStatus').textContent = 'Đăng nhập để tải danh sách link đã phát hành.';
+            showToast('Đã đăng xuất.');
+        }
+
+        function makeGuestUrl(domain, side, name, code, format) {
+            const basePath = side === 'Nhà Gái' ? '/thiepmoinhagai' : '/thiepmoinhatrai';
+            const toValue = format === 'original' ? name : format === 'slug' ? toSlugKey(name) : vietnameseToTelexSlug(name).toLowerCase();
+            return `${domain}${basePath}?to=${encodeURIComponent(toValue)}&k=${encodeURIComponent(code)}`;
+        }
 
         function generateLinks() {
             const rawText = document.getElementById('guestListInput').value;
             const domain = document.getElementById('domainSelect').value.replace(/\/+$/, '');
             const sideChoice = document.querySelector('input[name="sideChoice"]:checked').value;
-            const urlStyle = document.querySelector('input[name="urlStyle"]:checked').value;
+            const linkFormat = document.querySelector('input[name="linkFormatChoice"]:checked').value;
             const template = document.getElementById('msgTemplate').value.trim() || DEFAULT_TEMPLATE;
 
             const isGroom = (sideChoice === 'nhatrai');
@@ -498,15 +591,11 @@
                 guestDirectoryMap[slug] = name;
                 guestDirectoryMap[telexSlug.toLowerCase()] = name;
 
-                let toParam = telexSlug;
-                if (urlStyle === 'slug') {
-                    toParam = slug;
-                } else if (urlStyle === 'encoded') {
-                    toParam = encodeURIComponent(name);
-                }
+                const toValue = linkFormat === 'original' ? name : linkFormat === 'slug' ? slug : telexSlug.toLowerCase();
+                const toParam = encodeURIComponent(toValue);
 
                 const fullUrl = `${domain}${basePath}?to=${toParam}`;
-                const previewDisplayName = (urlStyle === 'encoded') ? name : resolveGuestName(toParam);
+                const previewDisplayName = name;
                 const message = template
                     .replaceAll('{name}', name)
                     .replaceAll('{link}', fullUrl)
@@ -521,12 +610,150 @@
                     side: sideLabel,
                     event: eventName,
                     url: fullUrl,
-                    message
+                    message,
+                    code: '',
+                    linkFormat
                 };
             });
 
             document.getElementById('totalBadge').textContent = `${currentList.length} người`;
             renderCards(currentList);
+        }
+
+        async function issueInvitations() {
+            if (!adminAuthenticated) {
+                showToast('Hãy đăng nhập quản trị trước khi phát hành link.', 'error');
+                return;
+            }
+            if (!currentList.length) {
+                showToast('Hãy nhập danh sách khách trước.', 'error');
+                return;
+            }
+            if (currentList.every(item => item.code)) {
+                showToast('Danh sách này đã được phát hành link có mã.', 'error');
+                return;
+            }
+            if (currentList.some(item => item.name.length > 80)) {
+                showToast('Tên khách tối đa 80 ký tự để khớp với thiệp.', 'error');
+                return;
+            }
+
+            const button = document.getElementById('issueInvitationsButton');
+            button.disabled = true;
+            button.classList.add('opacity-60', 'cursor-wait');
+            try {
+                const side = document.querySelector('input[name="sideChoice"]:checked').value === 'nhagai' ? 'Nhà Gái' : 'Nhà Trai';
+                const linkFormat = document.querySelector('input[name="linkFormatChoice"]:checked').value;
+                const domain = document.getElementById('domainSelect').value.replace(/\/+$/, '');
+                const response = await fetch('/api/wedding/invitations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ side, linkFormat, baseUrl: domain, guests: currentList.map(item => ({ name: item.name })) })
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Không tạo được link.');
+
+                const template = document.getElementById('msgTemplate').value.trim() || DEFAULT_TEMPLATE;
+                currentList = result.invitations.map((issued, index) => {
+                    const previous = currentList[index];
+                    const url = makeGuestUrl(domain, side, issued.name, issued.code, linkFormat);
+                    const message = template
+                        .replaceAll('{name}', issued.name)
+                        .replaceAll('{link}', url)
+                        .replaceAll('{event}', previous.event)
+                        .replaceAll('{side}', side);
+                    return { ...previous, name: issued.name, side, url, message, code: issued.code, inviteKey: issued.inviteKey };
+                });
+                renderCards(currentList);
+                showToast(`Đã phát hành ${currentList.length} link có mã bảo vệ.`);
+                loadIssuedInvitations();
+            } catch (error) {
+                showToast(error.message || 'Không tạo được link. Kiểm tra cấu hình máy chủ.', 'error');
+            } finally {
+                button.disabled = false;
+                button.classList.remove('opacity-60', 'cursor-wait');
+            }
+        }
+
+        async function loadIssuedInvitations() {
+            if (!adminAuthenticated) return;
+            const status = document.getElementById('issuedInvitationsStatus');
+            const container = document.getElementById('issuedInvitationsList');
+            status.textContent = 'Đang tải danh sách link...';
+            try {
+                const response = await fetch('/api/wedding/invitations', { cache: 'no-store' });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Chưa tải được danh sách link.');
+                const domainOverride = document.getElementById('domainSelect').value.replace(/\/+$/, '');
+                const invitations = result.invitations || [];
+                issuedInvitationsCache = invitations;
+                status.textContent = invitations.length ? `${invitations.length} link đã phát hành.` : 'Chưa có link nào được phát hành.';
+                container.innerHTML = invitations.map(item => {
+                    const format = ['telex', 'slug', 'original'].includes(item.linkFormat) ? item.linkFormat : 'original';
+                    const url = item.code ? makeGuestUrl(item.baseUrl || domainOverride, item.side, item.name, item.code, format) : '';
+                    const date = item.createdAt ? new Date(item.createdAt).toLocaleString('vi-VN') : '';
+                    return `<article class="rounded-2xl border border-stone-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-2 flex-wrap"><b class="text-sm text-charcoal">${escapeHtml(item.name)}</b><span class="text-[10px] px-2 py-0.5 rounded-full ${item.side === 'Nhà Trai' ? 'bg-blue-50 text-blue-700' : 'bg-rose-50 text-rose-700'}">${escapeHtml(item.side)}</span><span class="text-[10px] text-stone-400">${escapeHtml(date)}</span></div>
+                            <div class="mt-1 text-xs ${item.albumUnlocked ? 'text-emerald-700' : 'text-stone-400'}">${item.albumUnlocked ? 'Album đã mở khóa' : 'Album chưa mở khóa'}</div>
+                            ${url ? `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer" class="mt-1 block truncate font-mono text-[11px] text-stone-500 hover:text-gold-dark">${escapeHtml(url)}</a>` : '<p class="mt-1 text-xs text-amber-700">Link được phát hành trước khi lưu mã; hãy phát hành link mới để có thể xem lại.</p>'}
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            ${url ? `<button data-copy-issued-link="${escapeAttr(url)}" data-copy-issued-name="${escapeAttr(item.name)}" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-xs font-semibold"><i class="fa-solid fa-link mr-1"></i> Copy</button>` : ''}
+                            ${item.albumUnlocked ? `<button data-revoke-album-id="${escapeAttr(item.id)}" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold"><i class="fa-solid fa-lock mr-1"></i> Thu hồi album</button>` : ''}
+                            <button data-delete-issued-id="${escapeAttr(item.id)}" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold"><i class="fa-regular fa-trash-can mr-1"></i> Xoá</button>
+                        </div>
+                    </article>`;
+                }).join('');
+                container.querySelectorAll('[data-copy-issued-link]').forEach(button => button.addEventListener('click', () => {
+                    copyText(button.dataset.copyIssuedLink, `Đã copy link của ${button.dataset.copyIssuedName}!`);
+                }));
+                container.querySelectorAll('[data-delete-issued-id]').forEach(button => button.addEventListener('click', () => {
+                    deleteIssuedInvitation(button.dataset.deleteIssuedId);
+                }));
+                container.querySelectorAll('[data-revoke-album-id]').forEach(button => button.addEventListener('click', () => {
+                    revokeAlbumAccess(button.dataset.revokeAlbumId);
+                }));
+            } catch (error) {
+                status.textContent = error.message || 'Chưa tải được danh sách link.';
+                container.innerHTML = '';
+            }
+        }
+
+        async function deleteIssuedInvitation(id) {
+            const name = issuedInvitationsCache.find(item => item.id === id)?.name || 'khách mời';
+            if (!confirm(`Xoá/thu hồi link của “${name}”? RSVP và lời chúc cũ sẽ được giữ nguyên.`)) return;
+            try {
+                const response = await fetch('/api/wedding/invitations', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Chưa xoá được link.');
+                showToast(`Đã thu hồi link của ${name}; dữ liệu phản hồi cũ vẫn được giữ.`);
+                loadIssuedInvitations();
+            } catch (error) {
+                showToast(error.message || 'Lỗi khi xoá link.', 'error');
+            }
+        }
+
+        async function revokeAlbumAccess(id) {
+            const name = issuedInvitationsCache.find(item => item.id === id)?.name || 'khách mời';
+            if (!confirm(`Thu hồi quyền xem album của link “${name}”? RSVP và lời chúc sẽ được giữ nguyên.`)) return;
+            try {
+                const response = await fetch('/api/wedding/album-access', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Chưa thu hồi được quyền album.');
+                showToast(`Đã thu hồi quyền xem album của ${name}. RSVP và lời chúc vẫn được giữ.`);
+                loadIssuedInvitations();
+            } catch (error) {
+                showToast(error.message || 'Lỗi khi thu hồi quyền album.', 'error');
+            }
         }
 
         function renderCards(list) {
@@ -551,17 +778,21 @@
                                 <i class="fa-solid fa-check text-[9px]"></i> Hiện trên thiệp: <b>${escapeHtml(item.previewDisplayName)}</b>
                             </span>
                         </div>
-                        <a href="${item.url}" target="_blank" class="text-[11px] text-stone-500 hover:text-gold-dark truncate block font-mono hover:underline" title="Bấm để mở xem thử thiệp">
-                            ${escapeHtml(item.url)} <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                        </a>
+                        ${item.code ? `
+                            <a href="${escapeAttr(item.url)}" target="_blank" rel="noopener noreferrer" class="text-[11px] text-stone-500 hover:text-gold-dark truncate block font-mono hover:underline" title="Bấm để mở thiệp đã phát hành">
+                                ${escapeHtml(item.url)} <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                            </a>
+                        ` : '<p class="text-[11px] text-amber-700">Chưa phát hành mã. Link xem trước chưa dùng để gửi RSVP/lời chúc.</p>'}
                     </div>
                     <div class="flex items-center gap-2 flex-shrink-0">
-                        <button onclick="copyText('${escapeAttr(item.url)}', 'Đã copy link của ${escapeAttr(item.name)}!')" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold transition-colors flex items-center gap-1.5 active:scale-95">
-                            <i class="fa-solid fa-link text-stone-500"></i> Copy Link
-                        </button>
-                        <button onclick="copyText('${escapeAttr(item.message)}', 'Đã copy lời mời Zalo cho ${escapeAttr(item.name)}!')" class="px-3 py-1.5 rounded-xl bg-gold hover:bg-gold-dark text-white text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm active:scale-95">
-                            <i class="fa-regular fa-comment-dots"></i> Copy Tin Nhắn
-                        </button>
+                        ${item.code ? `
+                            <button onclick="copyText('${escapeAttr(item.url)}', 'Đã copy link của ${escapeAttr(item.name)}!')" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold transition-colors flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-link text-stone-500"></i> Copy Link
+                            </button>
+                            <button onclick="copyText('${escapeAttr(item.message)}', 'Đã copy lời mời Zalo cho ${escapeAttr(item.name)}!')" class="px-3 py-1.5 rounded-xl bg-gold hover:bg-gold-dark text-white text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm active:scale-95">
+                                <i class="fa-regular fa-comment-dots"></i> Copy Tin Nhắn
+                            </button>
+                        ` : ''}
                     </div>
                 </div>
             `).join('');
@@ -596,6 +827,10 @@
                 showToast('Chưa có danh sách để copy!', 'error');
                 return;
             }
+            if (currentList.some(item => !item.code)) {
+                showToast('Phát hành link có mã trước khi sao chép lời mời.', 'error');
+                return;
+            }
             const allText = currentList.map(item => `[${item.name} - ${item.side}]\n${item.message}\n`).join('\n------------------------\n\n');
             copyText(allText, `Đã copy toàn bộ lời mời của ${currentList.length} khách!`);
         }
@@ -603,6 +838,10 @@
         function exportToCsv() {
             if (!currentList.length) {
                 showToast('Chưa có khách mời nào để xuất file!', 'error');
+                return;
+            }
+            if (currentList.some(item => !item.code)) {
+                showToast('Phát hành link có mã trước khi xuất danh sách.', 'error');
                 return;
             }
 
@@ -669,8 +908,9 @@
             return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
         }
 
-        window.onload = function() {
-            loadSampleGuests();
+        window.onload = async function() {
+            await refreshAdminSession();
+            if (adminAuthenticated) loadSampleGuests();
         };
     </script>
 </body>

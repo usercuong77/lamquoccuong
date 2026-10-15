@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracingIncludes: {
+    '/*': ['./private/admin-credentials.txt'],
+  },
   async rewrites() {
     return [
       { source: "/edit", destination: "/edit/index.html" },

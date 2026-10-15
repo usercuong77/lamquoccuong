@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Thống kê xác nhận | Quốc Cường & Kim Liên</title>
+  <title>Thống kê khách mời | Quốc Cường & Kim Liên</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -17,22 +17,44 @@
     .hero{padding:35px 0 27px;display:flex;justify-content:space-between;align-items:end;gap:20px}.eyebrow{color:var(--sage);font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase}.hero h1{font:600 clamp(32px,5vw,48px)/1.05 'Playfair Display',serif;margin:9px 0 8px;letter-spacing:-.03em}.hero p{color:var(--muted);font-size:13px;margin:0}.updated{font-size:11px;color:var(--muted);white-space:nowrap;padding-bottom:4px}
     .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.metric,.side-card,.panel{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}.metric{padding:20px 22px;position:relative;overflow:hidden}.metric:after{content:'';position:absolute;width:90px;height:90px;border:1px solid #e7efeb;border-radius:50%;right:-26px;top:-34px}.metric-label{font-size:11px;color:var(--muted);font-weight:600}.metric-value{font-size:34px;line-height:1.1;font-weight:700;letter-spacing:-.05em;margin-top:10px}.metric.attend .metric-value{color:var(--green)}.metric.absent .metric-value{color:var(--rose)}
     .side-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.side-card{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}.side-name{font:600 19px 'Playfair Display',serif}.side-detail{font-size:11px;color:var(--muted);margin-top:5px}.side-count{font-size:22px;font-weight:700;color:var(--sage-deep);white-space:nowrap}.side-count small{font-size:11px;color:var(--muted);font-weight:500}
+    .rsvp-notice{position:fixed;z-index:80;top:16px;left:50%;display:flex;align-items:center;gap:12px;width:min(440px,calc(100% - 28px));padding:14px 16px;transform:translateX(-50%);border:1px solid #cfe4da;border-radius:16px;background:#fff;box-shadow:0 14px 40px rgba(35,58,53,.18);color:var(--ink);font-size:13px;font-weight:700;animation:notice-in .25s ease-out}.rsvp-notice[hidden]{display:none}.rsvp-notice-icon{display:grid;flex:0 0 34px;width:34px;height:34px;place-items:center;border-radius:50%;background:var(--green-bg);color:var(--green)}.rsvp-notice button{margin-left:auto;border:0;background:transparent;color:var(--muted);font-size:20px;cursor:pointer}@keyframes notice-in{from{opacity:0;translate:0 -8px}to{opacity:1;translate:0 0}}
     .panel{margin-top:24px;overflow:hidden}.panel-head{padding:19px 20px 14px;display:flex;align-items:center;justify-content:space-between;gap:16px}.panel-title{font:600 21px 'Playfair Display',serif}.panel-note{color:var(--muted);font-size:11px;margin-top:4px}.filters{padding:0 20px 16px;display:flex;gap:10px;flex-wrap:wrap}.field{border:1px solid var(--line);border-radius:12px;background:#fbfdfb;color:var(--ink);padding:10px 12px;font-size:12px;outline:none}.field:focus{border-color:var(--sage)}.search{flex:1;min-width:210px}.select{min-width:150px}.table-wrap{overflow:auto;border-top:1px solid var(--line)}table{width:100%;border-collapse:collapse;min-width:690px}th{text-align:left;background:#f8fbf9;padding:12px 20px;color:#82918b;font-size:9px;letter-spacing:.13em;text-transform:uppercase;font-weight:700}td{padding:14px 20px;border-top:1px solid #edf2ef;font-size:12px}tbody tr:hover{background:#fbfdfb}.guest-name{font-size:13px;font-weight:700}.guest-link{font-size:10px;color:#99a6a0;margin-top:4px;max-width:330px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 9px;font-size:10px;font-weight:700;white-space:nowrap}.badge.yes{background:var(--green-bg);color:var(--green)}.badge.no{background:var(--rose-bg);color:var(--rose)}.badge.side{background:#f0f5f2;color:#587269}.copy{border:0;background:transparent;color:var(--sage-deep);font-size:11px;font-weight:700;cursor:pointer;padding:6px}.copy:hover{text-decoration:underline}.empty,.state{padding:36px 20px;text-align:center;color:var(--muted);font-size:13px}.state.error{color:#a53e48}.hidden{display:none!important}.footnote{padding:12px 20px;border-top:1px solid var(--line);font-size:10px;color:#87948e}.statusline{font-size:11px;color:var(--muted);padding:0 20px 14px;min-height:19px}
-    @media(max-width:700px){.shell{width:min(100% - 24px,560px);padding-top:18px}.topline{align-items:flex-start}.brand{font-size:9px;letter-spacing:.13em}.top-actions .button{padding:9px 11px}.hero{padding:28px 0 20px;display:block}.updated{padding-top:12px}.summary{gap:8px}.metric{padding:15px 13px;border-radius:17px}.metric-label{font-size:10px}.metric-value{font-size:28px}.side-summary{grid-template-columns:1fr;gap:8px;margin-top:8px}.side-card{padding:14px;border-radius:17px;align-items:flex-start;display:flex}.side-name{font-size:16px}.side-count{margin-top:0;font-size:19px}.panel{margin-top:18px;border-radius:18px}.panel-head{align-items:flex-start;padding:16px 14px 12px}.panel-title{font-size:18px}.filters{padding:0 14px 13px}.search{flex-basis:100%}.select{flex:1;min-width:0}th,td{padding-left:13px;padding-right:13px}.side-detail{line-height:1.45}}
+    .wish-original{font-weight:700}.wish-original-link{color:var(--ink);text-decoration:none}.wish-original-link:hover{text-decoration:underline}.wish-message{max-width:520px;white-space:pre-wrap;line-height:1.55}.wish-sender{font-weight:700}.wish-count{margin-left:auto;color:var(--sage-deep);font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0}
+    .auth-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 15% 0%,#e1eee8 0,transparent 38%),var(--paper)}.auth-card{width:min(420px,100%);padding:34px;border:1px solid var(--line);border-radius:26px;background:rgba(255,255,255,.94);box-shadow:var(--shadow)}.auth-card .brand{margin-bottom:22px}.auth-title{font:600 32px/1.15 'Playfair Display',serif;margin:0 0 8px}.auth-note{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 24px}.auth-field{display:block;width:100%;margin:7px 0 16px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fbfdfb;color:var(--ink);font-size:14px;outline:none}.auth-field:focus{border-color:var(--sage)}.auth-error{min-height:20px;color:#a53e48;font-size:12px;margin:0 0 10px}
+    @media(max-width:700px){.auth-card{padding:26px 22px;border-radius:22px}.shell{width:min(100% - 24px,560px);padding-top:18px}.topline{align-items:flex-start}.brand{font-size:9px;letter-spacing:.13em}.top-actions .button{padding:9px 11px}.hero{padding:28px 0 20px;display:block}.updated{padding-top:12px}.summary{gap:8px}.metric{padding:15px 13px;border-radius:17px}.metric-label{font-size:10px}.metric-value{font-size:28px}.side-summary{grid-template-columns:1fr;gap:8px;margin-top:8px}.side-card{padding:14px;border-radius:17px;align-items:flex-start;display:flex}.side-name{font-size:16px}.side-count{margin-top:0;font-size:19px}.panel{margin-top:18px;border-radius:18px}.panel-head{align-items:flex-start;padding:16px 14px 12px;gap:8px}.panel-title{font-size:18px}.filters{padding:0 14px 13px}.search{flex-basis:100%}.select{flex:1;min-width:0}th,td{padding-left:13px;padding-right:13px}.side-detail{line-height:1.45}#wishTableWrap table{width:100%;min-width:0;table-layout:fixed}#wishTableWrap thead{display:none}#wishTableWrap tbody{display:grid;gap:10px;padding:10px}#wishTableWrap tbody tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;border:1px solid var(--line);border-radius:14px;background:#fff;padding:9px 10px}#wishTableWrap td{min-width:0;padding:8px 5px;border:0;font-size:12px;overflow-wrap:anywhere}#wishTableWrap td::before{content:attr(data-label);display:block;margin-bottom:4px;color:var(--muted);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}#wishTableWrap td:first-child,#wishTableWrap td:nth-child(4),#wishTableWrap td:nth-child(5){grid-column:1/-1}#wishTableWrap .guest-link{display:none}#wishTableWrap .wish-original{font-size:14px}#wishTableWrap .wish-message{max-width:none}#wishTableWrap td:nth-child(5){text-align:right;color:var(--muted)}}
   </style>
 </head>
 <body>
-  <main class="shell">
+  <div class="rsvp-notice" id="rsvpNotice" role="status" aria-live="polite" hidden>
+    <span class="rsvp-notice-icon" aria-hidden="true">&#10003;</span>
+    <span id="rsvpNoticeText"></span>
+    <button type="button" id="dismissRsvpNotice" aria-label="Đóng thông báo">&times;</button>
+  </div>
+  <section class="auth-screen" id="loginScreen">
+    <form class="auth-card" id="loginForm">
+      <div class="brand"><span>+</span> Quoc Cuong & Kim Lien</div>
+      <h1 class="auth-title">Đăng nhập quản trị</h1>
+      <p class="auth-note">Đăng nhập để xem thống kê khách mời và lời chúc.</p>
+      <label for="loginUsername" class="metric-label">Tên đăng nhập</label>
+      <input class="auth-field" id="loginUsername" name="username" type="text" autocomplete="username" required maxlength="80">
+      <label for="loginPassword" class="metric-label">Mật khẩu</label>
+      <input class="auth-field" id="loginPassword" name="password" type="password" autocomplete="current-password" required maxlength="1024">
+      <p class="auth-error" id="loginError" role="alert"></p>
+      <button class="button primary" id="loginButton" type="submit" style="width:100%;padding:13px">Đăng nhập</button>
+    </form>
+  </section>
+  <main class="shell hidden" id="dashboard">
     <header class="topline">
       <div class="brand"><span>+</span> Quoc Cuong & Kim Lien <span style="margin-left:8px">/ RSVP</span></div>
       <div class="top-actions">
         <button class="button" id="exportButton" type="button">Tải CSV</button>
         <button class="button primary" id="refreshButton" type="button">Làm mới</button>
+        <button class="button" id="logoutButton" type="button">Đăng xuất</button>
       </div>
     </header>
 
     <section class="hero">
-      <div><div class="eyebrow">Danh sách phản hồi khách mời</div><h1>Thống kê xác nhận</h1><p>Chỉ tính lựa chọn tham dự hoặc vắng mặt, không tính nội dung lời chúc.</p></div>
+      <div><div class="eyebrow">Danh sách phản hồi khách mời</div><h1>Thống kê khách mời</h1><p>Theo dõi xác nhận tham dự và lời chúc, đối chiếu với tên gốc trên link mời.</p></div>
       <div class="updated" id="updatedAt">Đang tải dữ liệu...</div>
     </section>
 
@@ -48,7 +70,7 @@
     </section>
 
     <section class="panel">
-      <div class="panel-head"><div><div class="panel-title">Khách đã xác nhận</div><div class="panel-note">Mỗi tên ở mỗi phía chỉ lấy phản hồi mới nhất.</div></div></div>
+      <div class="panel-head"><div><div class="panel-title">Khách đã xác nhận</div><div class="panel-note">Mỗi link mời chỉ hiển thị lựa chọn mới nhất; khách có thể cập nhật RSVP.</div></div></div>
       <div class="filters">
         <input class="field search" id="searchInput" type="search" placeholder="Tìm theo tên khách..." autocomplete="off">
         <select class="field select" id="sideFilter" aria-label="Lọc phía gia đình"><option value="">Tất cả hai nhà</option><option>Nhà Trai</option><option>Nhà Gái</option><option>Cả Hai</option></select>
@@ -59,16 +81,37 @@
         <table><thead><tr><th>Tên khách / link mời</th><th>Phía</th><th>Phản hồi</th><th>Thời gian</th><th></th></tr></thead><tbody id="responsesBody"></tbody></table>
       </div>
       <div class="state hidden" id="emptyState">Chưa có lượt bấm xác nhận nào.</div>
-      <div class="footnote">Nguồn: Supabase RSVP. Các dòng có lời chúc được loại khỏi thống kê.</div>
+      <div class="footnote">Nguồn: lựa chọn xác nhận trong Supabase. Lời chúc được thống kê riêng bên dưới.</div>
+    </section>
+    <section class="panel" aria-labelledby="wishesTitle">
+      <div class="panel-head"><div><div class="panel-title" id="wishesTitle">Lời chúc mừng</div><div class="panel-note">Tên gốc lấy từ link mời; tên người gửi là tên khách tự nhập khi gửi lời chúc.</div></div><div class="wish-count" id="wishCount">-- lời chúc</div></div>
+      <div class="filters">
+        <input class="field search" id="wishSearchInput" type="search" placeholder="Tìm tên gốc, tên người gửi hoặc nội dung..." autocomplete="off">
+        <select class="field select" id="wishSideFilter" aria-label="Lọc lời chúc theo phía"><option value="">Tất cả hai nhà</option><option>Nhà Trai</option><option>Nhà Gái</option><option>Cả Hai</option></select>
+      </div>
+      <div class="statusline" id="wishStatusLine" role="status"></div>
+      <div class="table-wrap" id="wishTableWrap"><table><thead><tr><th>Tên gốc trên link</th><th>Tên người gửi</th><th>Phía</th><th>Lời chúc</th><th>Thời gian</th></tr></thead><tbody id="wishesBody"></tbody></table></div>
+      <div class="state hidden" id="wishEmptyState">Chưa có lời chúc nào.</div>
+      <div class="footnote" id="wishSchemaNote">Chưa có cột lưu tên gốc trên Supabase: lời chúc mới chưa thể đối chiếu chắc chắn với tên trong link. Hãy chạy migration trước khi dùng chính thức.</div>
+    </section>
+    <section class="panel" aria-labelledby="pendingWishesTitle">
+      <div class="panel-head"><div><div class="panel-title" id="pendingWishesTitle">Lời chúc chờ duyệt</div><div class="panel-note">Lời chúc từ khách không dùng link mời chính thức. Chỉ lời chúc được duyệt mới xuất hiện trên thiệp.</div></div><div class="wish-count" id="pendingWishCount">-- lời chúc</div></div>
+      <div class="statusline" id="pendingWishStatus" role="status"></div>
+      <div class="table-wrap" id="pendingWishTableWrap"><table><thead><tr><th>Tên trên link (nếu có)</th><th>Tên người gửi</th><th>Phía</th><th>Lời chúc</th><th>Thời gian</th><th></th></tr></thead><tbody id="pendingWishesBody"></tbody></table></div>
+      <div class="state hidden" id="pendingWishEmpty">Chưa có lời chúc chờ duyệt.</div>
     </section>
   </main>
 
   <script>
-    const SUPABASE_URL = 'https://wabvabtlsfnrwuygdyls.supabase.co';
-    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable__P6rhX4muzIWmP_aALbwWA_9TxQzqFf';
-    const API = `${SUPABASE_URL}/rest/v1/wedding_guestbook`;
-    const PAGE_SIZE = 1000;
+    const STATS_API = '/api/wedding/stats';
     let responses = [];
+    let wishes = [];
+    let pendingWishes = [];
+    let supportsInviteName = true;
+    let lastObservedTimestamp = '';
+    let noticeTimeout;
+    let adminAuthenticated = false;
+    let refreshTimer;
 
     const byId = id => document.getElementById(id);
     const normalizeName = name => String(name || '').trim().replace(/\s+/g, ' ').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('vi');
@@ -81,56 +124,216 @@
       return Number.isNaN(date.getTime()) ? 'Không rõ' : new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(date);
     };
 
+    async function fetchStats(dataset, since = '') {
+      const url = new URL(STATS_API, window.location.origin);
+      url.searchParams.set('dataset', dataset);
+      if (since) url.searchParams.set('since', since);
+      const response = await fetch(url, { credentials: 'same-origin', cache: 'no-store' });
+      if (response.status === 401) {
+        lockDashboard('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+        throw new Error('Phiên đăng nhập đã hết hạn.');
+      }
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || `Máy chủ trả mã ${response.status}`);
+      return result;
+    }
+
+    function unlockDashboard() {
+      adminAuthenticated = true;
+      byId('loginScreen').classList.add('hidden');
+      byId('dashboard').classList.remove('hidden');
+      if (!refreshTimer) refreshTimer = setInterval(checkForNewResponses, 30000);
+    }
+
+    function lockDashboard(message = '') {
+      adminAuthenticated = false;
+      clearInterval(refreshTimer);
+      refreshTimer = undefined;
+      byId('dashboard').classList.add('hidden');
+      byId('loginScreen').classList.remove('hidden');
+      byId('loginPassword').value = '';
+      byId('loginError').textContent = message;
+      byId('rsvpNotice').hidden = true;
+      responses = [];
+      wishes = [];
+      pendingWishes = [];
+      lastObservedTimestamp = '';
+      byId('responsesBody').replaceChildren();
+      byId('wishesBody').replaceChildren();
+      byId('pendingWishesBody').replaceChildren();
+      byId('attendingCount').textContent = '--';
+      byId('absentCount').textContent = '--';
+      byId('totalCount').textContent = '--';
+      byId('groomCount').innerHTML = '-- <small>khách</small>';
+      byId('brideCount').innerHTML = '-- <small>khách</small>';
+      byId('bothCount').innerHTML = '-- <small>khách</small>';
+      byId('wishCount').textContent = '-- lời chúc';
+      byId('pendingWishCount').textContent = '-- lời chúc';
+      byId('updatedAt').textContent = '';
+    }
+
+    async function submitAdminLogin(event) {
+      event.preventDefault();
+      const button = byId('loginButton');
+      const error = byId('loginError');
+      button.disabled = true;
+      error.textContent = '';
+      try {
+        const response = await fetch('/api/wedding/admin-session', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: byId('loginUsername').value, password: byId('loginPassword').value })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Đăng nhập chưa thành công.');
+        byId('loginPassword').value = '';
+        unlockDashboard();
+        await loadDashboardData();
+      } catch (loginError) {
+        error.textContent = loginError.message || 'Không thể đăng nhập.';
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function logoutAdmin() {
+      try { await fetch('/api/wedding/admin-session', { method: 'DELETE', credentials: 'same-origin' }); } catch {}
+      lockDashboard();
+    }
+
     async function loadAllResponses() {
       byId('refreshButton').disabled = true;
       byId('statusLine').textContent = 'Đang đồng bộ dữ liệu từ Supabase...';
       byId('statusLine').className = 'statusline';
       try {
-        let offset = 0;
-        const allRows = [];
-        while (true) {
-          const url = new URL(API);
-          url.search = new URLSearchParams({
-            select: 'id,name,side,status,created_at',
-            is_visible: 'eq.true',
-            wish: 'is.null',
-            order: 'created_at.desc',
-            limit: String(PAGE_SIZE),
-            offset: String(offset)
-          }).toString();
-          const response = await fetch(url, {
-            headers: {
-              apikey: SUPABASE_PUBLISHABLE_KEY,
-              Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
-            },
-            cache: 'no-store'
-          });
-          if (!response.ok) throw new Error(`Supabase trả mã ${response.status}: ${await response.text()}`);
-          const batch = await response.json();
-          allRows.push(...batch);
-          if (batch.length < PAGE_SIZE) break;
-          offset += PAGE_SIZE;
-        }
+        const allRows = await fetchStats('responses');
 
-        const latestByGuest = new Map();
+        const latestByInvite = new Map();
         for (const row of allRows) {
           if (!row.name || !row.status) continue;
-          const key = `${row.side || ''}|${normalizeName(row.name)}`;
-          const previous = latestByGuest.get(key);
-          if (!previous || new Date(row.created_at) > new Date(previous.created_at)) latestByGuest.set(key, row);
+          const key = row.invite_key || `${row.side || ''}|${normalizeName(row.name)}`;
+          const previous = latestByInvite.get(key);
+          if (!previous || new Date(row.created_at) > new Date(previous.created_at)) latestByInvite.set(key, row);
         }
-        responses = [...latestByGuest.values()].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        responses = [...latestByInvite.values()].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         updateSummary();
         renderTable();
         byId('updatedAt').textContent = `Cập nhật lúc ${new Intl.DateTimeFormat('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date())}`;
-        byId('statusLine').textContent = `${allRows.length} lượt bấm được tải, gộp thành ${responses.length} khách/phía.`;
+        byId('statusLine').textContent = `${allRows.length} phản hồi được tải, gộp thành ${responses.length} link mời.`;
       } catch (error) {
         console.error('Không tải được RSVP:', error);
         byId('statusLine').textContent = `Không tải được dữ liệu: ${error.message}`;
         byId('statusLine').className = 'statusline state error';
-        byId('updatedAt').textContent = 'Lỗi kết nối Supabase';
+        byId('updatedAt').textContent = 'Lỗi tải dữ liệu';
       } finally {
         byId('refreshButton').disabled = false;
+      }
+    }
+
+    function originalInviteName(row) {
+      if (row.invite_name) return row.invite_name;
+      const key = String(row.invite_key || '');
+      const separator = key.indexOf(':');
+      return separator >= 0 ? key.slice(separator + 1).replaceAll('-', ' ').replace(/\b\p{L}/gu, letter => letter.toLocaleUpperCase('vi')) : row.name || 'Không có tên gốc';
+    }
+
+    function displayInviteName(row) {
+      return originalInviteName(row).replace(/\bKim\s+Lieen\b/i, 'Kim Liên');
+    }
+
+    async function loadAllWishes() {
+      byId('wishStatusLine').textContent = 'Đang tải lời chúc...';
+      try {
+        const allRows = await fetchStats('wishes');
+        wishes = allRows;
+        renderWishes();
+        byId('wishStatusLine').textContent = `${wishes.length} lời chúc đã được tải.`;
+        byId('wishSchemaNote').classList.toggle('hidden', supportsInviteName);
+      } catch (error) {
+        byId('wishStatusLine').textContent = `Không tải được lời chúc: ${error.message}`;
+        byId('wishStatusLine').className = 'statusline state error';
+      }
+    }
+
+    async function loadPendingWishes() {
+      byId('pendingWishStatus').textContent = 'Đang tải lời chúc chờ duyệt...';
+      try {
+        pendingWishes = await fetchStats('pendingWishes');
+        renderPendingWishes();
+        byId('pendingWishStatus').textContent = `${pendingWishes.length} lời chúc đang chờ duyệt.`;
+      } catch (error) {
+        byId('pendingWishStatus').textContent = `Không tải được lời chúc chờ duyệt: ${error.message}`;
+        byId('pendingWishStatus').className = 'statusline state error';
+      }
+    }
+
+    async function loadDashboardData() {
+      if (!adminAuthenticated) return;
+      await Promise.all([loadAllResponses(), loadAllWishes(), loadPendingWishes()]);
+      lastObservedTimestamp = [...responses, ...wishes].reduce((latest, row) => row.created_at > latest ? row.created_at : latest, '') || new Date().toISOString();
+    }
+
+    function showRsvpNotice(message) {
+      byId('rsvpNoticeText').textContent = message;
+      byId('rsvpNotice').hidden = false;
+      clearTimeout(noticeTimeout);
+      noticeTimeout = setTimeout(() => { byId('rsvpNotice').hidden = true; }, 7000);
+    }
+
+    async function checkForNewResponses() {
+      if (!adminAuthenticated || !lastObservedTimestamp || document.visibilityState !== 'visible') return;
+      try {
+        const updates = await fetchStats('updates', lastObservedTimestamp);
+        if (!updates.length) return;
+
+        let newCount = 0;
+        let changedCount = 0;
+        let newWishCount = 0;
+        let newPendingWishCount = 0;
+        for (const row of updates) {
+          if (row.status && !row.wish) {
+            const key = row.invite_key || `${row.side || ''}|${normalizeName(row.name)}`;
+            const existingIndex = responses.findIndex(item => (item.invite_key || `${item.side || ''}|${normalizeName(item.name)}`) === key);
+            if (existingIndex < 0) {
+              responses.unshift(row);
+              newCount++;
+            } else {
+              const previous = responses[existingIndex];
+              if (previous.status !== row.status) changedCount++;
+              responses[existingIndex] = row;
+            }
+          }
+          if (row.wish) {
+            if (row.is_visible === false) {
+              if (!pendingWishes.some(item => item.id === row.id)) {
+                pendingWishes.unshift(row);
+                newPendingWishCount++;
+              }
+            } else if (!wishes.some(item => item.id === row.id)) {
+              wishes.unshift(row);
+              newWishCount++;
+            }
+          }
+          if (row.created_at > lastObservedTimestamp) lastObservedTimestamp = row.created_at;
+        }
+        responses.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        wishes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        pendingWishes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        updateSummary();
+        renderTable();
+        renderWishes();
+        renderPendingWishes();
+        byId('pendingWishStatus').textContent = `${pendingWishes.length} lời chúc đang chờ duyệt.`;
+        const message = [
+          newCount ? `${newCount} RSVP mới` : '',
+          changedCount ? `${changedCount} lựa chọn vừa được cập nhật` : '',
+          newWishCount ? `${newWishCount} lời chúc mới` : '',
+          newPendingWishCount ? `${newPendingWishCount} lời chúc mới chờ duyệt` : ''
+        ].filter(Boolean).join(' · ');
+        if (message) showRsvpNotice(`Có phản hồi mới: ${message}.`);
+      } catch (error) {
+        console.warn('Không kiểm tra được RSVP mới:', error);
       }
     }
 
@@ -210,6 +413,121 @@
       byId('statusLine').textContent = `${filtered.length} / ${responses.length} khách đang hiển thị.`;
     }
 
+    function renderWishes() {
+      const query = normalizeName(byId('wishSearchInput').value);
+      const side = byId('wishSideFilter').value;
+      const filtered = wishes.filter(row => (!query || [displayInviteName(row), row.name, row.wish].some(value => normalizeName(value).includes(query)))
+        && (!side || row.side === side));
+      const body = byId('wishesBody');
+      body.replaceChildren();
+      const isEmpty = filtered.length === 0;
+      byId('wishTableWrap').classList.toggle('hidden', isEmpty);
+      byId('wishEmptyState').classList.toggle('hidden', !isEmpty);
+      byId('wishEmptyState').textContent = wishes.length ? 'Không tìm thấy lời chúc phù hợp.' : 'Chưa có lời chúc nào.';
+      byId('wishCount').textContent = `${wishes.length} lời chúc`;
+      for (const row of filtered) {
+        const tr = document.createElement('tr');
+        const sourceCell = document.createElement('td');
+        sourceCell.dataset.label = 'Tên gốc trên link';
+        const sourceName = document.createElement('a');
+        sourceName.className = 'wish-original wish-original-link';
+        sourceName.href = sideLink({ ...row, name: originalInviteName(row) });
+        sourceName.target = '_blank';
+        sourceName.rel = 'noopener noreferrer';
+        sourceName.textContent = displayInviteName(row);
+        const sourceLink = document.createElement('a');
+        sourceLink.className = 'guest-link source-url';
+        sourceLink.href = sideLink({ ...row, name: originalInviteName(row) });
+        sourceLink.target = '_blank';
+        sourceLink.rel = 'noopener noreferrer';
+        sourceLink.textContent = sourceLink.href;
+        sourceCell.append(sourceName, sourceLink);
+        const senderCell = document.createElement('td');
+        senderCell.dataset.label = 'Người gửi';
+        senderCell.className = 'wish-sender';
+        senderCell.textContent = row.name || 'Không có tên';
+        const sideCell = document.createElement('td');
+        sideCell.dataset.label = 'Phía';
+        const sideBadge = document.createElement('span');
+        sideBadge.className = 'badge side';
+        sideBadge.textContent = row.side || 'Chưa chọn';
+        sideCell.append(sideBadge);
+        const wishCell = document.createElement('td');
+        wishCell.dataset.label = 'Lời chúc';
+        wishCell.className = 'wish-message';
+        wishCell.textContent = row.wish || '';
+        const timeCell = document.createElement('td');
+        timeCell.dataset.label = 'Thời gian';
+        timeCell.textContent = formatDate(row.created_at);
+        tr.append(sourceCell, senderCell, sideCell, wishCell, timeCell);
+        body.append(tr);
+      }
+      byId('wishStatusLine').textContent = `${filtered.length} / ${wishes.length} lời chúc đang hiển thị.`;
+    }
+
+    function renderPendingWishes() {
+      const body = byId('pendingWishesBody');
+      body.replaceChildren();
+      const isEmpty = pendingWishes.length === 0;
+      byId('pendingWishTableWrap').classList.toggle('hidden', isEmpty);
+      byId('pendingWishEmpty').classList.toggle('hidden', !isEmpty);
+      byId('pendingWishCount').textContent = `${pendingWishes.length} lời chúc`;
+      for (const row of pendingWishes) {
+        const tr = document.createElement('tr');
+        const fields = [
+          ['Tên trên link (nếu có)', displayInviteName(row)],
+          ['Tên người gửi', row.name || 'Không có tên'],
+          ['Phía', row.side || 'Chưa chọn'],
+          ['Lời chúc', row.wish || ''],
+          ['Thời gian', formatDate(row.created_at)]
+        ];
+        for (const [label, value] of fields) {
+          const cell = document.createElement('td');
+          cell.dataset.label = label;
+          if (label === 'Lời chúc') cell.className = 'wish-message';
+          cell.textContent = value;
+          tr.append(cell);
+        }
+        const actions = document.createElement('td');
+        actions.dataset.label = 'Duyệt';
+        actions.className = 'flex flex-wrap gap-2';
+        const approve = document.createElement('button');
+        approve.type = 'button';
+        approve.className = 'px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold';
+        approve.textContent = 'Duyệt';
+        approve.addEventListener('click', () => moderateWish(row.id, 'approve'));
+        const reject = document.createElement('button');
+        reject.type = 'button';
+        reject.className = 'px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold';
+        reject.textContent = 'Xoá';
+        reject.addEventListener('click', () => moderateWish(row.id, 'delete'));
+        actions.append(approve, reject);
+        tr.append(actions);
+        body.append(tr);
+      }
+    }
+
+    async function moderateWish(id, action) {
+      if (action === 'delete' && !confirm('Xoá lời chúc đang chờ duyệt này?')) return;
+      try {
+        const response = await fetch('/api/wedding/wishes', {
+          method: action === 'approve' ? 'PATCH' : 'DELETE',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Không thể xử lý lời chúc.');
+        pendingWishes = pendingWishes.filter(row => row.id !== id);
+        renderPendingWishes();
+        byId('pendingWishStatus').textContent = action === 'approve' ? 'Đã duyệt lời chúc; lời chúc đã xuất hiện trên thiệp.' : 'Đã xoá lời chúc chờ duyệt.';
+        if (action === 'approve') await loadAllWishes();
+      } catch (error) {
+        byId('pendingWishStatus').textContent = error.message || 'Không thể xử lý lời chúc.';
+        byId('pendingWishStatus').className = 'statusline state error';
+      }
+    }
+
     function exportCsv() {
       const header = ['Ten khach', 'Phia', 'Trang thai', 'Thoi gian', 'Link moi'];
       const rows = responses.map(row => [row.name, row.side, row.status, formatDate(row.created_at), sideLink(row)]);
@@ -223,12 +541,31 @@
       URL.revokeObjectURL(url);
     }
 
-    byId('refreshButton').addEventListener('click', loadAllResponses);
+    byId('refreshButton').addEventListener('click', loadDashboardData);
     byId('exportButton').addEventListener('click', exportCsv);
     byId('searchInput').addEventListener('input', renderTable);
     byId('sideFilter').addEventListener('change', renderTable);
     byId('statusFilter').addEventListener('change', renderTable);
-    loadAllResponses();
+    byId('wishSearchInput').addEventListener('input', renderWishes);
+    byId('wishSideFilter').addEventListener('change', renderWishes);
+    byId('dismissRsvpNotice').addEventListener('click', () => {
+      byId('rsvpNotice').hidden = true;
+      clearTimeout(noticeTimeout);
+    });
+    byId('loginForm').addEventListener('submit', submitAdminLogin);
+    byId('logoutButton').addEventListener('click', logoutAdmin);
+    (async function initializeAdminDashboard() {
+      try {
+        const response = await fetch('/api/wedding/admin-session', { credentials: 'same-origin', cache: 'no-store' });
+        const session = await response.json();
+        if (response.ok && session.authenticated) {
+          unlockDashboard();
+          await loadDashboardData();
+          return;
+        }
+      } catch {}
+      lockDashboard();
+    })();
   </script>
 </body>
 </html>
