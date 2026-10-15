@@ -25,11 +25,15 @@ Các rewrite trong `next.config.mjs` trỏ về thiệp chính tại `public/thi
 ## 3. Phát hành và xác thực link mời
 
 1. Quản trị viên đăng nhập trang tạo link bằng tài khoản được lưu dưới dạng hash trong `private/admin-credentials.txt`.
-2. Trình duyệt gửi tên khách, phía khách và định dạng link tới `POST /api/wedding/invitations`.
+2. Trình duyệt gửi tên khách, phía khách, định dạng link và chính xác giá trị `to` sẽ đưa vào URL tới `POST /api/wedding/invitations`.
 3. Máy chủ tạo mã ngẫu nhiên `k` và `invite_key` riêng cho từng link. Cùng tên khách phát hành nhiều lần sẽ tạo các link độc lập, không ghi đè mã cũ.
-4. Supabase lưu hash SHA-256 của mã để xác thực và bản mã hóa AES-GCM để trang quản trị có thể dựng lại URL đầy đủ trong danh sách link.
+4. Supabase lưu hash SHA-256 của mã để xác thực, bản mã hóa AES-GCM để trang quản trị dựng lại URL, và `to_value` để ràng buộc mã với đúng tên được phát hành.
 5. URL dùng `to` làm tên khách và `k` làm mã xác thực. Link cũ không có `k` vẫn xem được thiệp nhưng không được tính là link chính thức.
-6. API xác thực cả mã lẫn tên/nhà khách trước khi cấp `invite_key` cho trình duyệt. Mã và tên hợp lệ chứng minh người đang dùng có link, không chứng minh danh tính ngoài đời; khách vẫn có thể chuyển tiếp link.
+6. API xác thực mã `k`, giá trị `to` chính xác và phía khách trước khi cấp `invite_key` cho trình duyệt. Ví dụ, mã phát hành với `to=Cuowngf` sẽ không xác thực nếu đổi thành `to=cuong`, dù hai chuỗi có thể cùng được hiểu là tên Cường.
+7. Tên khách được chuẩn hóa để hiển thị không làm thay đổi quy tắc quyền: API so sánh chính xác với `to_value`, không so sánh tên đã bỏ dấu.
+8. Mã và tên hợp lệ chứng minh người đang dùng có URL mời; không chứng minh danh tính ngoài đời. Khách vẫn có thể chuyển tiếp URL. Phát hành link mới không tự thu hồi link cũ; muốn vô hiệu hóa mã cũ, hãy xóa link đó trong lịch sử phát hành.
+
+Định dạng link hiện có là Telex (ví dụ `Cuowngf`) và tên tiếng Việt nguyên bản (được URL-encode). Tùy chọn rút gọn không dấu đã bị bỏ. Link cũ vẫn được kiểm tra theo `link_format` đã lưu; bản ghi chưa có `to_value` sẽ được đối chiếu bằng giá trị dựng lại từ tên và định dạng đó.
 
 Các API chính:
 
@@ -51,13 +55,21 @@ Xóa link mời làm mã đó không còn xác thực được. Lịch sử RSVP
 ## 5. Lời chúc và duyệt
 
 - Lời chúc từ link chính thức được lưu với `invite_key`, `invite_name` và `is_visible=true`; lời chúc xuất hiện trên thiệp.
-- Lời chúc không có mã hợp lệ vẫn được nhận nhưng lưu `is_visible=false`, không có `invite_key`, và chưa xuất hiện công khai.
+- Lời chúc không có mã hợp lệ, thiếu mã hoặc có `to` không khớp vẫn được nhận theo thiết kế nhưng lưu `is_visible=false`, không có `invite_key`, và chưa xuất hiện công khai. API có thể trả thành công vì lời chúc đã được đưa vào hàng chờ; điều này không có nghĩa mã sai được công nhận là link chính thức.
 - Sau khi gửi lời chúc không chính thức, người gửi thấy thông báo cố định **Lời Chúc Đang Chờ Duyệt**. Mã lời chúc được lưu trong `localStorage` của trình duyệt để biết lời chúc nào cần kiểm tra.
 - Quản trị viên duyệt hoặc xóa lời chúc ở mục **Lời chúc chờ duyệt** trên trang thống kê. Duyệt đặt `is_visible=true`; xóa sẽ xóa bản ghi chờ duyệt.
 - Khi khách đã được duyệt bấm xem album, trang kiểm tra trạng thái của đúng lời chúc qua `GET /api/wedding/wish-status`. Khách không có link chính thức vẫn không được mở album và thấy thông báo **Album chỉ mở bằng link mời chính thức nhé.**
 - Nếu chưa được duyệt, bấm album tiếp tục mở lời nhắc gửi lời chúc như trước.
 
 Trang thống kê gọi API có xác thực quản trị để tải RSVP, lời chúc đã duyệt và lời chúc chờ duyệt. Khi đăng nhập, trang kiểm tra thay đổi mới mỗi 30 giây khi tab đang hiển thị; thông báo có thể gồm RSVP mới, thay đổi RSVP, lời chúc mới hoặc lời chúc mới chờ duyệt.
+
+### Ranh giới bảo mật và chống spam
+
+- Giao diện trình duyệt không phải lớp bảo vệ. Người dùng có thể gọi API trực tiếp hoặc sửa DOM, nhưng RSVP, tra cứu trạng thái và quyền album vẫn phải qua xác thực server-side.
+- Với lời chúc không chính thức, API cố ý cho phép gửi vào hàng chờ duyệt. Gọi API trực tiếp với `k` sai/thiếu có thể tạo bản ghi chờ duyệt, nhưng không làm lời chúc hiện công khai, không tạo `invite_key`, không mở album và không tạo RSVP.
+- Hiện chưa triển khai rate limit, CAPTCHA/Turnstile, chống gửi lặp hoặc dọn hàng chờ tự động. Đây là giới hạn đã chấp nhận cho quy mô hiện tại; nếu có spam, cần thêm kiểm soát phía server trước khi ghi database. Kiểm tra `Origin` không thay thế rate limit/CAPTCHA.
+- Lời chúc được escape HTML trước khi hiển thị trên thiệp; trang thống kê dùng `textContent` cho nội dung khách gửi. Không đưa nội dung người dùng vào `innerHTML` nếu chưa escape đúng ngữ cảnh.
+- Danh sách mã mời không được nhúng trong JavaScript công khai. URL chứa mã `k` của link tương ứng và có thể bị người nhận chuyển tiếp; không coi mã là bằng chứng danh tính.
 
 ## 6. Album và quyền truy cập
 
@@ -89,7 +101,7 @@ Local dùng `.env.local`, file này đã được `.gitignore` loại khỏi Git
 ### Các bảng/hàm chính
 
 - `wedding_guestbook`: RSVP và lời chúc; có `invite_key`, `invite_name`, `is_visible`, `status`, `wish`, `created_at`.
-- `wedding_invitations`: danh sách link, tên hiển thị, phía khách, mã hash, bản mã hóa để dựng lại URL, trạng thái hoạt động.
+- `wedding_invitations`: danh sách link, tên hiển thị, phía khách, mã hash, bản mã hóa để dựng lại URL, giá trị `to_value` chính xác, định dạng link và trạng thái hoạt động.
 - `wedding_album_unlocks`: quyền mở album theo `invite_key`.
 - `save_wedding_rsvp(...)`: upsert RSVP mới nhất cho mỗi link.
 - `mark_wedding_album_unlocked()`: trigger chỉ mở album cho lời chúc chính thức đã hiển thị.
@@ -123,6 +135,15 @@ npm run build
 ```
 
 Kiểm tra thêm `git status` để chắc `.env.local` không xuất hiện trong thay đổi và không commit file build/cache.
+
+### Checklist kiểm thử link và lời chúc
+
+- Link phát hành với đúng `to` và `k`: xác thực được; RSVP và lời chúc chính thức hoạt động theo các điều kiện hiện hành.
+- Giữ `k` nhưng đổi `to` sang tên khác hoặc một cách viết tương đương: không xác thực chính thức, không RSVP và không mở album. Nếu gửi lời chúc, lời chúc phải vào chờ duyệt.
+- Bỏ `k`, để `k` rỗng hoặc truyền sai kiểu/độ dài: không xác thực chính thức. Lời chúc không chính thức vẫn có thể được nhận vào hàng chờ.
+- Gửi lời chúc có chuỗi `<script>alert(1)</script>`: nội dung phải hiện như văn bản, không chạy JavaScript.
+- Sau migration, xác nhận `public.wedding_invitations` có cột `to_value`. Nếu thiếu, API tra cứu link có thể lỗi cho tới khi chạy migration.
+- Checklist này kiểm tra hành vi cơ bản, không thay thế kiểm thử tải hoặc kiểm thử xâm nhập chuyên nghiệp.
 
 ## 10. Deploy và xử lý sự cố
 

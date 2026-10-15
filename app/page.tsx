@@ -208,8 +208,8 @@ function ScrollWords({ text, className, id }: { text: string; className?: string
           key={`${index}-${word}`}
           className="scroll-word"
           aria-hidden="true"
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 18, filter: "blur(5px)" }}
-          whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
+          whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.75 }}
           transition={{ duration: 0.48, delay: index * 0.035, ease: "easeOut" }}
         >

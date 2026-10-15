@@ -57,6 +57,9 @@
     </script>
 
     <style>
+        html.auto-scrolling {
+            scroll-behavior: auto !important;
+        }
         html {
             overflow-y: scroll;
             scrollbar-gutter: stable;
@@ -697,62 +700,52 @@
         .reveal-slow-up {
             opacity: 0;
             transform: translateY(18px);
-            filter: blur(5px);
             transition: opacity 3.4s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 3.4s cubic-bezier(0.16, 1, 0.3, 1),
-                        filter 3.4s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform, filter;
+                        transform 3.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal-slow-up.revealed {
             opacity: 1;
             transform: translateY(0);
-            filter: blur(0);
         }
 
         .reveal-slow-scale {
             opacity: 0;
             transform: scale(0.97) translateY(14px);
-            filter: blur(5px);
             transition: opacity 3.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 3.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        filter 3.8s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform, filter;
+                        transform 3.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal-slow-scale.revealed {
             opacity: 1;
             transform: scale(1) translateY(0);
-            filter: blur(0);
         }
 
         .reveal-slow-left {
             opacity: 0;
             transform: translateX(-22px);
-            filter: blur(4px);
             transition: opacity 3.6s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 3.6s cubic-bezier(0.16, 1, 0.3, 1),
-                        filter 3.6s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform, filter;
+                        transform 3.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal-slow-left.revealed {
             opacity: 1;
             transform: translateX(0);
-            filter: blur(0);
         }
 
         .reveal-slow-right {
             opacity: 0;
             transform: translateX(22px);
-            filter: blur(4px);
             transition: opacity 3.6s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 3.6s cubic-bezier(0.16, 1, 0.3, 1),
-                        filter 3.6s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform, filter;
+                        transform 3.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal-slow-right.revealed {
             opacity: 1;
             transform: translateX(0);
-            filter: blur(0);
         }
+
+        .reveal-slow-line {
+            width: 0%;
+            transition: width 3.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-slow-line.revealed { width: 100%; }
 
         .reveal-slow-line {
             width: 0%;
@@ -1134,22 +1127,32 @@
         .attendance-choice.is-selected i { color: #fff; }
 
         .text-stagger .text-char {
-            display: inline;
+            display: inline-block;
+            vertical-align: baseline;
             opacity: 0;
-            filter: blur(3px);
-            transition: opacity 2s cubic-bezier(0.16, 1, 0.3, 1),
-                        filter 2s cubic-bezier(0.16, 1, 0.3, 1);
-            transition-delay: var(--char-delay, 0ms);
-            will-change: opacity, filter;
+            transform: translate(var(--char-from-x, 0), var(--char-from-y, 0.58em))
+                       rotateZ(var(--char-from-rotate, var(--char-tilt, -4deg)))
+                       scale(var(--char-from-scale, 0.9));
+            transform-origin: 50% 85%;
+            transition: opacity var(--char-opacity-duration, 1.15s) var(--char-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+                        transform var(--char-transform-duration, 1.35s) var(--char-ease, cubic-bezier(0.22, 1, 0.36, 1));
+            transition-delay: calc(var(--sentence-delay, 0ms) + var(--char-delay, 0ms));
         }
         .text-stagger.revealed .text-char {
             opacity: 1;
-            filter: blur(0);
+            transform: translateY(0) rotateZ(0deg) scale(1);
         }
-        .text-word {
-            display: inline;
-            white-space: nowrap;
-        }
+
+        /* Each section gets a distinct, compositor-friendly text entrance. */
+        #mainContentSection { --char-from-y: 0.72em; --char-from-scale: 0.88; --char-transform-duration: 1.25s; }
+        #familySection { --char-from-x: -0.48em; --char-from-y: 0.08em; --char-from-rotate: -3deg; --char-from-scale: 0.96; --char-transform-duration: 1.05s; }
+        #eventsSection { --char-from-y: -0.48em; --char-from-rotate: 5deg; --char-from-scale: 0.92; --char-transform-duration: 1.3s; }
+        #countdownSection { --char-from-y: 0.12em; --char-from-rotate: -10deg; --char-from-scale: 0.58; --char-transform-duration: 1.45s; --char-opacity-duration: 1.35s; }
+        #rsvpSection { --char-from-x: 0.42em; --char-from-y: 0.12em; --char-from-rotate: 3deg; --char-from-scale: 0.96; --char-transform-duration: 1.1s; }
+        #giftSection { --char-from-y: 0.46em; --char-from-rotate: -5deg; --char-from-scale: 0.78; --char-transform-duration: 1.5s; --char-opacity-duration: 1.35s; }
+        #invitationBodyContent > footer { --char-from-y: 0.32em; --char-from-rotate: 2deg; --char-from-scale: 1.04; --char-transform-duration: 1.7s; }
+
+        .text-word { display: inline; white-space: nowrap; }
 
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
@@ -1379,6 +1382,7 @@
             <div class="reveal-slow-scale stagger-2 rounded-3xl overflow-hidden shadow-xl border-4 border-white mb-6 aspect-[4/5] bg-sand relative">
                 <img src="/thiepcuoi/anime-wedding-moment.svg" 
                      alt="Minh hoạ anime chân dung ngày cưới của Quốc Cường và Kim Liên" 
+                     loading="lazy"
                      class="w-full h-full object-cover img-editorial-zoom">
             </div>
 
@@ -1425,6 +1429,7 @@
                     <div class="w-full aspect-[4/5] rounded-xl overflow-hidden bg-sand mb-2.5">
                         <img src="/thiepcuoi/anime-groom.svg" 
                              alt="Chân dung chú rể Quốc Cường phong cách anime" 
+                             loading="lazy"
                              class="w-full h-full object-cover">
                     </div>
                     <span class="font-script text-xl text-stone-400 leading-none">Chú rể</span>
@@ -1436,6 +1441,7 @@
                     <div class="w-full aspect-[4/5] rounded-xl overflow-hidden bg-sand mb-2.5">
                         <img src="/thiepcuoi/anime-bride.svg" 
                              alt="Chân dung cô dâu Kim Liên phong cách anime" 
+                             loading="lazy"
                              class="w-full h-full object-cover">
                     </div>
                     <span class="font-script text-xl text-stone-400 leading-none">Cô dâu</span>
@@ -1535,7 +1541,7 @@
         <section id="rsvpSection" class="px-5 py-4">
             <div id="albumGateCard" class="album-gate-card">
                 <div class="album-gate-icon" aria-hidden="true">
-                    <img src="/thiepcuoi/anime-wedding-moment.svg" alt="">
+                    <img src="/thiepcuoi/anime-wedding-moment.svg" alt="" loading="lazy">
                 </div>
                 <div class="album-gate-copy">
                     <p class="album-gate-eyebrow">Khoảnh khắc của chúng mình</p>
@@ -1607,6 +1613,7 @@
                                 <img id="groomQr" src="https://img.vietqr.io/image/970423-02653834001-qr_only.png?accountName=LAM%20QUOC%20CUONG"
                                      onerror="this.src='https://placehold.co/200x200/FAF7F2/9B7732?text=QR+TPBank'"
                                      alt="QR Chú Rể" 
+                                     loading="lazy"
                                      class="w-full h-full object-contain">
                             </div>
                             <p class="qr-owner-name text-sm font-bold text-charcoal font-editorial">Quốc Cường</p>
@@ -1629,6 +1636,7 @@
                                 <img id="brideQr" src="https://img.vietqr.io/image/970436-1019926637-qr_only.png?accountName=NGUYEN%20THI%20KIM%20LIEN"
                                      onerror="this.src='https://placehold.co/200x200/FAF7F2/9B7732?text=QR+Vietcombank'"
                                      alt="QR Cô Dâu" 
+                                     loading="lazy"
                                      class="w-full h-full object-contain">
                             </div>
                             <p class="qr-owner-name text-sm font-bold text-charcoal font-editorial">Kim Liên</p>
@@ -1662,7 +1670,7 @@
 
     </div>
 
-    <audio id="weddingAudio" src="/thiepcuoi/Music/0929.MP3" preload="metadata" loop></audio>
+    <audio id="weddingAudio" src="/thiepcuoi/Music/vaycuoi.MP3" preload="metadata" loop></audio>
 
     <!-- Nút nghe nhạc nền nổi ở góc phải bên dưới -->
     <div class="fixed bottom-5 right-5 z-50">
@@ -1748,7 +1756,7 @@
                 </button>
             </div>
             <div class="album-viewer" aria-live="polite">
-                <img id="albumMainImage" src="/thiepcuoi/anime-wedding-moment.svg" alt="Minh họa anime ngày cưới của Quốc Cường và Kim Liên">
+                <img id="albumMainImage" src="/thiepcuoi/anime-wedding-moment.svg" alt="Minh họa anime ngày cưới của Quốc Cường và Kim Liên" loading="lazy">
                 <button type="button" class="album-nav-button previous" aria-label="Ảnh trước" onclick="changeAlbumImage(-1)">
                     <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                 </button>
@@ -1799,6 +1807,14 @@
         let previousRootOverflow = '';
         let guestWishes = [];
         let savedRsvpStatus = '';
+        let autoScrollEnabled = false;
+        let autoScrollFrame = 0;
+        let autoScrollResumeTimer = 0;
+        let autoScrollLastFrame = 0;
+        let autoScrollPointerHeld = false;
+        let autoScrollControlFocused = false;
+        const autoScrollMobileQuery = window.matchMedia('(max-width: 767px)');
+        const AUTO_SCROLL_SPEED = 80;
 
         const weddingAlbumPhotos = [
             { src: '/thiepcuoi/anime-wedding-moment.svg', alt: 'Minh họa anime khoảnh khắc ngày cưới', caption: 'Khoảnh khắc ngày vui' },
@@ -2127,6 +2143,118 @@
             }
         }
 
+        function hasBlockingModal() {
+            return Boolean(document.querySelector(
+                '.official-invite-modal:not([hidden]), .album-gate-modal:not([hidden]), .album-modal:not([hidden]), #mapModal:not(.hidden), #customizeModal:not(.hidden)'
+            ));
+        }
+
+        function stopAutoScroll() {
+            if (autoScrollFrame) cancelAnimationFrame(autoScrollFrame);
+            autoScrollFrame = 0;
+            autoScrollLastFrame = 0;
+            document.documentElement.classList.remove('auto-scrolling');
+        }
+
+        function startAutoScroll() {
+            if (!autoScrollMobileQuery.matches || !autoScrollEnabled || autoScrollPointerHeld || autoScrollControlFocused || document.hidden || hasBlockingModal()) return;
+            const scrollingElement = document.scrollingElement;
+            if (!scrollingElement || scrollingElement.scrollHeight - window.innerHeight - window.scrollY <= 2) {
+                stopAutoScroll();
+                return;
+            }
+
+            window.clearTimeout(autoScrollResumeTimer);
+            if (autoScrollFrame) return;
+            document.documentElement.classList.add('auto-scrolling');
+            autoScrollLastFrame = performance.now();
+
+            const step = now => {
+                if (!autoScrollEnabled) return stopAutoScroll();
+                if (autoScrollPointerHeld || autoScrollControlFocused || document.hidden || hasBlockingModal()) {
+                    stopAutoScroll();
+                    return;
+                }
+
+                const elapsed = Math.min((now - autoScrollLastFrame) / 1000, 0.05);
+                autoScrollLastFrame = now;
+                const maxScroll = document.scrollingElement.scrollHeight - window.innerHeight;
+                const nextScroll = Math.min(maxScroll, window.scrollY + AUTO_SCROLL_SPEED * elapsed);
+                window.scrollTo(0, nextScroll);
+
+                if (maxScroll - nextScroll <= 1) {
+                    stopAutoScroll();
+                    return;
+                }
+                autoScrollFrame = requestAnimationFrame(step);
+            };
+
+            autoScrollFrame = requestAnimationFrame(step);
+        }
+
+        function scheduleAutoScrollResume() {
+            if (!autoScrollMobileQuery.matches || !autoScrollEnabled || autoScrollPointerHeld || autoScrollControlFocused || document.hidden) return;
+            window.clearTimeout(autoScrollResumeTimer);
+            autoScrollResumeTimer = window.setTimeout(startAutoScroll, 3000);
+        }
+
+        function pauseAutoScrollForInput() {
+            if (!autoScrollEnabled) return;
+            stopAutoScroll();
+            scheduleAutoScrollResume();
+        }
+
+        document.addEventListener('pointerdown', () => {
+            if (!autoScrollEnabled) return;
+            autoScrollPointerHeld = true;
+            window.clearTimeout(autoScrollResumeTimer);
+            stopAutoScroll();
+        }, { passive: true });
+        document.addEventListener('pointerup', () => {
+            if (!autoScrollEnabled) return;
+            autoScrollPointerHeld = false;
+            scheduleAutoScrollResume();
+        }, { passive: true });
+        document.addEventListener('pointercancel', () => {
+            if (!autoScrollEnabled) return;
+            autoScrollPointerHeld = false;
+            scheduleAutoScrollResume();
+        }, { passive: true });
+        window.addEventListener('wheel', pauseAutoScrollForInput, { passive: true });
+        document.addEventListener('keydown', event => {
+            if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) {
+                pauseAutoScrollForInput();
+            }
+        });
+        document.addEventListener('focusin', event => {
+            if (!event.target.matches('input, textarea, select, [contenteditable="true"]')) return;
+            autoScrollControlFocused = true;
+            stopAutoScroll();
+            window.clearTimeout(autoScrollResumeTimer);
+        });
+        document.addEventListener('focusout', event => {
+            if (!event.target.matches('input, textarea, select, [contenteditable="true"]')) return;
+            autoScrollControlFocused = false;
+            scheduleAutoScrollResume();
+        });
+        window.addEventListener('scroll', () => {
+            if (autoScrollEnabled && !autoScrollFrame && !autoScrollPointerHeld) scheduleAutoScrollResume();
+        }, { passive: true });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                window.clearTimeout(autoScrollResumeTimer);
+                stopAutoScroll();
+            } else {
+                scheduleAutoScrollResume();
+            }
+        });
+        autoScrollMobileQuery.addEventListener('change', event => {
+            if (event.matches) return;
+            autoScrollEnabled = false;
+            window.clearTimeout(autoScrollResumeTimer);
+            stopAutoScroll();
+        });
+
         // Hạ nắp xuống sau lớp ảnh ngay khi bắt đầu lật để nó không che hình.
         function handleEnvelopeClick(event) {
             const container = document.getElementById('envelopeContainer');
@@ -2156,6 +2284,11 @@
                     if (scrollCue) {
                         scrollCue.classList.remove('opacity-0', 'pointer-events-none');
                     }
+
+                    if (autoScrollMobileQuery.matches) {
+                        autoScrollEnabled = true;
+                        scheduleAutoScrollResume();
+                    }
                 }, 1400);
             }
         }
@@ -2163,6 +2296,7 @@
         // CƠ CHẾ CUỘN ĐẾN ĐÂU MỚI BẮT ĐẦU CHẠY ANIMATION CHẬM RÃI (INTERSECTION OBSERVER)
         function prepareLetterAnimations(root) {
             if (!root) return;
+            if (root.dataset.textStaggerPrepared === 'true') return;
 
             const excluded = 'script, style, svg, i, input, textarea, select, option, button[aria-label], [id^="cd"], #ticketDate, #subDate, .text-char, .text-word, .text-sentence';
             const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
@@ -2188,11 +2322,12 @@
                 const sentences = sentenceSegmenter
                     ? Array.from(sentenceSegmenter.segment(node.nodeValue), item => item.segment)
                     : [node.nodeValue];
-                let charIndex = 0;
-
-                sentences.forEach(sentence => {
+                sentences.forEach((sentence, sentenceIndex) => {
                     const sentenceGroup = document.createElement('span');
                     sentenceGroup.className = 'text-sentence';
+                    sentenceGroup.style.setProperty('--sentence-delay', `${sentenceIndex * 240}ms`);
+                    let charIndex = 0;
+
                     sentence.split(/(\s+)/u).forEach(token => {
                         if (!token || /^\s+$/u.test(token)) {
                             sentenceGroup.append(document.createTextNode(token));
@@ -2207,7 +2342,8 @@
                         chars.forEach(char => {
                             const letter = document.createElement('span');
                             letter.className = 'text-char';
-                            letter.style.setProperty('--char-delay', `${charIndex * 16}ms`);
+                            letter.style.setProperty('--char-delay', `${Math.min(charIndex * 14, 420)}ms`);
+                            letter.style.setProperty('--char-tilt', charIndex % 2 ? '4deg' : '-4deg');
                             letter.textContent = char;
                             word.append(letter);
                             charIndex += 1;
