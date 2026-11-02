@@ -68,6 +68,22 @@ export function createInviteKey() {
   return randomUUID();
 }
 
+export function createAlbumAccessToken(subject: string) {
+  const payload = JSON.stringify({ sub: subject, exp: Date.now() + 14 * 24 * 60 * 60 * 1000 });
+  return encryptInvitationCode(payload);
+}
+
+export function verifyAlbumAccessToken(token: string): string | null {
+  try {
+    const raw = decryptInvitationCode(token);
+    const data = JSON.parse(raw) as { sub?: string; exp?: number };
+    if (!data.sub || typeof data.exp !== 'number' || data.exp < Date.now()) return null;
+    return data.sub;
+  } catch {
+    return null;
+  }
+}
+
 export function normalizeInvitationName(value: string) {
   return value.trim().normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')

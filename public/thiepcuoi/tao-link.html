@@ -102,14 +102,14 @@
                         <label class="block text-xs font-semibold text-stone-600 mb-2">Chọn Phía Khách Mời:</label>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="flex items-center gap-2 p-3 rounded-2xl border border-stone-200 bg-cream cursor-pointer hover:border-gold transition-colors">
-                                <input type="radio" name="sideChoice" value="nhatrai" checked onchange="generateLinks()" class="text-gold focus:ring-gold">
+                                <input type="radio" name="sideChoice" value="nhatrai" checked onchange="handleSideChoiceChange('nhatrai')" class="text-gold focus:ring-gold">
                                 <div>
                                     <span class="block text-xs font-bold text-charcoal">🎩 Nhà Trai</span>
                                     <span class="block text-[10px] text-stone-500">Lễ Thành Hôn (11.01)</span>
                                 </div>
                             </label>
                             <label class="flex items-center gap-2 p-3 rounded-2xl border border-stone-200 bg-cream cursor-pointer hover:border-gold transition-colors">
-                                <input type="radio" name="sideChoice" value="nhagai" onchange="generateLinks()" class="text-gold focus:ring-gold">
+                                <input type="radio" name="sideChoice" value="nhagai" onchange="handleSideChoiceChange('nhagai')" class="text-gold focus:ring-gold">
                                 <div>
                                     <span class="block text-xs font-bold text-charcoal">👰 Nhà Gái</span>
                                     <span class="block text-[10px] text-stone-500">Lễ Vu Quy (10.01)</span>
@@ -211,13 +211,30 @@
                 </div>
 
                 <section class="mt-8 bg-white rounded-3xl p-5 shadow-sm border border-stone-200" aria-labelledby="issuedInvitationsTitle">
-                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
                         <div>
                             <h2 id="issuedInvitationsTitle" class="text-base font-bold text-charcoal">Link đã phát hành</h2>
                             <p class="text-xs text-stone-500 mt-1">Danh sách được lưu trên Supabase. Có thể thu hồi riêng quyền xem album hoặc xoá link; RSVP và lời chúc cũ vẫn được giữ.</p>
                         </div>
-                        <button onclick="loadIssuedInvitations()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold"><i class="fa-solid fa-rotate-right mr-1"></i> Tải lại</button>
+                        <button onclick="loadIssuedInvitations()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold cursor-pointer"><i class="fa-solid fa-rotate-right mr-1"></i> Tải lại</button>
                     </div>
+
+                    <!-- Thanh bộ lọc phía và thống kê đã gửi -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 p-1.5 bg-stone-100/80 rounded-2xl mb-4 border border-stone-200/60">
+                        <div class="flex items-center gap-1">
+                            <button id="issuedFilterTrai" type="button" onclick="setIssuedFilter('nhatrai')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-charcoal shadow-xs border border-stone-200/80 cursor-pointer">
+                                🎩 Nhà Trai <span id="countTrai" class="font-mono text-[11px] text-blue-700">(0)</span>
+                            </button>
+                            <button id="issuedFilterGai" type="button" onclick="setIssuedFilter('nhagai')" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-stone-600 hover:text-charcoal cursor-pointer">
+                                👰 Nhà Gái <span id="countGai" class="font-mono text-[11px] text-rose-700">(0)</span>
+                            </button>
+                            <button id="issuedFilterAll" type="button" onclick="setIssuedFilter('all')" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-stone-600 hover:text-charcoal cursor-pointer">
+                                Tất cả <span id="countAll" class="font-mono text-[11px] text-stone-500">(0)</span>
+                            </button>
+                        </div>
+                        <div class="text-xs text-stone-600 font-medium px-2 py-1" id="issuedSentSummary"></div>
+                    </div>
+
                     <p id="issuedInvitationsStatus" class="py-4 text-center text-xs text-stone-400">Đăng nhập để tải danh sách link đã phát hành.</p>
                     <div id="issuedInvitationsList" class="space-y-3"></div>
                 </section>
@@ -671,48 +688,151 @@
             }
         }
 
+        let currentIssuedFilter = 'nhatrai';
+
+        function handleSideChoiceChange(side) {
+            generateLinks();
+            setIssuedFilter(side);
+        }
+
+        function setIssuedFilter(filter) {
+            currentIssuedFilter = filter;
+            renderIssuedInvitations();
+        }
+
+        function getSentInvitationsMap() {
+            try {
+                return JSON.parse(localStorage.getItem('wedding_sent_invitations_v1') || '{}');
+            } catch {
+                return {};
+            }
+        }
+
+        function toggleSentInvitation(id) {
+            const map = getSentInvitationsMap();
+            map[id] = !map[id];
+            localStorage.setItem('wedding_sent_invitations_v1', JSON.stringify(map));
+            renderIssuedInvitations();
+            showToast(map[id] ? 'Đã đánh dấu: ĐÃ GỬI thiệp!' : 'Đã bỏ đánh dấu gửi.');
+        }
+
         async function loadIssuedInvitations() {
             if (!adminAuthenticated) return;
             const status = document.getElementById('issuedInvitationsStatus');
-            const container = document.getElementById('issuedInvitationsList');
             status.textContent = 'Đang tải danh sách link...';
             try {
                 const response = await fetch('/api/wedding/invitations', { cache: 'no-store' });
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.error || 'Chưa tải được danh sách link.');
-                const domainOverride = document.getElementById('domainSelect').value.replace(/\/+$/, '');
-                const invitations = result.invitations || [];
-                issuedInvitationsCache = invitations;
-                status.textContent = invitations.length ? `${invitations.length} link đã phát hành.` : 'Chưa có link nào được phát hành.';
-                container.innerHTML = invitations.map(item => {
-                    const url = item.code ? makeGuestUrl(item.baseUrl || domainOverride, item.side, item.toValue || item.name, item.code) : '';
-                    const date = item.createdAt ? new Date(item.createdAt).toLocaleString('vi-VN') : '';
-                    return `<article class="rounded-2xl border border-stone-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="min-w-0 flex-1">
-                            <div class="flex items-center gap-2 flex-wrap"><b class="text-sm text-charcoal">${escapeHtml(item.name)}</b><span class="text-[10px] px-2 py-0.5 rounded-full ${item.side === 'Nhà Trai' ? 'bg-blue-50 text-blue-700' : 'bg-rose-50 text-rose-700'}">${escapeHtml(item.side)}</span><span class="text-[10px] text-stone-400">${escapeHtml(date)}</span></div>
-                            <div class="mt-1 text-xs ${item.albumUnlocked ? 'text-emerald-700' : 'text-stone-400'}">${item.albumUnlocked ? 'Album đã mở khóa' : 'Album chưa mở khóa'}</div>
-                            ${url ? `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer" class="mt-1 block truncate font-mono text-[11px] text-stone-500 hover:text-gold-dark">${escapeHtml(url)}</a>` : '<p class="mt-1 text-xs text-amber-700">Link được phát hành trước khi lưu mã; hãy phát hành link mới để có thể xem lại.</p>'}
-                        </div>
-                        <div class="flex items-center gap-2 shrink-0">
-                            ${url ? `<button data-copy-issued-link="${escapeAttr(url)}" data-copy-issued-name="${escapeAttr(item.name)}" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-xs font-semibold"><i class="fa-solid fa-link mr-1"></i> Copy</button>` : ''}
-                            ${item.albumUnlocked ? `<button data-revoke-album-id="${escapeAttr(item.id)}" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold"><i class="fa-solid fa-lock mr-1"></i> Thu hồi album</button>` : ''}
-                            <button data-delete-issued-id="${escapeAttr(item.id)}" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold"><i class="fa-regular fa-trash-can mr-1"></i> Xoá</button>
-                        </div>
-                    </article>`;
-                }).join('');
-                container.querySelectorAll('[data-copy-issued-link]').forEach(button => button.addEventListener('click', () => {
-                    copyText(button.dataset.copyIssuedLink, `Đã copy link của ${button.dataset.copyIssuedName}!`);
-                }));
-                container.querySelectorAll('[data-delete-issued-id]').forEach(button => button.addEventListener('click', () => {
-                    deleteIssuedInvitation(button.dataset.deleteIssuedId);
-                }));
-                container.querySelectorAll('[data-revoke-album-id]').forEach(button => button.addEventListener('click', () => {
-                    revokeAlbumAccess(button.dataset.revokeAlbumId);
-                }));
+                issuedInvitationsCache = result.invitations || [];
+                renderIssuedInvitations();
             } catch (error) {
                 status.textContent = error.message || 'Chưa tải được danh sách link.';
-                container.innerHTML = '';
+                document.getElementById('issuedInvitationsList').innerHTML = '';
             }
+        }
+
+        function renderIssuedInvitations() {
+            const status = document.getElementById('issuedInvitationsStatus');
+            const container = document.getElementById('issuedInvitationsList');
+            if (!adminAuthenticated) {
+                status.textContent = 'Đăng nhập để tải danh sách link đã phát hành.';
+                status.hidden = false;
+                container.innerHTML = '';
+                return;
+            }
+
+            const domainOverride = document.getElementById('domainSelect').value.replace(/\/+$/, '');
+            const sentMap = getSentInvitationsMap();
+            const invitations = issuedInvitationsCache || [];
+
+            const totalCount = invitations.length;
+            const traiCount = invitations.filter(item => item.side === 'Nhà Trai').length;
+            const gaiCount = invitations.filter(item => item.side === 'Nhà Gái').length;
+
+            const countAllEl = document.getElementById('countAll');
+            const countTraiEl = document.getElementById('countTrai');
+            const countGaiEl = document.getElementById('countGai');
+            if (countAllEl) countAllEl.textContent = `(${totalCount})`;
+            if (countTraiEl) countTraiEl.textContent = `(${traiCount})`;
+            if (countGaiEl) countGaiEl.textContent = `(${gaiCount})`;
+
+            let filtered = invitations;
+            if (currentIssuedFilter === 'nhatrai') {
+                filtered = invitations.filter(item => item.side === 'Nhà Trai');
+            } else if (currentIssuedFilter === 'nhagai') {
+                filtered = invitations.filter(item => item.side === 'Nhà Gái');
+            }
+
+            const sentCount = filtered.filter(item => sentMap[item.id]).length;
+            const summaryEl = document.getElementById('issuedSentSummary');
+            if (summaryEl) {
+                summaryEl.innerHTML = `Đã gửi: <b class="text-emerald-700 font-bold">${sentCount}</b> / ${filtered.length}`;
+            }
+
+            ['All', 'Trai', 'Gai'].forEach(tab => {
+                const btn = document.getElementById(`issuedFilter${tab}`);
+                if (!btn) return;
+                const key = tab === 'All' ? 'all' : (tab === 'Trai' ? 'nhatrai' : 'nhagai');
+                if (currentIssuedFilter === key) {
+                    btn.className = 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-charcoal shadow-xs border border-stone-200/80 cursor-pointer';
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded-xl text-xs font-semibold text-stone-600 hover:text-charcoal hover:bg-stone-200/50 cursor-pointer';
+                }
+            });
+
+            if (!filtered.length) {
+                status.textContent = invitations.length
+                    ? (currentIssuedFilter === 'nhatrai' ? 'Chưa có link nào thuộc bên Nhà Trai.' : (currentIssuedFilter === 'nhagai' ? 'Chưa có link nào thuộc bên Nhà Gái.' : 'Chưa có link nào.'))
+                    : 'Chưa có link nào được phát hành.';
+                status.hidden = false;
+                container.innerHTML = '';
+                return;
+            }
+
+            status.hidden = true;
+            container.innerHTML = filtered.map(item => {
+                const isSent = Boolean(sentMap[item.id]);
+                const url = item.code ? makeGuestUrl(item.baseUrl || domainOverride, item.side, item.toValue || item.name, item.code) : '';
+                const date = item.createdAt ? new Date(item.createdAt).toLocaleString('vi-VN') : '';
+                return `<article class="rounded-2xl border transition-all p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${isSent ? 'border-emerald-200 bg-emerald-50/20' : 'border-stone-200 bg-white'}">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <b class="text-sm text-charcoal">${escapeHtml(item.name)}</b>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full ${item.side === 'Nhà Trai' ? 'bg-blue-50 text-blue-700' : 'bg-rose-50 text-rose-700'}">${escapeHtml(item.side)}</span>
+                            ${isSent
+                                ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold flex items-center gap-1"><i class="fa-solid fa-check text-[9px]"></i> Đã gửi</span>`
+                                : `<span class="text-[10px] px-2 py-0.5 rounded-full bg-stone-100 text-stone-500 font-medium">Chưa gửi</span>`
+                            }
+                            <span class="text-[10px] text-stone-400">${escapeHtml(date)}</span>
+                        </div>
+                        <div class="mt-1 text-xs ${item.albumUnlocked ? 'text-emerald-700' : 'text-stone-400'}">${item.albumUnlocked ? 'Album đã mở khóa' : 'Album chưa mở khóa'}</div>
+                        ${url ? `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer" class="mt-1 block truncate font-mono text-[11px] text-stone-500 hover:text-gold-dark">${escapeHtml(url)}</a>` : '<p class="mt-1 text-xs text-amber-700">Link được phát hành trước khi lưu mã; hãy phát hành link mới để có thể xem lại.</p>'}
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                        <button data-toggle-sent-id="${escapeAttr(item.id)}" title="${isSent ? 'Bấm để đánh dấu Chưa Gửi' : 'Bấm để đánh dấu Đã Gửi'}" class="px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${isSent ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs' : 'bg-stone-100 hover:bg-stone-200 text-stone-700'}">
+                            <i class="${isSent ? 'fa-solid fa-square-check' : 'fa-regular fa-square'} text-sm"></i>
+                            <span>${isSent ? 'Đã gửi' : 'Đánh dấu gửi'}</span>
+                        </button>
+                        ${url ? `<button data-copy-issued-link="${escapeAttr(url)}" data-copy-issued-name="${escapeAttr(item.name)}" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold cursor-pointer"><i class="fa-solid fa-link mr-1"></i> Copy</button>` : ''}
+                        ${item.albumUnlocked ? `<button data-revoke-album-id="${escapeAttr(item.id)}" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold cursor-pointer"><i class="fa-solid fa-lock mr-1"></i> Thu hồi album</button>` : ''}
+                        <button data-delete-issued-id="${escapeAttr(item.id)}" class="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold cursor-pointer"><i class="fa-regular fa-trash-can mr-1"></i> Xoá</button>
+                    </div>
+                </article>`;
+            }).join('');
+
+            container.querySelectorAll('[data-toggle-sent-id]').forEach(button => button.addEventListener('click', () => {
+                toggleSentInvitation(button.dataset.toggleSentId);
+            }));
+            container.querySelectorAll('[data-copy-issued-link]').forEach(button => button.addEventListener('click', () => {
+                copyText(button.dataset.copyIssuedLink, `Đã copy link của ${button.dataset.copyIssuedName}!`);
+            }));
+            container.querySelectorAll('[data-delete-issued-id]').forEach(button => button.addEventListener('click', () => {
+                deleteIssuedInvitation(button.dataset.deleteIssuedId);
+            }));
+            container.querySelectorAll('[data-revoke-album-id]').forEach(button => button.addEventListener('click', () => {
+                revokeAlbumAccess(button.dataset.revokeAlbumId);
+            }));
         }
 
         async function deleteIssuedInvitation(id) {

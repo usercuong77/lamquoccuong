@@ -10,7 +10,8 @@ const sites = [
   { source: "edit.lamquoccuong", target: "edit", entry: "index.html", base: "/edit/" },
   { source: "bio.lamquoccuong", target: "bio", entry: "index.html", base: "/bio/" },
   { source: "nuoitoi.lamquoccuong", target: "nuoitoi", entry: "index.html", base: "/nuoitoi/" },
-  { source: "thiepcuoi", target: "thiepcuoi", entry: "thiepcuoi.html", targetEntry: "index.html", base: "/thiepcuoi/", standalone: true }
+  { source: "thiepcuoi", target: "thiepcuoi", entry: "thiepcuoi.html", targetEntry: "index.html", base: "/thiepcuoi/", standalone: true },
+  { source: "CaptionsWeb", target: "videolab", entry: "index.html", base: "/videolab/", standalone: true }
 ];
 
 const pathFor = (site, relativePath = "") => path.join(publicRoot, site.target, relativePath);
@@ -74,7 +75,7 @@ async function integrate() {
 
   await fs.writeFile(path.join(publicRoot, "site-hub", "integration-map.json"), `${JSON.stringify({
     generatedAt: new Date().toISOString(),
-    routes: ["/edit/", "/bio/", "/nuoitoi/", "/thiepcuoi/"]
+    routes: ["/edit/", "/bio/", "/nuoitoi/", "/thiepcuoi/", "/videolab/"]
   }, null, 2)}\n`);
 }
 

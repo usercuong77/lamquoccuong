@@ -574,6 +574,50 @@
             background: #52786f; color: #fff; font: 700 15px 'Plus Jakarta Sans', sans-serif; cursor: pointer;
         }
         .official-invite-close:hover { background: #42675e; }
+        .devtools-notice {
+            position: fixed;
+            inset: 0;
+            z-index: 1600;
+            display: grid;
+            place-items: center;
+            padding: 22px;
+            background: rgba(30, 39, 36, .62);
+            backdrop-filter: blur(6px);
+        }
+        .devtools-notice[hidden] { display: none; }
+        .devtools-notice-card {
+            width: min(600px, 100%);
+            padding: 42px 38px 32px;
+            border: 2px solid #b9d2ca;
+            border-radius: 30px;
+            background: #fff;
+            text-align: center;
+            box-shadow: 0 28px 100px rgba(20, 38, 33, .34);
+            animation: official-invite-enter .28s ease-out both;
+        }
+        .devtools-notice-icon {
+            display: grid;
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 22px;
+            place-items: center;
+            border-radius: 50%;
+            background: #f8e9ec;
+            color: #c97383;
+            font-size: 32px;
+        }
+        .devtools-notice-title { margin: 0; color: #292422; font: 700 30px/1.25 'Playfair Display', serif; }
+        .devtools-notice-copy { margin: 16px 0 26px; color: #52635e; font: 600 17px/1.75 'Plus Jakarta Sans', sans-serif; }
+        .devtools-notice-close {
+            width: 100%; min-height: 54px; border: 0; border-radius: 16px;
+            background: #52786f; color: #fff; font: 700 17px 'Plus Jakarta Sans', sans-serif; cursor: pointer;
+        }
+        .devtools-notice-close:hover { background: #42675e; }
+        @media (max-width: 480px) {
+            .devtools-notice-card { padding: 32px 23px 24px; border-radius: 24px; }
+            .devtools-notice-title { font-size: 25px; }
+            .devtools-notice-copy { font-size: 15px; }
+        }
         @keyframes official-invite-enter {
             from { opacity: 0; transform: translateY(10px) scale(.97); }
             to { opacity: 1; transform: translateY(0) scale(1); }
@@ -628,72 +672,193 @@
             .album-gate-description { font-size: 15px; }
             .album-gate-button { min-height: 48px; font-size: 14px; }
         }
+        /* LUXURY DARK LIGHTBOX */
         .album-modal {
             position: fixed;
             inset: 0;
-            z-index: 100;
+            z-index: 1200;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: rgba(6, 9, 8, 0.96);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            user-select: none;
+            overflow: hidden;
+            animation: album-fade-in 0.28s ease-out both;
+        }
+        .album-modal[hidden] { display: none; }
+        @keyframes album-fade-in {
+            from { opacity: 0; transform: scale(0.985); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .album-header {
+            position: relative;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: linear-gradient(to bottom, rgba(6, 9, 8, 0.9) 0%, transparent 100%);
+        }
+        .album-counter-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e2e8f0;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        .album-close-btn {
+            display: flex;
+            width: 42px;
+            height: 42px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .album-close-btn:hover {
+            background: rgba(255, 255, 255, 0.24);
+            transform: scale(1.05);
+        }
+
+        .album-stage {
+            position: relative;
+            z-index: 20;
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px;
-            background: rgba(25, 34, 32, 0.78);
-            backdrop-filter: blur(8px);
-        }
-        .album-modal[hidden] { display: none; }
-        .album-dialog {
-            width: min(100%, 920px);
-            max-height: min(94vh, 980px);
-            overflow-y: auto;
-            border: 1px solid rgba(216, 236, 232, 0.8);
-            border-radius: 24px;
-            background: #fbfdfb;
-            padding: clamp(16px, 3vw, 28px);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
-        }
-        .album-viewer {
-            position: relative;
-            display: grid;
-            place-items: center;
-            height: min(64vh, 680px);
-            min-height: 280px;
-            overflow: hidden;
-            border-radius: 18px;
-            background: linear-gradient(145deg, #e8f1ee, #f9f4ef);
-        }
-        .album-viewer img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            padding: 0 16px;
+            overflow: hidden;
+            touch-action: pan-y pinch-zoom;
         }
-        .album-nav-button {
+        .album-img-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            max-width: 1100px;
+            max-height: calc(100vh - 200px);
+        }
+        .album-main-img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 14px;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+            transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.2, 0, 0.2, 1);
+            cursor: zoom-in;
+        }
+        .album-main-img.fade-out {
+            opacity: 0.35;
+            transform: scale(0.975);
+        }
+
+        .album-nav-arrow {
             position: absolute;
             top: 50%;
-            width: 44px;
-            height: 44px;
+            z-index: 25;
+            display: flex;
+            width: 48px;
+            height: 48px;
+            align-items: center;
+            justify-content: center;
             transform: translateY(-50%);
-            border: 1px solid rgba(255, 255, 255, 0.85);
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            color: #394c47;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            font-size: 18px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .album-nav-button.previous { left: 12px; }
-        .album-nav-button.next { right: 12px; }
+        .album-nav-arrow:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: translateY(-50%) scale(1.08);
+        }
+        .album-nav-arrow.prev { left: 24px; }
+        .album-nav-arrow.next { right: 24px; }
+        @media (max-width: 768px) {
+            .album-nav-arrow { display: none; }
+            .album-stage { padding: 0 8px; }
+            .album-img-wrapper { max-height: calc(100vh - 180px); }
+        }
+
+        .album-footer {
+            position: relative;
+            z-index: 30;
+            width: 100%;
+            padding: 12px 16px 20px;
+            background: linear-gradient(to top, rgba(6, 9, 8, 0.95) 0%, rgba(6, 9, 8, 0.7) 70%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .album-info-bar {
+            text-align: center;
+            max-width: 620px;
+            padding: 0 10px;
+        }
+        .album-caption {
+            color: #f8fafc;
+            font-size: 16px;
+            line-height: 1.4;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .album-thumbnails-strip {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            max-width: 100%;
+            padding: 4px 6px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .album-thumbnails-strip::-webkit-scrollbar { display: none; }
         .album-thumb {
-            width: 68px;
-            height: 68px;
+            width: 52px;
+            height: 52px;
             flex: 0 0 auto;
+            border-radius: 10px;
             overflow: hidden;
             border: 2px solid transparent;
-            border-radius: 12px;
-            opacity: 0.68;
+            opacity: 0.45;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #1e293b;
         }
-        .album-thumb[aria-current="true"] { border-color: #789b94; opacity: 1; }
-        .album-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        @media (max-width: 480px) {
-            .album-viewer { height: 58vh; min-height: 250px; }
-            .album-nav-button { width: 40px; height: 40px; }
-            .album-thumb { width: 58px; height: 58px; }
+        .album-thumb:hover { opacity: 0.8; }
+        .album-thumb[aria-current="true"] {
+            border-color: #34d399;
+            opacity: 1;
+            transform: scale(1.08);
+            box-shadow: 0 0 14px rgba(52, 211, 153, 0.45);
+        }
+        .album-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* HỆ THỐNG ANIMATION CUỘN CHẬM RÃI, THI VỊ */
@@ -1189,6 +1354,14 @@
             <h2 id="officialInviteTitle" class="official-invite-title">Hãy dùng link mời chính thức</h2>
             <p id="officialInviteMessage" class="official-invite-copy">Thiệp bạn đang xem hiện không phải link mời riêng được phát hành cho bạn. Vui lòng mở đúng link cô dâu/chú rể đã gửi để gửi lời chúc.</p>
             <button id="officialInviteCloseButton" type="button" class="official-invite-close" onclick="closeOfficialInviteNotice()">Đã hiểu</button>
+        </div>
+    </div>
+    <div id="devtoolsNotice" class="devtools-notice" role="dialog" aria-modal="true" aria-labelledby="devtoolsNoticeTitle" aria-describedby="devtoolsNoticeMessage" hidden onclick="if (event.target === this) closeDevtoolsNotice()">
+        <div class="devtools-notice-card">
+            <span class="devtools-notice-icon" aria-hidden="true"><i class="fa-solid fa-code"></i></span>
+            <h2 id="devtoolsNoticeTitle" class="devtools-notice-title">Bắt quả tang mở DevTools rồi nhé!</h2>
+            <p id="devtoolsNoticeMessage" class="devtools-notice-copy">Cứ kiểm tra thoải mái nha :)) Album vẫn được bảo vệ ở máy chủ. Kiểm tra xong nhớ gửi cô dâu chú rể một lời chúc nhé!</p>
+            <button type="button" class="devtools-notice-close" onclick="closeDevtoolsNotice()">Đã hiểu</button>
         </div>
     </div>
     <div id="wishCelebration" class="wish-celebration" role="status" aria-live="polite" hidden>
@@ -1743,32 +1916,47 @@
         </div>
     </div>
 
-    <!-- Album minh họa, chỉ mở sau khi gửi lời chúc thành công -->
-    <div id="weddingAlbumModal" class="album-modal" role="dialog" aria-modal="true" aria-labelledby="weddingAlbumTitle" hidden onclick="if (event.target === this) closeWeddingAlbum()">
-        <div class="album-dialog" onclick="event.stopPropagation()">
-            <div class="mb-4 flex items-start justify-between gap-4">
-                <div>
-                    <h2 id="weddingAlbumTitle" class="font-editorial text-2xl font-bold text-charcoal">Album ảnh cưới</h2>
-                    <p class="mt-1 text-sm text-stone-500">Bộ ảnh minh họa anime của Quốc Cường & Kim Liên</p>
+    <!-- Luxury Dark Lightbox Album -->
+    <div id="weddingAlbumModal" class="album-modal" role="dialog" aria-modal="true" aria-labelledby="weddingAlbumTitle" hidden>
+        <!-- Header bar -->
+        <div class="album-header">
+            <div class="flex items-center gap-2.5">
+                <span id="albumImageCounter" class="album-counter-pill font-mono">01 / 04</span>
+                <div class="hidden sm:block">
+                    <h2 id="weddingAlbumTitle" class="font-editorial text-sm font-semibold text-white tracking-wide">Album Ảnh Cưới</h2>
+                    <p class="text-[11px] text-stone-400">Quốc Cường & Kim Liên</p>
                 </div>
-                <button id="closeWeddingAlbumButton" type="button" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sand text-stone-700" aria-label="Đóng album" onclick="closeWeddingAlbum()">
-                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="album-swipe-hint text-[11px] text-stone-400 md:hidden flex items-center gap-1.5 opacity-75">
+                    <i class="fa-solid fa-arrows-left-right text-[10px]"></i> Vuốt chuyển ảnh
+                </span>
+                <button id="closeWeddingAlbumButton" type="button" class="album-close-btn" aria-label="Đóng album" onclick="closeWeddingAlbum()">
+                    <i class="fa-solid fa-xmark text-lg" aria-hidden="true"></i>
                 </button>
             </div>
-            <div class="album-viewer" aria-live="polite">
-                <img id="albumMainImage" src="/thiepcuoi/anime-wedding-moment.svg" alt="Minh họa anime ngày cưới của Quốc Cường và Kim Liên" loading="lazy">
-                <button type="button" class="album-nav-button previous" aria-label="Ảnh trước" onclick="changeAlbumImage(-1)">
-                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-                </button>
-                <button type="button" class="album-nav-button next" aria-label="Ảnh tiếp theo" onclick="changeAlbumImage(1)">
-                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-                </button>
+        </div>
+
+        <!-- Stage (Image Viewer) -->
+        <div id="albumViewerStage" class="album-stage" aria-live="polite">
+            <button type="button" class="album-nav-arrow prev" aria-label="Ảnh trước" onclick="changeAlbumImage(-1)">
+                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="album-nav-arrow next" aria-label="Ảnh sau" onclick="changeAlbumImage(1)">
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            </button>
+
+            <div class="album-img-wrapper">
+                <img id="albumMainImage" class="album-main-img" src="" alt="Album ảnh cưới Quốc Cường & Kim Liên" loading="lazy">
             </div>
-            <div class="mt-3 flex items-center justify-between gap-3">
-                <p id="albumImageCaption" class="font-editorial text-lg font-semibold text-charcoal">Khoảnh khắc ngày vui</p>
-                <span id="albumImageCounter" class="shrink-0 text-sm text-stone-500" aria-live="polite">1 / 4</span>
+        </div>
+
+        <!-- Footer bar (Caption & Thumbnails) -->
+        <div class="album-footer">
+            <div class="album-info-bar">
+                <p id="albumImageCaption" class="album-caption font-editorial">Khoảnh khắc ngày vui</p>
             </div>
-            <div id="albumThumbnails" class="mt-3 flex gap-2 overflow-x-auto pb-2" aria-label="Chọn ảnh trong album"></div>
+            <div id="albumThumbnails" class="album-thumbnails-strip" aria-label="Chọn ảnh trong album"></div>
         </div>
     </div>
 
@@ -1813,16 +2001,44 @@
         let autoScrollLastFrame = 0;
         let autoScrollPointerHeld = false;
         let autoScrollControlFocused = false;
+        let screenWakeLock = null;
         const autoScrollMobileQuery = window.matchMedia('(max-width: 767px)');
         const AUTO_SCROLL_SPEED = 80;
 
-        const weddingAlbumPhotos = [
-            { src: '/thiepcuoi/anime-wedding-moment.svg', alt: 'Minh họa anime khoảnh khắc ngày cưới', caption: 'Khoảnh khắc ngày vui' },
-            { src: '/thiepcuoi/anime-wedding-lotus.svg', alt: 'Minh họa anime cô dâu chú rể bên hoa sen', caption: 'Bên nhau ngày cưới' },
-            { src: '/thiepcuoi/anime-groom.svg', alt: 'Minh họa anime chú rể Quốc Cường', caption: 'Chú rể Quốc Cường' },
-            { src: '/thiepcuoi/anime-bride.svg', alt: 'Minh họa anime cô dâu Kim Liên', caption: 'Cô dâu Kim Liên' }
-        ];
+        // ==========================================
+        // [IT FRIENDS EASTER EGG & HONEYPOT]
+        // ==========================================
+        console.log(
+            "%c[FIREWALL ENGAGED] %c👋 Chào đồng nghiệp CNTT!\n%cBiết ngay là bạn sẽ bấm F12 mà 😄\nToàn bộ dữ liệu ảnh cưới đã được bảo vệ từ Server qua Zero-Trust Token.\nĐừng mất công pentest hay gõ script nữa, hãy gửi một lời chúc thật lòng cho cô dâu & chú rể nhé! ❤️",
+            "color: #ef4444; font-weight: 800; font-size: 15px;",
+            "color: #10b981; font-weight: 700; font-size: 14px;",
+            "color: #94a3b8; font-size: 12px; line-height: 1.6;"
+        );
+
+        const devtoolsInitialChromeSpace = {
+            width: window.outerWidth - window.innerWidth,
+            height: window.outerHeight - window.innerHeight
+        };
+        function checkForDockedDevtools() {
+            const widthChange = window.outerWidth - window.innerWidth - devtoolsInitialChromeSpace.width;
+            const heightChange = window.outerHeight - window.innerHeight - devtoolsInitialChromeSpace.height;
+            if (widthChange > 140 || heightChange > 140) {
+                document.getElementById('devtoolsNotice').hidden = false;
+            }
+        }
+        window.addEventListener('resize', checkForDockedDevtools, { passive: true });
+        window.setInterval(checkForDockedDevtools, 800);
+
+        window.hack_album = window.bypassWishGate = window.admin_unlock = window.unlockAll = function() {
+            alert("🚨 [HONEYPOT TRIGGERED]\nBắt quả tang đồng nghiệp đang cố hack thiệp cưới nhé! 😂\nDữ liệu ảnh nằm ở Server, hãy gửi lời chúc đàng hoàng đi bạn ơi!");
+            console.warn("%c[Honeypot Alert] Nice try! Ảnh không có ở client đâu mà bypass 😉", "color: #f59e0b; font-weight: bold;");
+            return "🔒 ACCESS DENIED - Vui lòng gửi lời chúc tại form bên dưới!";
+        };
+
+        // Danh sách ảnh được bảo vệ phía Server (Zero-Trust Gating)
+        let weddingAlbumPhotos = [];
         let activeAlbumPhoto = 0;
+        let isAlbumPhotosLoading = false;
 
         const wishSuggestions = [
             "Chúc hai bạn trăm năm tình viên mãn, bạc đầu nghĩa phu thê!",
@@ -2107,6 +2323,7 @@
             if (!audio || isMusicActive) return isMusicActive;
 
             try {
+                audio.loop = true;
                 await audio.play();
                 isMusicActive = true;
                 const icon = document.getElementById('musicIcon');
@@ -2149,11 +2366,33 @@
             ));
         }
 
+        async function requestScreenWakeLock() {
+            if (!autoScrollMobileQuery.matches || document.hidden || !('wakeLock' in navigator)) return;
+            if (screenWakeLock && !screenWakeLock.released) return;
+
+            try {
+                const sentinel = await navigator.wakeLock.request('screen');
+                screenWakeLock = sentinel;
+                sentinel.addEventListener('release', () => {
+                    if (screenWakeLock === sentinel) screenWakeLock = null;
+                }, { once: true });
+            } catch {
+                screenWakeLock = null;
+            }
+        }
+
+        function releaseScreenWakeLock() {
+            const sentinel = screenWakeLock;
+            screenWakeLock = null;
+            if (sentinel && !sentinel.released) sentinel.release().catch(() => {});
+        }
+
         function stopAutoScroll() {
             if (autoScrollFrame) cancelAnimationFrame(autoScrollFrame);
             autoScrollFrame = 0;
             autoScrollLastFrame = 0;
             document.documentElement.classList.remove('auto-scrolling');
+            releaseScreenWakeLock();
         }
 
         function startAutoScroll() {
@@ -2166,6 +2405,7 @@
 
             window.clearTimeout(autoScrollResumeTimer);
             if (autoScrollFrame) return;
+            requestScreenWakeLock();
             document.documentElement.classList.add('auto-scrolling');
             autoScrollLastFrame = performance.now();
 
@@ -2195,7 +2435,7 @@
         function scheduleAutoScrollResume() {
             if (!autoScrollMobileQuery.matches || !autoScrollEnabled || autoScrollPointerHeld || autoScrollControlFocused || document.hidden) return;
             window.clearTimeout(autoScrollResumeTimer);
-            autoScrollResumeTimer = window.setTimeout(startAutoScroll, 3000);
+            autoScrollResumeTimer = window.setTimeout(startAutoScroll, 2000);
         }
 
         function pauseAutoScrollForInput() {
@@ -2265,6 +2505,7 @@
                 container.classList.add('opened');
                 if (prompt) prompt.classList.add('opacity-0');
 
+                requestScreenWakeLock();
                 startMelody();
                 notifyToast('Đã mở thiệp cưới!', 'fa-heart');
 
@@ -2287,7 +2528,7 @@
 
                     if (autoScrollMobileQuery.matches) {
                         autoScrollEnabled = true;
-                        scheduleAutoScrollResume();
+                        startAutoScroll();
                     }
                 }, 1400);
             }
@@ -2572,8 +2813,15 @@
             document.body.style.overflow = officialInvitePreviousOverflow;
         }
 
+        function closeDevtoolsNotice() {
+            document.getElementById('devtoolsNotice').hidden = true;
+        }
+
         document.addEventListener('keydown', event => {
-            if (event.key === 'Escape') closeOfficialInviteNotice();
+            if (event.key === 'Escape') {
+                closeOfficialInviteNotice();
+                closeDevtoolsNotice();
+            }
         });
 
         let wishCelebrationTimeout;
@@ -2682,8 +2930,84 @@
             scrollCue.setAttribute('aria-controls', 'albumGateCard');
         }
 
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        let isTouchMoving = false;
+        let lastTapTime = 0;
+        let isPhotoZoomed = false;
+
+        function togglePhotoZoom() {
+            const img = document.getElementById('albumMainImage');
+            if (!img) return;
+            isPhotoZoomed = !isPhotoZoomed;
+            if (isPhotoZoomed) {
+                img.style.transform = 'scale(1.85)';
+                img.style.cursor = 'zoom-out';
+            } else {
+                img.style.transform = 'scale(1)';
+                img.style.cursor = 'zoom-in';
+            }
+        }
+
+        function initAlbumSwipeGestures() {
+            const stage = document.getElementById('albumViewerStage');
+            if (!stage || stage.dataset.gesturesBound) return;
+            stage.dataset.gesturesBound = 'true';
+
+            stage.addEventListener('touchstart', e => {
+                if (e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    touchEndX = touchStartX;
+                    touchEndY = touchStartY;
+                    isTouchMoving = true;
+                }
+            }, { passive: true });
+
+            stage.addEventListener('touchmove', e => {
+                if (!isTouchMoving || e.touches.length !== 1) return;
+                touchEndX = e.touches[0].clientX;
+                touchEndY = e.touches[0].clientY;
+            }, { passive: true });
+
+            stage.addEventListener('touchend', e => {
+                if (!isTouchMoving) return;
+                isTouchMoving = false;
+                const diffX = touchStartX - touchEndX;
+                const diffY = touchStartY - touchEndY;
+
+                // Double tap detect
+                const now = Date.now();
+                if (Math.abs(diffX) < 10 && Math.abs(diffY) < 10) {
+                    if (now - lastTapTime < 300) {
+                        togglePhotoZoom();
+                        lastTapTime = 0;
+                        return;
+                    }
+                    lastTapTime = now;
+                }
+
+                // Don't swipe if zoomed
+                if (isPhotoZoomed) return;
+
+                // Horizontal swipe (threshold 40px)
+                if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.2) {
+                    if (diffX > 0) changeAlbumImage(1);
+                    else changeAlbumImage(-1);
+                }
+            }, { passive: true });
+
+            const mainImg = document.getElementById('albumMainImage');
+            if (mainImg) {
+                mainImg.addEventListener('dblclick', togglePhotoZoom);
+            }
+        }
+
         function renderAlbumThumbnails() {
             const thumbnails = document.getElementById('albumThumbnails');
+            if (!thumbnails) return;
             thumbnails.replaceChildren();
             weddingAlbumPhotos.forEach((photo, index) => {
                 const button = document.createElement('button');
@@ -2703,15 +3027,45 @@
         }
 
         function setAlbumPhoto(index) {
+            if (!weddingAlbumPhotos || !weddingAlbumPhotos.length) return;
             activeAlbumPhoto = (index + weddingAlbumPhotos.length) % weddingAlbumPhotos.length;
             const photo = weddingAlbumPhotos[activeAlbumPhoto];
+            if (!photo) return;
+
             const image = document.getElementById('albumMainImage');
-            image.src = photo.src;
-            image.alt = photo.alt;
-            document.getElementById('albumImageCaption').textContent = photo.caption;
-            document.getElementById('albumImageCounter').textContent = `${activeAlbumPhoto + 1} / ${weddingAlbumPhotos.length}`;
-            document.querySelectorAll('#albumThumbnails .album-thumb').forEach((button, index) => {
-                button.setAttribute('aria-current', String(index === activeAlbumPhoto));
+            if (image) {
+                image.classList.add('fade-out');
+                setTimeout(() => {
+                    image.src = photo.src;
+                    image.alt = photo.alt || photo.caption || 'Album ảnh cưới';
+                    image.classList.remove('fade-out');
+                }, 90);
+            }
+
+            if (isPhotoZoomed) {
+                isPhotoZoomed = false;
+                if (image) {
+                    image.style.transform = 'scale(1)';
+                    image.style.cursor = 'zoom-in';
+                }
+            }
+
+            const captionEl = document.getElementById('albumImageCaption');
+            if (captionEl) captionEl.textContent = photo.caption || '';
+
+            const counterEl = document.getElementById('albumImageCounter');
+            if (counterEl) {
+                const cur = String(activeAlbumPhoto + 1).padStart(2, '0');
+                const tot = String(weddingAlbumPhotos.length).padStart(2, '0');
+                counterEl.textContent = `${cur} / ${tot}`;
+            }
+
+            document.querySelectorAll('#albumThumbnails .album-thumb').forEach((button, i) => {
+                const isActive = (i === activeAlbumPhoto);
+                button.setAttribute('aria-current', String(isActive));
+                if (isActive) {
+                    button.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                }
             });
         }
 
@@ -2747,10 +3101,50 @@
             }
         }
 
+        async function fetchWeddingAlbumPhotos() {
+            if (weddingAlbumPhotos.length > 0) return true;
+            if (isAlbumPhotosLoading) return false;
+            isAlbumPhotosLoading = true;
+
+            let storedToken = '';
+            try { storedToken = sessionStorage.getItem('weddingAlbumToken') || ''; } catch {}
+
+            try {
+                const response = await fetch('/api/wedding/album-photos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    cache: 'no-store',
+                    body: JSON.stringify({
+                        token: storedToken,
+                        code: invitationCode,
+                        inviteName: guestNameFromLink,
+                        side: invitationSideLabel
+                    })
+                });
+
+                if (!response.ok) return false;
+
+                const data = await response.json();
+                if (data.unlocked && Array.isArray(data.photos) && data.photos.length > 0) {
+                    weddingAlbumPhotos = data.photos;
+                    if (data.token) {
+                        try { sessionStorage.setItem('weddingAlbumToken', data.token); } catch {}
+                    }
+                    unlockWeddingAlbum();
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.warn('Could not load album photos from server:', error);
+                return false;
+            } finally {
+                isAlbumPhotosLoading = false;
+            }
+        }
+
         async function openWeddingAlbum(triggerElement = document.getElementById('albumGateButton')) {
-            const access = await checkAlbumUnlockForInvitation();
-            if (!access) {
-                if (!invitationAuthorized && await hasPendingWishBeenApproved()) {
+            if (!invitationAuthorized) {
+                if (await hasPendingWishBeenApproved()) {
                     showOfficialInviteNotice('album');
                     return;
                 }
@@ -2758,6 +3152,15 @@
                 return;
             }
 
+            if (weddingAlbumPhotos.length === 0) {
+                const loaded = await fetchWeddingAlbumPhotos();
+                if (!loaded) {
+                    showAlbumGatePrompt(triggerElement);
+                    return;
+                }
+            }
+
+            closeAlbumGatePrompt();
             albumTriggerElement = triggerElement;
             previousBodyOverflow = document.body.style.overflow;
             previousRootOverflow = document.documentElement.style.overflow;
@@ -2767,7 +3170,8 @@
             renderAlbumThumbnails();
             setAlbumPhoto(activeAlbumPhoto);
             document.getElementById('weddingAlbumModal').hidden = false;
-            albumTriggerElement.setAttribute('aria-expanded', 'true');
+            initAlbumSwipeGestures();
+            albumTriggerElement?.setAttribute('aria-expanded', 'true');
             document.getElementById('closeWeddingAlbumButton').focus();
         }
 
@@ -2901,9 +3305,13 @@
                         pendingWishId = result.id;
                         try { localStorage.setItem(pendingWishStorageKey, pendingWishId); } catch {}
                     }
+                    try { sessionStorage.removeItem('weddingAlbumToken'); } catch {}
                     lockWeddingAlbum();
                 } else {
-                    unlockWeddingAlbum();
+                    if (result.albumToken) {
+                        try { sessionStorage.setItem('weddingAlbumToken', result.albumToken); } catch {}
+                    }
+                    await fetchWeddingAlbumPhotos();
                     renderWishesFeed();
                 }
                 document.getElementById('rsvpWish').value = '';
@@ -3068,8 +3476,14 @@
         window.onload = async function() {
             await resolveInvitationCode();
             applyInvitationPersonalization();
-            if (isWeddingAlbumUnlocked) updateAlbumGateUI();
-            checkAlbumUnlockForInvitation();
+            if (!invitationAuthorized) {
+                try { sessionStorage.removeItem('weddingAlbumToken'); } catch {}
+                lockWeddingAlbum();
+            } else {
+                fetchWeddingAlbumPhotos();
+                if (isWeddingAlbumUnlocked) updateAlbumGateUI();
+                checkAlbumUnlockForInvitation();
+            }
             loadInvitationRsvp();
             loadGuestWishes();
             runCountdown();

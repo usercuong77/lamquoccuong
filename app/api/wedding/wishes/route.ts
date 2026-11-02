@@ -47,14 +47,14 @@ export async function DELETE(request: Request) {
   try {
     const body = await request.json() as { id?: unknown };
     if (!validId(body.id)) return NextResponse.json({ error: 'Mã lời chúc không hợp lệ.' }, { status: 400 });
-    const query = new URLSearchParams({ id: `eq.${body.id}`, wish: 'not.is.null', is_visible: 'eq.false', select: 'id' });
+    const query = new URLSearchParams({ id: `eq.${body.id}`, wish: 'not.is.null', select: 'id' });
     const response = await supabaseServiceRequest(`wedding_guestbook?${query}`, {
       method: 'DELETE',
       headers: { Prefer: 'return=representation' }
     });
     if (!response.ok) {
-      console.error('Could not reject wedding wish:', response.status, await response.text());
-      return NextResponse.json({ error: 'Chưa xoá được lời chúc chờ duyệt.' }, { status: 502 });
+      console.error('Could not delete wedding wish:', response.status, await response.text());
+      return NextResponse.json({ error: 'Chưa xoá được lời chúc.' }, { status: 502 });
     }
     const [deleted] = await response.json() as Array<{ id: string }>;
     if (!deleted) return NextResponse.json({ error: 'Lời chúc không tồn tại hoặc đã được xử lý.' }, { status: 404 });

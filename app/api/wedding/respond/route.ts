@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isSameOriginRequest } from '@/lib/wedding-admin';
-import { lookupWeddingInvitation, supabaseServiceRequest } from '@/lib/wedding-invitations';
+import { lookupWeddingInvitation, supabaseServiceRequest, createAlbumAccessToken } from '@/lib/wedding-invitations';
 
 export const runtime = 'nodejs';
 
@@ -78,7 +78,10 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Chưa gửi được lời chúc. Hãy kiểm tra migration Supabase.' }, { status: 502 });
       }
       const [savedWish] = await response.json();
-      return NextResponse.json({ ...savedWish, pendingApproval: !invitation }, { headers: { 'Cache-Control': 'no-store' } });
+      const isPending = !invitation;
+      // Chỉ cấp token mở album khi là link mời chính thức. Link lạ chờ duyệt tuyệt đối không cấp token!
+      const albumToken = invitation ? createAlbumAccessToken(invitation.invite_key) : null;
+      return NextResponse.json({ ...savedWish, albumToken, pendingApproval: isPending }, { headers: { 'Cache-Control': 'no-store' } });
     }
 
     return NextResponse.json({ error: 'Loại phản hồi không hợp lệ.' }, { status: 400 });
