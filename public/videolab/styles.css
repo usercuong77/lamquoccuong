@@ -5384,3 +5384,418 @@ body, .apple-glass-theme {
     gap: 8px;
   }
 }
+
+/* ── PHONE POLISH: readable type, no clipped copy, safe touch targets ── */
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .section-shell {
+    width: calc(100% - 28px);
+  }
+
+  .top-announcement {
+    overflow: hidden;
+  }
+
+  .announcement-content {
+    width: 100%;
+    padding: 8px 14px;
+    gap: 6px;
+  }
+
+  .announcement-text {
+    max-width: 36rem;
+    font-size: 12px;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+
+  .mini-countdown {
+    white-space: normal;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  .announcement-btn {
+    width: auto;
+    min-height: 40px;
+    padding: 8px 16px;
+  }
+
+  .site-header {
+    top: 6px;
+    width: calc(100% - 20px);
+    min-height: 52px;
+    margin-top: 6px;
+    padding: 6px 12px;
+    gap: 8px;
+  }
+
+  .brand {
+    min-width: 0;
+    margin-right: auto;
+  }
+
+  .menu-toggle {
+    width: 44px;
+    height: 44px;
+  }
+
+  .main-nav {
+    max-height: min(70dvh, 480px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+    padding: 26px 0 44px;
+  }
+
+  /* Keep the phone version centered on the editing product, not long sales comparisons. */
+  .why-own-section,
+  .token-section,
+  .workflow-section,
+  .roi-section,
+  .hero-control-strip,
+  .hero-value-cards,
+  .comparison-section-box {
+    display: none;
+  }
+
+  .hero-copy,
+  .hero-visual,
+  .hero-spotlight-tag,
+  .hero-video-bottom-caption,
+  .hero-control-strip,
+  .hero-value-cards {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .hero-visual {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 24px;
+  }
+
+  .hero-copy .eyebrow {
+    display: flex;
+    align-self: flex-start;
+    width: fit-content;
+    max-width: 100%;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 7px 10px;
+    border-radius: 14px;
+    font-size: 10px;
+    line-height: 1.45;
+    letter-spacing: 0.02em;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+
+  .hero h1 {
+    max-width: 100%;
+    font-size: clamp(29px, 8vw, 36px);
+    line-height: 1.16;
+    letter-spacing: -0.035em;
+    overflow-wrap: normal;
+  }
+
+  .hero h1 em {
+    display: inline;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .hero-lede {
+    max-width: 100%;
+    font-size: 15px;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-actions .button {
+    display: flex;
+    min-height: 50px;
+    height: auto;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 14px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-actions .button > span:first-child {
+    width: 100%;
+  }
+
+  .hero-actions .button > span:last-child {
+    display: none;
+  }
+
+  .hero-actions .text-link {
+    min-height: 44px;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-urgency-note,
+  .hcs-label,
+  .hcs-pill,
+  .val-card,
+  .hero-video-bottom-caption {
+    overflow-wrap: anywhere;
+  }
+
+  .hero-urgency-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px 8px;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 14px;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .hero-urgency-note strong {
+    white-space: nowrap;
+  }
+
+  .section-heading-clean h2 {
+    text-wrap: balance;
+  }
+
+  .sp-card p,
+  .tool-hl-card p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .sp-pill-row {
+    display: none;
+  }
+
+  .price-card .tier-features li:nth-child(n + 6) {
+    display: none;
+  }
+
+  .hcs-label {
+    align-items: flex-start;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .hcs-pills {
+    align-items: stretch;
+  }
+
+  .hcs-pill {
+    min-height: 42px;
+    align-items: center;
+    line-height: 1.4;
+  }
+
+  .hero-featured-video-frame {
+    width: min(100%, 315px);
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  .hero-video-bottom-caption {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .section-heading-clean h2,
+  .pricing-top h2,
+  .section-heading-clean p,
+  .section-desc-lg,
+  .pillar-card h3,
+  .versus-card h3,
+  .faq-item summary {
+    overflow-wrap: anywhere;
+  }
+
+  .comparison-table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .comparison-table {
+    min-width: 680px;
+  }
+
+  .pricing-cards-grid,
+  .pricing-grid-dual,
+  .three-pillars-grid,
+  .versus-grid,
+  .workflow-grid,
+  .roi-grid,
+  .features-trio-grid,
+  .superpowers-grid,
+  .interactive-demo-container,
+  .tool-highlights-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .price-card,
+  .pillar-card,
+  .versus-card,
+  .workflow-step-card,
+  .roi-card,
+  .trio-card,
+  .sp-card,
+  .video-compare-card {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .buy-trigger-btn,
+  .announcement-btn,
+  .msb-btn,
+  .final-cta-box .button {
+    min-height: 46px;
+  }
+
+  .modal-overlay {
+    padding: 10px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .modal-container {
+    width: 100%;
+    max-height: min(90dvh, 760px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .modal-container input,
+  .modal-container select,
+  .modal-container textarea {
+    min-height: 46px;
+    font-size: 16px;
+  }
+
+  .mobile-sticky-bar {
+    gap: 10px;
+    padding: 8px 12px max(8px, env(safe-area-inset-bottom));
+    transform: translateY(calc(100% + 16px));
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 220ms ease, visibility 220ms ease;
+  }
+
+  .mobile-sticky-bar.is-visible {
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .msb-info {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .msb-tag {
+    font-size: 9px;
+  }
+
+  .msb-price {
+    display: block;
+    font-size: 14px;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
+  .msb-price s {
+    display: none;
+  }
+
+  .msb-btn {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 148px;
+    max-width: 58%;
+    min-height: 46px;
+    padding: 10px 12px;
+    white-space: nowrap;
+  }
+
+  .site-footer {
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
+  }
+
+  [id] {
+    scroll-margin-top: 88px;
+  }
+}
+
+@media (max-width: 380px) {
+  .section-shell {
+    width: calc(100% - 24px);
+  }
+
+  .announcement-text {
+    font-size: 11px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .hero-actions .button {
+    font-size: 12.5px;
+  }
+
+  .msb-price {
+    font-size: 12.5px;
+  }
+
+  .msb-btn {
+    min-width: 132px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* The hero and sticky CTA already carry the offer; keep the top banner compact. */
+  .mini-countdown,
+  .announcement-btn {
+    display: none;
+  }
+
+  .announcement-content {
+    padding-block: 7px;
+  }
+
+  .mobile-sticky-bar .msb-btn {
+    max-width: 54%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-sticky-bar {
+    transition: none;
+  }
+}

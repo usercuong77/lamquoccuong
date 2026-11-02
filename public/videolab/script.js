@@ -57,6 +57,32 @@ function initCaptionsApp() {
     });
   });
 
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && nav?.classList.contains('open')) {
+      nav.classList.remove('open');
+      menuButton?.setAttribute('aria-expanded', 'false');
+      menuButton?.focus();
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (nav?.classList.contains('open') && !nav.contains(event.target) && !menuButton?.contains(event.target)) {
+      nav.classList.remove('open');
+      menuButton?.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Keep the fixed purchase bar out of the opening viewport so it never
+  // covers the primary hero action. Reveal it once the visitor scrolls.
+  const stickyPurchaseBar = document.querySelector('.mobile-sticky-bar');
+  const primaryHeroCta = document.querySelector('.hero-actions .button');
+  if (stickyPurchaseBar && primaryHeroCta && 'IntersectionObserver' in window) {
+    const stickyObserver = new IntersectionObserver(([entry]) => {
+      stickyPurchaseBar.classList.toggle('is-visible', !entry.isIntersecting);
+    }, { threshold: 0.1 });
+    stickyObserver.observe(primaryHeroCta);
+  }
+
   // ── 2. SCROLL REVEAL OBSERVER ──
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
