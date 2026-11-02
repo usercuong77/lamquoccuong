@@ -218,21 +218,21 @@ function initCaptionsApp() {
       topScarcity.innerHTML = `Tiến độ: Lite còn <b>${liteRemaining}</b> suất • Pro chỉ còn <b>${proRemaining}</b> suất cuối!`;
     }
 
-    // 2. Cập nhật Thẻ LABPRO LITE (579K)
+    // 2. Cập nhật Thẻ LABPRO LITE (379K)
     const liteFill = document.getElementById('lite-counter-fill');
     const liteAct = document.getElementById('lite-activated-count');
     const liteUrg = document.getElementById('lite-urgent-count');
     if (liteFill) liteFill.style.width = litePercent + '%';
     if (liteAct) liteAct.innerHTML = `Đã kích hoạt: <strong>${liteActivated} / 50 suất</strong>`;
-    if (liteUrg) liteUrg.innerHTML = `Chỉ còn ${liteRemaining} suất cuối 579K!`;
+    if (liteUrg) liteUrg.innerHTML = `Chỉ còn ${liteRemaining} suất cuối 379K!`;
 
-    // 3. Cập nhật Thẻ VIDEOLAB PRO (889K)
+    // 3. Cập nhật Thẻ VIDEOLAB PRO (589K)
     const proFill = document.getElementById('pro-counter-fill');
     const proAct = document.getElementById('pro-activated-count');
     const proUrg = document.getElementById('pro-urgent-count');
     if (proFill) proFill.style.width = proPercent + '%';
     if (proAct) proAct.innerHTML = `Đã kích hoạt: <strong>${proActivated} / 50 suất</strong>`;
-    if (proUrg) proUrg.innerHTML = `Chỉ còn ${proRemaining} suất cuối 889K!`;
+    if (proUrg) proUrg.innerHTML = `Chỉ còn ${proRemaining} suất cuối 589K!`;
   }
   initRandomScarcity();
 
@@ -500,11 +500,11 @@ function initCaptionsApp() {
       pkgLabelLite?.classList.add('active');
 
       if (modalHeadingTitle) modalHeadingTitle.textContent = 'Đơn Đặt Mua LABPRO LITE (50 Suất Đầu)';
-      if (modalHeadingDesc) modalHeadingDesc.innerHTML = 'Sở hữu trọn đời <strong>LABPRO LITE</strong> với giá ưu đãi <strong>579.000 VNĐ</strong>';
+      if (modalHeadingDesc) modalHeadingDesc.innerHTML = 'Sở hữu trọn đời <strong>LABPRO LITE</strong> với giá ưu đãi <strong>379.000 VNĐ</strong>';
       if (summaryOldPrice) summaryOldPrice.textContent = '1.890.000đ';
       if (summaryDiscountLabel) summaryDiscountLabel.textContent = 'Ưu đãi 50 suất đầu tiên (Tiết kiệm 69%):';
-      if (summaryDiscountNum) summaryDiscountNum.textContent = '- 1.311.000đ';
-      if (summaryTotalPrice) summaryTotalPrice.textContent = '579.000 VNĐ';
+      if (summaryDiscountNum) summaryDiscountNum.textContent = '- 1.511.000đ';
+      if (summaryTotalPrice) summaryTotalPrice.textContent = '379.000 VNĐ';
       if (summaryBonusText) summaryBonusText.textContent = '10 Font + 10 Preset + TẶNG 900MB SFX + Hỗ trợ cài đặt & hướng dẫn';
       if (summaryLadderNote) summaryLadderNote.textContent = '*(Đủ 50 suất giá tăng lên 868.500 VNĐ, đủ 100 suất lên 1.300.000 VNĐ)*';
     } else {
@@ -512,11 +512,11 @@ function initCaptionsApp() {
       pkgLabelPro?.classList.add('active');
 
       if (modalHeadingTitle) modalHeadingTitle.textContent = 'Đơn Đặt Mua VIDEOLAB PRO (50 Suất Đầu)';
-      if (modalHeadingDesc) modalHeadingDesc.innerHTML = 'Sở hữu trọn đời <strong>VIDEOLAB PRO</strong> với giá ưu đãi <strong>889.000 VNĐ</strong>';
+      if (modalHeadingDesc) modalHeadingDesc.innerHTML = 'Sở hữu trọn đời <strong>VIDEOLAB PRO</strong> với giá ưu đãi <strong>589.000 VNĐ</strong>';
       if (summaryOldPrice) summaryOldPrice.textContent = '2.490.000đ';
       if (summaryDiscountLabel) summaryDiscountLabel.textContent = 'Ưu đãi 50 suất đầu tiên (Tiết kiệm 64%):';
-      if (summaryDiscountNum) summaryDiscountNum.textContent = '- 1.601.000đ';
-      if (summaryTotalPrice) summaryTotalPrice.textContent = '889.000 VNĐ';
+      if (summaryDiscountNum) summaryDiscountNum.textContent = '- 1.901.000đ';
+      if (summaryTotalPrice) summaryTotalPrice.textContent = '589.000 VNĐ';
       if (summaryBonusText) summaryBonusText.textContent = '10.000 Font chữ + Kho 2.5GB SFX Hollywood + Cập nhật trọn đời';
       if (summaryLadderNote) summaryLadderNote.textContent = '*(Đủ 50 suất giá sẽ tự động nhảy lên 1.333.500 VNĐ, đủ 100 suất lên 2.000.000 VNĐ)*';
     }
@@ -588,13 +588,13 @@ function initCaptionsApp() {
 
     // Determine Package Details
     const isLite = currentPackage === 'lite';
-    const amount = isLite ? 579000 : 889000;
-    const amountStr = isLite ? '579.000 VNĐ' : '889.000 VNĐ';
+    const amount = isLite ? 379000 : 589000;
+    const amountStr = isLite ? '379.000 VNĐ' : '589.000 VNĐ';
     const prefix = isLite ? 'VLL' : 'VLP';
     const pkgName = isLite ? 'LABPRO LITE' : 'VIDEOLAB PRO';
 
     // Clean phone number for memo
-    const cleanPhone = custPhone.replace(/\D/g, '').slice(-6) || (isLite ? '579K' : '889K');
+    const cleanPhone = custPhone.replace(/\D/g, '').slice(-6) || (isLite ? '379K' : '589K');
     const memo = `${prefix} ${cleanPhone}`;
 
     // Display customer confirmation line
